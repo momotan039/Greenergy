@@ -1,0 +1,33 @@
+# Greenergy Theme - Translation Template
+# Copyright (C) 2024 Greenergy
+# This file is distributed under the same license as the Greenergy Theme package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Greenergy Theme 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Gemini CLI\n"
+"X-Domain: greenergy\n"
+
+#: Various template files
+msgid "Home"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Subscribe"
+msgstr ""
+
+msgid "Read more"
+msgstr ""
+
+msgid "No results found"
+msgstr ""

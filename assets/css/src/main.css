@@ -1,0 +1,107 @@
+/**
+ * Greenergy Theme - Main CSS Entry Point
+ * 
+ * This file contains Tailwind directives and imports.
+ * Component styles use @apply for reusable patterns.
+ * 
+ * @package Greenergy
+ */
+
+/* =========================================
+   TAILWIND DIRECTIVES
+   ========================================= */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================
+   COMPONENT IMPORTS
+   ========================================= */
+@import './components/buttons.css';
+@import './components/forms.css';
+@import './components/cards.css';
+@import './components/navigation.css';
+
+/* =========================================
+   BASE LAYER OVERRIDES
+   Minimal global styles only
+   ========================================= */
+@layer base {
+
+    /* Smooth scrolling */
+    html {
+        @apply scroll-smooth;
+    }
+
+    /* RTL font switching */
+    html[dir="rtl"] body {
+        @apply font-arabic;
+    }
+
+    /* Base body styles */
+    body {
+        @apply antialiased bg-white dark:bg-secondary-900 text-secondary-800 dark:text-secondary-100;
+    }
+
+    /* Focus visible for accessibility */
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-primary-500;
+    }
+
+    /* Skip link */
+    .skip-link {
+        @apply sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-tooltip focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:rounded-lg;
+    }
+
+    /* Heading defaults */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-heading font-bold text-secondary-900 dark:text-white;
+    }
+
+    /* Link defaults */
+    a {
+        @apply text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200;
+    }
+
+    /* Image defaults */
+    img {
+        @apply max-w-full h-auto;
+    }
+}
+
+/* =========================================
+   UTILITIES LAYER
+   Custom utility classes
+   ========================================= */
+@layer utilities {
+
+    /* Text balance for headings */
+    .text-balance {
+        text-wrap: balance;
+    }
+
+    /* Line clamp utilities */
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Container query ready */
+    .container-query {
+        container-type: inline-size;
+    }
+}

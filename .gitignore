@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs (commit for production, ignore for development)
+# Uncomment below if using CI/CD to build
+# assets/css/dist/
+# assets/js/dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+
+# Cache
+.cache/
+*.cache
+
+# Debug
+debug.log
+error_log
+
+# Temporary files
+*.tmp
+*.temp

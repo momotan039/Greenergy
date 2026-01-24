@@ -1,0 +1,88 @@
+/**
+ * Form Components
+ * 
+ * Form input styles using @apply
+ * Works with @tailwindcss/forms plugin
+ * 
+ * @package Greenergy
+ */
+
+@layer components {
+
+    /* Form group wrapper */
+    .form-group {
+        @apply mb-4;
+    }
+
+    /* Labels */
+    .form-label {
+        @apply block mb-2 text-sm font-medium text-secondary-700 dark:text-secondary-200;
+    }
+
+    /* Base input */
+    .form-input {
+        @apply block w-full px-4 py-3 text-base text-secondary-900 dark:text-white bg-white dark:bg-secondary-800 border border-secondary-300 dark:border-secondary-600 rounded-lg placeholder:text-secondary-400 dark:placeholder:text-secondary-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-colors duration-200;
+    }
+
+    /* Textarea */
+    .form-textarea {
+        @apply form-input resize-y min-h-[120px];
+    }
+
+    /* Select */
+    .form-select {
+        @apply form-input appearance-none bg-no-repeat pe-10;
+        /* RTL-aware padding */
+    }
+
+    /* Checkbox & Radio wrapper */
+    .form-check {
+        @apply flex items-start gap-3;
+    }
+
+    .form-check-input {
+        @apply mt-0.5 w-5 h-5 text-primary-500 border-secondary-300 dark:border-secondary-600 rounded focus:ring-2 focus:ring-primary-500/20;
+    }
+
+    .form-check-input[type="radio"] {
+        @apply rounded-full;
+    }
+
+    .form-check-label {
+        @apply text-sm text-secondary-700 dark:text-secondary-200;
+    }
+
+    /* Input with icon */
+    .input-with-icon {
+        @apply relative;
+    }
+
+    .input-with-icon .form-input {
+        @apply ps-12;
+        /* RTL-aware padding */
+    }
+
+    .input-with-icon .input-icon {
+        @apply absolute top-1/2 -translate-y-1/2 start-4
+        /* RTL-aware */
+        text-secondary-400 pointer-events-none;
+    }
+
+    /* Search input */
+    .search-input {
+        @apply form-input rounded-full ps-12;
+    }
+
+    /* Form validation states */
+    .form-input.is-invalid {
+        @apply border-error focus:border-error focus:ring-error/20;
+    }
+
+    .form-input.is-valid {
+        @apply border-success focus:border-success focus:ring-success/20;
+    }
+
+    .form-error {
+        @apply mt-1 text-sm text-error;
+    }
+}

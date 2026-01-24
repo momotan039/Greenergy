@@ -1,0 +1,140 @@
+/**
+ * Card Components
+ * 
+ * Reusable card patterns for News, Articles, Jobs, Courses
+ * 
+ * @package Greenergy
+ */
+
+@layer components {
+
+    /* Base card */
+    .card {
+        @apply bg-white dark:bg-secondary-800 rounded-xl shadow-card overflow-hidden transition-shadow duration-300 hover:shadow-card-hover;
+    }
+
+    /* Card image container */
+    .card-image {
+        @apply relative aspect-card overflow-hidden;
+    }
+
+    .card-image img {
+        @apply w-full h-full object-cover transition-transform duration-300 group-hover:scale-105;
+    }
+
+    /* Card body */
+    .card-body {
+        @apply p-4 lg:p-5 space-y-3;
+    }
+
+    /* Card category/tag */
+    .card-category {
+        @apply inline-block px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30 rounded-full;
+    }
+
+    /* Card title */
+    .card-title {
+        @apply text-lg font-bold text-secondary-900 dark:text-white line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200;
+    }
+
+    /* Card excerpt */
+    .card-excerpt {
+        @apply text-sm text-secondary-600 dark:text-secondary-400 line-clamp-3;
+    }
+
+    /* Card meta (date, author, etc) */
+    .card-meta {
+        @apply flex items-center gap-4 text-sm text-secondary-500 dark:text-secondary-400;
+    }
+
+    .card-meta-item {
+        @apply inline-flex items-center gap-1.5;
+    }
+
+    /* Card footer */
+    .card-footer {
+        @apply flex items-center justify-between px-4 lg:px-5 py-3 border-t border-secondary-100 dark:border-secondary-700;
+    }
+
+    /* =========================================
+     CARD VARIANTS
+     ========================================= */
+
+    /* Horizontal card */
+    .card-horizontal {
+        @apply card flex flex-col sm:flex-row;
+    }
+
+    .card-horizontal .card-image {
+        @apply sm:w-2/5 aspect-video sm:aspect-square;
+    }
+
+    .card-horizontal .card-body {
+        @apply sm:w-3/5 flex flex-col justify-center;
+    }
+
+    /* Featured card (large) */
+    .card-featured {
+        @apply card relative;
+    }
+
+    .card-featured .card-image {
+        @apply aspect-hero;
+    }
+
+    .card-featured .card-body {
+        @apply absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 to-transparent;
+    }
+
+    .card-featured .card-title {
+        @apply text-2xl text-white;
+    }
+
+    .card-featured .card-category {
+        @apply bg-primary-500 text-white;
+    }
+
+    /* Compact card (list view) */
+    .card-compact {
+        @apply flex items-center gap-4 p-3 bg-white dark:bg-secondary-800 rounded-lg hover:bg-secondary-50 dark:hover:bg-secondary-700 transition-colors duration-200;
+    }
+
+    .card-compact .card-image {
+        @apply w-20 h-20 rounded-lg shrink-0;
+    }
+
+    .card-compact .card-title {
+        @apply text-sm font-semibold line-clamp-2;
+    }
+
+    /* Job card specific */
+    .card-job {
+        @apply card border-s-4 border-s-primary-500;
+        /* RTL-aware border */
+    }
+
+    .card-job .job-type {
+        @apply inline-block px-2 py-0.5 text-xs font-medium text-secondary-600 dark:text-secondary-300 bg-secondary-100 dark:bg-secondary-700 rounded;
+    }
+
+    .card-job .job-salary {
+        @apply text-lg font-bold text-primary-600 dark:text-primary-400;
+    }
+
+    /* Course card specific */
+    .card-course {
+        @apply card;
+    }
+
+    .card-course .course-price {
+        @apply text-xl font-bold text-primary-600;
+    }
+
+    .card-course .course-badges {
+        @apply flex flex-wrap gap-2;
+    }
+
+    .card-course .course-badge {
+        @apply inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-secondary-600 dark:text-secondary-300 bg-secondary-100 dark:bg-secondary-700 rounded;
+    }
+}

@@ -1,0 +1,58 @@
+/**
+ * Greenergy Theme - Gutenberg Editor Styles
+ * 
+ * Applies theme styles to the block editor
+ * 
+ * @package Greenergy
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import same component styles as frontend */
+@import './components/buttons.css';
+@import './components/forms.css';
+@import './components/cards.css';
+
+/* =========================================
+   EDITOR-SPECIFIC STYLES
+   ========================================= */
+@layer components {
+
+    /* Editor wrapper */
+    .editor-styles-wrapper {
+        @apply font-sans text-base text-secondary-800;
+    }
+
+    /* Block alignment */
+    .wp-block {
+        @apply max-w-4xl mx-auto;
+    }
+
+    /* Wide and full width */
+    .wp-block[data-align="wide"] {
+        @apply max-w-6xl;
+    }
+
+    .wp-block[data-align="full"] {
+        @apply max-w-none;
+    }
+
+    /* Typography in editor */
+    .editor-styles-wrapper h1 {
+        @apply text-4xl font-bold mb-4;
+    }
+
+    .editor-styles-wrapper h2 {
+        @apply text-3xl font-bold mb-4;
+    }
+
+    .editor-styles-wrapper h3 {
+        @apply text-2xl font-bold mb-3;
+    }
+
+    .editor-styles-wrapper p {
+        @apply text-base leading-relaxed mb-4;
+    }
+}

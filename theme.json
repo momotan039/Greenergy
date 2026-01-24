@@ -1,0 +1,103 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/theme.json",
+    "version": 2,
+    "settings": {
+        "color": {
+            "custom": true,
+            "palette": [
+                {
+                    "name": "Primary",
+                    "slug": "primary",
+                    "color": "#10B981"
+                },
+                {
+                    "name": "Secondary",
+                    "slug": "secondary",
+                    "color": "#1F2937"
+                },
+                {
+                    "name": "Accent",
+                    "slug": "accent",
+                    "color": "#F59E0B"
+                },
+                {
+                    "name": "White",
+                    "slug": "white",
+                    "color": "#FFFFFF"
+                },
+                {
+                    "name": "Light Gray",
+                    "slug": "light-gray",
+                    "color": "#F3F4F6"
+                },
+                {
+                    "name": "Dark Gray",
+                    "slug": "dark-gray",
+                    "color": "#374151"
+                }
+            ]
+        },
+        "typography": {
+            "fontFamilies": [
+                {
+                    "fontFamily": "Inter, system-ui, sans-serif",
+                    "name": "Inter",
+                    "slug": "inter"
+                },
+                {
+                    "fontFamily": "'Noto Sans Arabic', Tahoma, sans-serif",
+                    "name": "Arabic",
+                    "slug": "arabic"
+                }
+            ],
+            "fontSizes": [
+                {
+                    "name": "Small",
+                    "slug": "small",
+                    "size": "0.875rem"
+                },
+                {
+                    "name": "Medium",
+                    "slug": "medium",
+                    "size": "1rem"
+                },
+                {
+                    "name": "Large",
+                    "slug": "large",
+                    "size": "1.25rem"
+                },
+                {
+                    "name": "XL",
+                    "slug": "xl",
+                    "size": "1.5rem"
+                },
+                {
+                    "name": "2XL",
+                    "slug": "2xl",
+                    "size": "2rem"
+                }
+            ]
+        },
+        "layout": {
+            "contentSize": "800px",
+            "wideSize": "1200px"
+        },
+        "spacing": {
+            "units": [
+                "px",
+                "em",
+                "rem",
+                "%",
+                "vw",
+                "vh"
+            ]
+        },
+        "appearanceTools": true,
+        "useRootPaddingAwareAlignments": true
+    },
+    "styles": {
+        "spacing": {
+            "blockGap": "1.5rem"
+        }
+    }
+}
