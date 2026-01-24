@@ -3,6 +3,7 @@
  * Performance Optimization Class
  *
  * Implements Core Web Vitals optimizations for 95+ PageSpeed.
+ * CRITICAL: No external font loading - self-hosted via Tailwind.
  *
  * @package Greenergy
  * @since 1.0.0
@@ -22,7 +23,7 @@ class Greenergy_Performance {
      * Constructor
      */
     public function __construct() {
-        // Resource hints
+        // Resource hints - only for services in use
         add_action( 'wp_head', [ $this, 'add_resource_hints' ], 1 );
         
         // Remove bloat
@@ -41,9 +42,6 @@ class Greenergy_Performance {
         // Optimize WP core
         add_action( 'wp_enqueue_scripts', [ $this, 'dequeue_unnecessary' ], 100 );
         
-        // DNS prefetch
-        add_filter( 'wp_resource_hints', [ $this, 'resource_hints' ], 10, 2 );
-        
         // Limit post revisions
         if ( ! defined( 'WP_POST_REVISIONS' ) ) {
             define( 'WP_POST_REVISIONS', 5 );
@@ -52,26 +50,16 @@ class Greenergy_Performance {
 
     /**
      * Add resource hints (preconnect, prefetch)
+     * PERFORMANCE: No Google Fonts - using self-hosted fonts
      */
     public function add_resource_hints() {
-        // Preconnect to commonly used origins
-        $preconnect = [
-            'https://fonts.googleapis.com',
-            'https://fonts.gstatic.com',
-        ];
-
-        foreach ( $preconnect as $url ) {
-            echo '<link rel="preconnect" href="' . esc_url( $url ) . '" crossorigin>' . "\n";
-        }
-
-        // DNS prefetch for third-party services
-        $dns_prefetch = [
-            '//www.googletagmanager.com',
-            '//www.google-analytics.com',
-        ];
-
-        foreach ( $dns_prefetch as $url ) {
-            echo '<link rel="dns-prefetch" href="' . esc_url( $url ) . '">' . "\n";
+        // Only DNS prefetch for analytics if configured
+        $gtm_id = function_exists( 'greenergy_option' ) ? greenergy_option( 'gtm_id', '' ) : '';
+        $ga_id  = function_exists( 'greenergy_option' ) ? greenergy_option( 'google_analytics', '' ) : '';
+        
+        if ( $gtm_id || $ga_id ) {
+            echo '<link rel="dns-prefetch" href="//www.googletagmanager.com">' . "\n";
+            echo '<link rel="dns-prefetch" href="//www.google-analytics.com">' . "\n";
         }
     }
 
@@ -202,34 +190,11 @@ class Greenergy_Performance {
      * Dequeue unnecessary scripts and styles
      */
     public function dequeue_unnecessary() {
-        // Remove block library CSS if not using Gutenberg on frontend
-        // Uncomment if you're not using native blocks
-        // wp_dequeue_style( 'wp-block-library' );
-        // wp_dequeue_style( 'wp-block-library-theme' );
-        
         // Remove classic theme styles
         wp_dequeue_style( 'classic-theme-styles' );
         
-        // Remove global styles if not needed
-        // wp_dequeue_style( 'global-styles' );
-    }
-
-    /**
-     * Add resource hints
-     *
-     * @param array  $hints          Resource hints.
-     * @param string $relation_type  Relation type.
-     * @return array Modified hints.
-     */
-    public function resource_hints( $hints, $relation_type ) {
-        if ( 'preconnect' === $relation_type ) {
-            $hints[] = [
-                'href'        => 'https://fonts.googleapis.com',
-                'crossorigin' => 'anonymous',
-            ];
-        }
-
-        return $hints;
+        // Remove WooCommerce block styles if not using WooCommerce
+        wp_dequeue_style( 'wc-blocks-style' );
     }
 
     /**
