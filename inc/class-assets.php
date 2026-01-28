@@ -60,6 +60,22 @@ class Greenergy_Assets {
             $this->css_version
         );
 
+        // Swiper CSS from CDN
+        wp_enqueue_style(
+            'swiper',
+            'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
+            [],
+            '11.0.0'
+        );
+
+        // AOS Animation CSS from CDN
+        wp_enqueue_style(
+            'aos',
+            'https://unpkg.com/aos@2.3.1/dist/aos.css',
+            [],
+            '2.3.1'
+        );
+
         // RTL support - WordPress auto-loads RTL version
         wp_style_add_data( 'greenergy-main', 'rtl', 'replace' );
         wp_style_add_data( 'greenergy-main', 'suffix', '-rtl' );
@@ -80,6 +96,30 @@ class Greenergy_Assets {
             $js_dir . '/main.min.js',
             [],
             $this->js_version,
+            [
+                'strategy'  => 'defer',
+                'in_footer' => true,
+            ]
+        );
+
+        // Swiper JS from CDN (deferred)
+        wp_enqueue_script(
+            'swiper',
+            'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js',
+            [],
+            '11.0.0',
+            [
+                'strategy'  => 'defer',
+                'in_footer' => true,
+            ]
+        );
+
+        // AOS Animation JS from CDN (deferred)
+        wp_enqueue_script(
+            'aos',
+            'https://unpkg.com/aos@2.3.1/dist/aos.js',
+            [],
+            '2.3.1',
             [
                 'strategy'  => 'defer',
                 'in_footer' => true,

@@ -25,6 +25,7 @@ class Greenergy_Theme_Setup {
         add_action( 'after_setup_theme', [ $this, 'setup' ] );
         add_action( 'widgets_init', [ $this, 'register_sidebars' ] );
         add_action( 'init', [ $this, 'register_menus' ] );
+        add_action( 'init', [ $this, 'register_patterns' ] );
     }
 
     /**
@@ -154,6 +155,24 @@ class Greenergy_Theme_Setup {
                 'before_title'  => '<h4 class="widget-title text-base font-bold text-white mb-4">',
                 'after_title'   => '</h4>',
             ] );
+        }
+    }
+
+    /**
+     * Register Block Patterns
+     */
+    public function register_patterns() {
+        register_block_pattern_category(
+            'greenergy',
+            array( 'label' => __( 'Greenergy', 'greenergy' ) )
+        );
+
+        if ( file_exists( GREENERGY_INC_DIR . '/patterns/homepage-content.php' ) ) {
+            $pattern_data = require GREENERGY_INC_DIR . '/patterns/homepage-content.php';
+            register_block_pattern(
+                'greenergy/homepage-content',
+                $pattern_data
+            );
         }
     }
 }

@@ -1,0 +1,91 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/hero-block",
+    "title": "Greenergy Hero",
+    "category": "greenergy-blocks",
+    "icon": "cover-image",
+    "editorScript": "greenergy-blocks-editor",
+    "description": "Main Hero section with image and gradient background.",
+    "attributes": {
+        "badgeText": {
+            "type": "string",
+            "default": "مستقبل الطاقة النظيفة"
+        },
+        "headlineHighlight": {
+            "type": "string",
+            "default": "اكتشف"
+        },
+        "headlineMain": {
+            "type": "string",
+            "default": "عالم الطاقة المتجددة من دليل اللاعبين في السوق"
+        },
+        "description": {
+            "type": "string",
+            "default": "اكتشف دليل الطاقة المتجددة الشامل الذي غيّر مستقبل الملايين."
+        },
+        "ctaText": {
+            "type": "string",
+            "default": "المستقبل يبدأ من هنا"
+        },
+        "imageUrl": {
+            "type": "string",
+            "default": ""
+        },
+        "imageId": {
+            "type": "number",
+            "default": 0
+        },
+        "ctaUrl": {
+            "type": "string",
+            "default": "#"
+        },
+        "viewMode": {
+            "type": "string",
+            "default": "static"
+        },
+        "stats": {
+            "type": "array",
+            "default": [
+                {
+                    "icon": "fa-building",
+                    "value": "11M+",
+                    "label": "محطة و مشروع"
+                },
+                {
+                    "icon": "fa-globe",
+                    "value": "50+",
+                    "label": "منظمة"
+                },
+                {
+                    "icon": "fa-chart-line",
+                    "value": "500+",
+                    "label": "شركة"
+                },
+                {
+                    "icon": "fa-user-friends",
+                    "value": "1000+",
+                    "label": "خبير ومختص"
+                }
+            ]
+        },
+        "featuredStat": {
+            "type": "object",
+            "default": {
+                "value": "500+",
+                "label": "زيارة و مهتمين"
+            }
+        }
+    },
+    "supports": {
+        "align": [
+            "full",
+            "wide"
+        ],
+        "spacing": {
+            "margin": true,
+            "padding": true
+        }
+    },
+    "render": "file:./render.php"
+}

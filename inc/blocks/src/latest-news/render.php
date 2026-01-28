@@ -1,0 +1,186 @@
+<?php
+/**
+ * Latest News Block Template.
+ *
+ * @param   array $attributes - Block attributes.
+ * @param   array $content - Block content.
+ * @param   array $block - Block instance.
+ * @package Greenergy
+ * @since 1.0.0
+ */
+
+$attributes = wp_parse_args( $attributes ?? [], [
+    'badgeText'   => 'أحدث الأخبار',
+    'description' => 'كن على اطلاع دائم على آخر التطورات في عالم الطاقة المتجددة، مع لمحة سريعة عن أكثر المواضيع التي يتحدث عنها الجميع.',
+    'imageId'     => 0,
+    'imageUrl'    => '',
+] );
+
+$bg_image_url = $attributes['imageUrl'];
+if ( ! empty( $attributes['imageId'] ) ) {
+    $lib_url = wp_get_attachment_image_url( $attributes['imageId'], 'full' );
+    if ( $lib_url ) {
+        $bg_image_url = $lib_url;
+    }
+}
+
+$wrapper_attributes = get_block_wrapper_attributes( [
+    'class' => 'bg-white py-8 lg:py-20 px-4 relative',
+] );
+
+// Dynamic Data Fetching: Get news from CPT
+$args = [
+    'post_type'      => 'news',
+    'posts_per_page' => 8,
+    'status'         => 'publish',
+];
+$query = new WP_Query( $args );
+
+if ( $query->have_posts() ) {
+    $news_items = [];
+    while ( $query->have_posts() ) {
+        $query->the_post();
+        $news_items[] = [
+            'title'   => get_the_title(),
+            'excerpt' => get_the_excerpt() ?: wp_trim_words( get_the_content(), 15 ),
+            'views'   => get_post_meta( get_the_ID(), 'views', true ) ?: '0',
+            'date'    => get_the_date('d/m/Y'),
+            'image'   => get_the_post_thumbnail_url( get_the_ID(), 'large' ) ?: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&auto=format&fit=crop',
+        ];
+    }
+    wp_reset_postdata();
+} else {
+    // Placeholder news items
+    $news_items = [
+        [
+            'title' => 'الكويت تُطلق مشروعاً ضخماً للطاقة الشمسية بقدرة ١٥٠٠',
+            'excerpt' => 'الإمارات تُطلق مشروعاً ضخماً للطاقة الشمس ...',
+            'views' => '9,870',
+            'date' => '16/08/2025',
+            'image' => 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&auto=format&fit=crop',
+        ],
+        [
+            'title' => 'الكويت تُطلق مشروعاً ضخماً للطاقة الشمسية بقدرة ١٥٠٠',
+            'excerpt' => 'الإمارات تُطلق مشروعاً ضخماً للطاقة الشمس',
+            'views' => '9,870',
+            'date' => '16/08/2025',
+            'image' => 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&auto=format&fit=crop',
+        ],
+        [
+            'title' => 'الكويت تُطلق مشروعاً ضخماً للطاقة الشمسية بقدرة ١٥٠٠',
+            'excerpt' => 'الإمارات تُطلق مشروعاً ضخماً للطاقة الشمس',
+            'views' => '9,870',
+            'date' => '16/08/2025',
+            'image' => 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&auto=format&fit=crop',
+        ],
+        [
+            'title' => 'الكويت تُطلق مشروعاً ضخماً للطاقة الشمسية بقدرة ١٥٠٠',
+            'excerpt' => 'الإمارات تُطلق مشروعاً ضخماً للطاقة الشمس',
+            'views' => '9,870',
+            'date' => '16/08/2025',
+            'image' => 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&auto=format&fit=crop',
+        ],
+    ];
+}
+?>
+<style>
+    .swiper-pagination-bullet-active {
+        background: #229924 !important;
+    }
+    .swiper-container-latest {
+        width: 100%;
+        padding-bottom: 50px !important;
+    }
+</style>
+
+<section <?php echo $wrapper_attributes; ?>>
+    <?php if ( $bg_image_url ) : ?>
+        <div class="absolute inset-0 opacity-5 pointer-events-none">
+            <img src="<?php echo esc_url( $bg_image_url ); ?>" class="w-full h-full object-cover">
+        </div>
+    <?php endif; ?>
+    <div class="max-w-[1400px] mx-auto relative z-10">
+        <!-- Header -->
+        <div class="text-center mb-10" data-aos="fade-down" data-aos-duration="1000">
+            <div class="inline-block bg-[#E6F6EC] text-[#229924] font-bold px-6 py-2 rounded-full mb-4 text-xl">
+                <?php echo esc_html( $attributes['badgeText'] ); ?>
+            </div>
+            <p class="text-[#656865] max-w-2xl mx-auto text-lg leading-relaxed">
+                <?php echo esc_html( $attributes['description'] ); ?>
+            </p>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex flex-wrap justify-center gap-3 mb-10" data-aos="fade-up" data-aos-delay="200">
+            <button class="bg-[#229924] text-white px-6 py-2 rounded-lg font-bold hover:bg-[#1a7a1c] transition">كل الاخبار</button>
+            <button class="bg-[#EFF2F5] text-gray-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-200 transition">طاقة شمسية</button>
+            <button class="bg-[#EFF2F5] text-gray-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-200 transition">رياح</button>
+            <button class="bg-[#EFF2F5] text-gray-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-200 transition">بيئة</button>
+        </div>
+
+        <!-- Swiper Container -->
+        <div class="swiper swiper-container-latest mb-12" data-aos="zoom-in" data-aos-delay="400" data-aos-duration="1000">
+            <div class="swiper-wrapper">
+                <?php foreach ( $news_items as $news ) : ?>
+                    <div class="swiper-slide h-auto">
+                        <div class="bg-white rounded-2xl overflow-hidden cursor-pointer group hover:shadow-xl transition-all duration-300 h-full border border-gray-100 lg:border-none">
+                            <div class="relative h-44 md:h-56 overflow-hidden rounded-2xl">
+                                <img src="<?php echo esc_url( $news['image'] ); ?>" alt="News" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            </div>
+                            <div class="px-2 py-4 text-right">
+                                <h3 class="text-gray-900 font-black text-sm md:text-lg leading-tight mb-3 group-hover:text-[#229924] transition-colors">
+                                    <?php echo esc_html( $news['title'] ); ?>
+                                </h3>
+                                <p class="text-gray-600 text-xs md:text-sm mb-3"><?php echo esc_html( $news['excerpt'] ); ?></p>
+                                <div class="flex items-center justify-between text-[10px] md:text-xs font-bold text-gray-500 border-t border-gray-100 pt-3">
+                                    <div class="flex items-center gap-1">
+                                        <span><?php echo esc_html( $news['views'] ); ?></span>
+                                        <i class="far fa-eye"></i>
+                                    </div>
+                                    <div dir="ltr"><?php echo esc_html( $news['date'] ); ?></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <!-- Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <!-- View All Button -->
+        <div class="text-center">
+            <a href="#" class="inline-flex items-center gap-3 bg-white border border-gray-200 text-gray-800 px-8 py-3 rounded-xl font-bold hover:shadow-md transition">
+                <span>عرض الكل</span>
+                <i class="fas fa-arrow-left text-sm"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<?php if ( ! is_admin() ) : ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (typeof Swiper !== 'undefined') {
+            new Swiper('.swiper-container-latest', {
+                slidesPerView: 2,
+                spaceBetween: 16,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 20
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                        spaceBetween: 24
+                    }
+                }
+            });
+        }
+    });
+</script>
+<?php endif; ?>

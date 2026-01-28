@@ -18,7 +18,7 @@ module.exports = {
    * Dark mode strategy
    * 'class' allows manual toggle via .dark class on html/body
    */
-  darkMode: 'class',
+  // darkMode: 'class',
 
   /**
    * RTL Support
@@ -106,9 +106,9 @@ module.exports = {
        * Font families - use self-hosted WOFF2 only
        */
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        arabic: ['Noto Sans Arabic', 'Tahoma', 'sans-serif'],
-        heading: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Cairo', 'system-ui', '-apple-system', 'sans-serif'],
+        arabic: ['Cairo', 'Tahoma', 'sans-serif'],
+        heading: ['Cairo', 'system-ui', 'sans-serif'],
       },
 
       /**
@@ -217,12 +217,12 @@ module.exports = {
   plugins: [
     // Typography plugin for prose content
     require('@tailwindcss/typography'),
-    
+
     // Forms plugin for better form styling
     require('@tailwindcss/forms')({
       strategy: 'class', // Only apply when .form-input etc classes used
     }),
-    
+
     // RTL support with logical properties
     require('tailwindcss-rtl'),
   ],

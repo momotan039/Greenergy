@@ -1,6 +1,6 @@
 <?php
 /**
- * Gutenberg Blocks Loader
+ * Block Loader Class
  *
  * @package Greenergy
  * @since 1.0.0
@@ -10,53 +10,87 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-/**
- * Class Greenergy_Blocks_Loader
- */
 class Greenergy_Blocks_Loader {
 
+    /**
+     * Constructor
+     */
     public function __construct() {
-        add_action( 'init', [ $this, 'register_blocks' ] );
+        // Register custom block category (both filters for compatibility)
         add_filter( 'block_categories_all', [ $this, 'register_block_category' ], 10, 2 );
+        add_filter( 'block_categories', [ $this, 'register_block_category' ], 10, 2 );
+        
+        // Register blocks on init
+        add_action( 'init', [ $this, 'register_blocks' ] );
+        
+        // Enqueue editor-specific assets
+        add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_editor_assets' ] );
     }
 
     /**
-     * Register custom blocks
+     * Register Custom Block Category
+     */
+    public function register_block_category( $categories, $post ) {
+        $greenergy_category = [
+            'slug'  => 'greenergy-blocks',
+            'title' => esc_html__( 'Greenergy Blocks', 'greenergy' ),
+            'icon'  => 'lightbulb',
+        ];
+
+        // Prepend to the categories array to show at the top
+        array_unshift( $categories, $greenergy_category );
+
+        return $categories;
+    }
+
+    /**
+     * Register all blocks found in /inc/blocks/src/
      */
     public function register_blocks() {
-        // Block registration will go here
-        // Each block in /inc/blocks/src/{block-name}/ will be registered
-        
-        $blocks_dir = GREENERGY_INC_DIR . '/blocks/src';
-        
-        if ( ! file_exists( $blocks_dir ) ) {
-            return;
-        }
+        $script_path = GREENERGY_ASSETS_DIR . '/js/dist/blocks.min.js';
+        $version = file_exists( $script_path ) ? filemtime( $script_path ) : GREENERGY_VERSION;
 
-        $block_folders = glob( $blocks_dir . '/*', GLOB_ONLYDIR );
+        // Register Editor Script first so block.json can find it
+        wp_register_script(
+            'greenergy-blocks-editor',
+            GREENERGY_ASSETS_URI . '/js/dist/blocks.min.js',
+            [ 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-server-side-render', 'wp-i18n' ],
+            $version,
+            true
+        );
 
-        foreach ( $block_folders as $block_folder ) {
-            $block_json = $block_folder . '/block.json';
-            
-            if ( file_exists( $block_json ) ) {
-                register_block_type( $block_folder );
+        $blocks_dir = GREENERGY_INC_DIR . '/blocks/src/';
+        if ( ! is_dir( $blocks_dir ) ) return;
+
+        $items = scandir( $blocks_dir );
+        foreach ( $items as $item ) {
+            if ( in_array( $item, [ '.', '..' ], true ) ) continue;
+
+            $block_path = $blocks_dir . $item;
+            if ( is_dir( $block_path ) && file_exists( $block_path . '/block.json' ) ) {
+                $result = register_block_type_from_metadata( $block_path );
+                if ( ! $result ) {
+                    error_log( "Greenergy Blocks: Failed to register block at $block_path" );
+                }
             }
         }
     }
 
     /**
-     * Register custom block category
+     * Enqueue generic editor script if needed
+     * Note: block.json handles most of this, but we need to register the handles.
      */
-    public function register_block_category( $categories, $post ) {
-        return array_merge(
-            [
-                [
-                    'slug'  => 'greenergy',
-                    'title' => __( 'Greenergy Blocks', 'greenergy' ),
-                    'icon'  => 'admin-site-alt3',
-                ],
-            ],
-            $categories
+    public function enqueue_editor_assets() {
+        // Enqueue Editor Script (handle was registered in register_blocks)
+        wp_enqueue_script( 'greenergy-blocks-editor' );
+
+        // Enqueue Editor Styles (Tailwind)
+        wp_enqueue_style(
+            'greenergy-blocks-editor-style',
+            GREENERGY_ASSETS_URI . '/css/dist/editor.min.css',
+            [],
+            GREENERGY_VERSION
         );
     }
 }
+

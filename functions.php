@@ -14,6 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// file_put_contents( 'C:/xampp/htdocs/greenergy/wp-content/themes/greenergy_theme/test-log.log', "PHP Execution Success: " . date('Y-m-d H:i:s') . "\n", FILE_APPEND );
+
 /**
  * Theme Constants
  */
@@ -47,6 +49,7 @@ function greenergy_autoloader( $class_name ) {
         GREENERGY_INC_DIR . '/blocks/class-' . $class_file . '.php',
         GREENERGY_INC_DIR . '/widgets/class-' . $class_file . '.php',
         GREENERGY_INC_DIR . '/rest-api/class-' . $class_file . '.php',
+        GREENERGY_INC_DIR . '/admin/class-' . $class_file . '.php', // New Admin Path
         GREENERGY_DIR . '/admin/class-' . $class_file . '.php',
     ];
 
@@ -86,40 +89,42 @@ function greenergy_init() {
     new Greenergy_CPT_Jobs();
     new Greenergy_CPT_Courses();
     new Greenergy_CPT_Directory();
+    new Greenergy_CPT_Stories();
+    new Greenergy_CPT_Stats();
     
     // Gutenberg Blocks
     new Greenergy_Blocks_Loader();
     
     // Admin functionality
     if ( is_admin() ) {
-        new Greenergy_Admin_Init();
+        Greenergy_Admin_Panel::get_instance();
     }
+    
+    // REST API (Initialize always or checking is_admin/rest request context - usually always for routes)
+    Greenergy_Admin_REST::get_instance();
 }
 add_action( 'after_setup_theme', 'greenergy_init', 5 );
 
 /**
- * Redux Framework Configuration
- * Only load if Redux is active
- */
-function greenergy_load_redux() {
-    if ( class_exists( 'Redux' ) ) {
-        require_once GREENERGY_DIR . '/admin/redux/redux-config.php';
-    }
-}
-add_action( 'init', 'greenergy_load_redux' );
-
-/**
- * Get theme option from Redux
+ * Get theme option
  *
  * @param string $option_name The option key to retrieve.
  * @param mixed  $default     Default value if option not found.
  * @return mixed The option value.
  */
 function greenergy_option( $option_name, $default = '' ) {
-    global $greenergy_options;
+    // Try to get from new settings first (if migrated)
+    $new_settings = get_option( 'greenergy_settings', [] );
     
-    if ( isset( $greenergy_options[ $option_name ] ) ) {
-        return $greenergy_options[ $option_name ];
+    if ( isset( $new_settings[ $option_name ] ) ) {
+        return $new_settings[ $option_name ];
+    }
+
+    // Fallback to legacy Redux options
+    $options = get_option( 'greenergy_options', [] );
+    
+    if ( isset( $options[ $option_name ] ) ) {
+        return $options[ $option_name ];
     }
     
     return $default;

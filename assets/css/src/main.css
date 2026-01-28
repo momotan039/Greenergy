@@ -40,7 +40,7 @@
 
     /* Base body styles */
     body {
-        @apply antialiased bg-white dark:bg-secondary-900 text-secondary-800 dark:text-secondary-100;
+        @apply antialiased bg-white text-secondary-800;
     }
 
     /* Focus visible for accessibility */

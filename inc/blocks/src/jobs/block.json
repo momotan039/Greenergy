@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/jobs",
+    "title": "Greenergy Jobs",
+    "category": "greenergy-blocks",
+    "icon": "businessman",
+    "editorScript": "greenergy-blocks-editor",
+    "description": "Jobs listing section.",
+    "attributes": {
+        "badgeText": {
+            "type": "string",
+            "default": "الوظائف"
+        },
+        "description": {
+            "type": "string",
+            "default": "كن على اطلاع دائم على آخر التطورات في عالم الطاقة المتجددة، مع لمحة سريعة عن أكثر المواضيع التي يتحدث عنها الجميع."
+        },
+        "buttonText": {
+            "type": "string",
+            "default": "عرض جميع الوظائف"
+        },
+        "imageId": {
+            "type": "number",
+            "default": 0
+        }
+    },
+    "supports": {
+        "align": [
+            "full",
+            "wide"
+        ],
+        "spacing": {
+            "margin": true,
+            "padding": true
+        }
+    },
+    "render": "file:./render.php"
+}

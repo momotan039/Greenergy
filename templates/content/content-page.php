@@ -1,0 +1,27 @@
+<?php
+/**
+ * Template part for displaying page content in page.php
+ *
+ * @package Greenergy
+ * @since 1.0.0
+ */
+?>
+
+<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+    <header class="entry-header mb-8 text-center">
+        <?php if ( ! is_front_page() ) : ?>
+            <h1 class="text-4xl font-black text-gray-900 mb-4"><?php the_title(); ?></h1>
+        <?php endif; ?>
+    </header>
+
+    <div class="entry-content">
+        <?php
+        the_content();
+
+        wp_link_pages( array(
+            'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'greenergy' ),
+            'after'  => '</div>',
+        ) );
+        ?>
+    </div>
+</article>

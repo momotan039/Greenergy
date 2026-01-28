@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/latest-news",
+    "title": "Greenergy Latest News",
+    "category": "greenergy-blocks",
+    "icon": "admin-post",
+    "editorScript": "greenergy-blocks-editor",
+    "description": "Latest news with filters and swiper.",
+    "attributes": {
+        "badgeText": {
+            "type": "string",
+            "default": "أحدث الأخبار"
+        },
+        "description": {
+            "type": "string",
+            "default": "كن على اطلاع دائم على آخر التطورات في عالم الطاقة المتجددة، مع لمحة سريعة عن أكثر المواضيع التي يتحدث عنها الجميع."
+        },
+        "imageId": {
+            "type": "number",
+            "default": 0
+        }
+    },
+    "supports": {
+        "align": [
+            "full",
+            "wide"
+        ],
+        "spacing": {
+            "margin": true,
+            "padding": true
+        }
+    },
+    "render": "file:./render.php"
+}

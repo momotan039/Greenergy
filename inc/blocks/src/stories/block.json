@@ -1,0 +1,76 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/stories",
+    "title": "Greenergy Stories",
+    "category": "greenergy-blocks",
+    "icon": "groups",
+    "description": "Instagram-style story circles section.",
+    "editorScript": "greenergy-blocks-editor",
+    "attributes": {
+        "stories": {
+            "type": "array",
+            "default": [
+                {
+                    "label": "أخبار عاجلة",
+                    "image": "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?w=200&h=200&fit=crop",
+                    "imageId": 0,
+                    "link": "#"
+                },
+                {
+                    "label": "نصيحة سريعة",
+                    "image": "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=200&h=200&fit=crop",
+                    "imageId": 0,
+                    "link": "#"
+                },
+                {
+                    "label": "حدث قادم",
+                    "image": "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?w=200&h=200&fit=crop",
+                    "imageId": 0,
+                    "link": "#"
+                },
+                {
+                    "label": "ملخص تقرير عالمي",
+                    "image": "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=200&h=200&fit=crop",
+                    "imageId": 0,
+                    "link": "#"
+                },
+                {
+                    "label": "ابتكار جديد",
+                    "image": "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?w=200&h=200&fit=crop",
+                    "imageId": 0,
+                    "link": "#"
+                },
+                {
+                    "label": "ملخص تقرير عالمي",
+                    "image": "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=200&h=200&fit=crop",
+                    "imageId": 0,
+                    "link": "#"
+                },
+                {
+                    "label": "قصة نجاح",
+                    "image": "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?w=200&h=200&fit=crop",
+                    "imageId": 0,
+                    "link": "#"
+                },
+                {
+                    "label": "ابتكار جديد",
+                    "image": "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?w=200&h=200&fit=crop",
+                    "imageId": 0,
+                    "link": "#"
+                }
+            ]
+        }
+    },
+    "supports": {
+        "align": [
+            "full",
+            "wide"
+        ],
+        "spacing": {
+            "margin": true,
+            "padding": true
+        }
+    },
+    "render": "file:./render.php"
+}

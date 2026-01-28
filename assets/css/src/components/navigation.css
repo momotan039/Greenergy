@@ -1,132 +1,42 @@
-/**
- * Navigation Components
- * 
- * Header navigation, mobile menu, dropdowns
- * 
- * @package Greenergy
- */
+/* Navigation Component Styles */
 
 @layer components {
 
-    /* =========================================
-     MAIN NAVIGATION
-     ========================================= */
-    .main-navigation {
-        @apply hidden lg:flex items-center gap-1;
-    }
-
     .nav-link {
-        @apply px-4 py-2 text-sm font-medium text-secondary-700 dark:text-secondary-200 rounded-lg hover:bg-secondary-100 dark:hover:bg-secondary-800 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200;
+        @apply relative inline-flex items-center text-sm font-medium text-secondary-700 hover:text-primary-600 dark:text-secondary-200 dark:hover:text-white transition-colors duration-200;
     }
 
     .nav-link.active {
-        @apply text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20;
+        @apply text-primary-600 dark:text-white;
     }
 
-    /* =========================================
-     DROPDOWN MENU
-     ========================================= */
-    .dropdown {
-        @apply relative;
-    }
-
-    .dropdown-toggle {
-        @apply nav-link inline-flex items-center gap-1;
-    }
-
+    /* Dropdown Menus */
     .dropdown-menu {
-        @apply absolute top-full start-0
-        /* RTL-aware */
-        min-w-[220px] py-2 bg-white dark:bg-secondary-800 rounded-xl shadow-dropdown opacity-0 invisible translate-y-2 transition-all duration-200;
+        @apply absolute top-full right-0 min-w-[240px] bg-white dark:bg-secondary-800 rounded-xl shadow-dropdown opacity-0 invisible translate-y-2 transition-all duration-200 z-dropdown overflow-hidden;
     }
 
-    .dropdown:hover .dropdown-menu,
-    .dropdown:focus-within .dropdown-menu {
+    .group:hover .dropdown-menu {
         @apply opacity-100 visible translate-y-0;
     }
 
     .dropdown-item {
-        @apply block px-4 py-2.5 text-sm text-secondary-700 dark:text-secondary-200 hover:bg-secondary-50 dark:hover:bg-secondary-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-150;
+        @apply block px-4 py-3 text-sm text-secondary-600 hover:text-primary-600 hover:bg-secondary-50 dark:text-secondary-300 dark:hover:text-white dark:hover:bg-secondary-700/50 transition-colors duration-150;
     }
 
-    .dropdown-divider {
-        @apply my-2 border-t border-secondary-100 dark:border-secondary-700;
+    /* Mobile Menu */
+    .mobile-menu-backdrop {
+        @apply fixed inset-0 bg-secondary-900/50 backdrop-blur-sm z-modal-backdrop opacity-0 invisible transition-all duration-300;
     }
 
-    /* =========================================
-     MOBILE NAVIGATION
-     ========================================= */
-    .mobile-menu-toggle {
-        @apply lg:hidden btn-icon;
-    }
-
-    .mobile-menu {
-        @apply fixed inset-0 z-modal bg-white dark:bg-secondary-900 transform translate-x-full rtl:-translate-x-full transition-transform duration-300 ease-out;
-    }
-
-    .mobile-menu.is-open {
-        @apply translate-x-0;
-    }
-
-    .mobile-menu-header {
-        @apply flex items-center justify-between p-4 border-b border-secondary-100 dark:border-secondary-800;
-    }
-
-    .mobile-menu-body {
-        @apply p-4 overflow-y-auto;
-    }
-
-    .mobile-nav-link {
-        @apply block px-4 py-3 text-base font-medium text-secondary-800 dark:text-secondary-100 border-b border-secondary-100 dark:border-secondary-800 hover:text-primary-600 dark:hover:text-primary-400;
-    }
-
-    .mobile-menu-overlay {
-        @apply fixed inset-0 z-modal-backdrop bg-black/50 opacity-0 invisible transition-opacity duration-300;
-    }
-
-    .mobile-menu-overlay.is-open {
+    .mobile-menu-backdrop.open {
         @apply opacity-100 visible;
     }
 
-    /* =========================================
-     BREADCRUMBS
-     ========================================= */
-    .breadcrumbs {
-        @apply flex flex-wrap items-center gap-2 text-sm text-secondary-500 dark:text-secondary-400;
+    .mobile-menu-panel {
+        @apply fixed top-0 right-0 bottom-0 w-[300px] bg-white dark:bg-secondary-900 shadow-xl transform translate-x-full transition-transform duration-300 z-modal;
     }
 
-    .breadcrumbs-item {
-        @apply inline-flex items-center gap-2;
-    }
-
-    .breadcrumbs-link {
-        @apply hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-150;
-    }
-
-    .breadcrumbs-separator {
-        @apply text-secondary-300 dark:text-secondary-600;
-    }
-
-    .breadcrumbs-current {
-        @apply text-secondary-700 dark:text-secondary-200 font-medium;
-    }
-
-    /* =========================================
-     PAGINATION
-     ========================================= */
-    .pagination {
-        @apply flex items-center justify-center gap-1;
-    }
-
-    .pagination-link {
-        @apply inline-flex items-center justify-center min-w-[40px] h-10 px-3 text-sm font-medium text-secondary-600 dark:text-secondary-300 rounded-lg hover:bg-secondary-100 dark:hover:bg-secondary-800 transition-colors duration-150;
-    }
-
-    .pagination-link.active {
-        @apply bg-primary-500 text-white hover:bg-primary-600;
-    }
-
-    .pagination-link.disabled {
-        @apply opacity-50 cursor-not-allowed pointer-events-none;
+    .mobile-menu-panel.open {
+        @apply translate-x-0;
     }
 }

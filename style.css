@@ -1,19 +1,17 @@
 /*
-Theme Name: Greenergy Theme
-Theme URI: https://greenergy.com
-Author: Greenergy Development Team
-Author URI: https://greenergy.com
-Description: Enterprise-grade hybrid WordPress theme for Greenergy media platform. Performance-first architecture with Gutenberg support, RTL/multilingual ready, and optimized for Core Web Vitals.
+Theme Name: Greenergy
+Theme URI: https://example.com/greenergy
+Author: Greenergy Team
+Author URI: https://example.com
+Description: A premium WordPress theme for energy-themed websites with custom Gutenberg blocks.
 Version: 1.0.0
-Tested up to: 6.4
-Requires PHP: 8.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: greenergy
-Domain Path: /languages
-Tags: blog, news, entertainment, custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready, rtl-language-support, block-styles, wide-blocks, full-site-editing
+Tags: custom-blocks, green, renewable-energy
+*/
 
-Greenergy Theme - A high-performance hybrid WordPress theme.
-All design assets are loaded from /assets/ directory.
-This file contains theme metadata only - no CSS rules here.
+/* 
+Note: Most styles are handled via Tailwind CSS in header.php 
+or editor-specific styles in assets/css/src/editor.css
 */

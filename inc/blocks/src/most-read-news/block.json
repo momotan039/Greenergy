@@ -1,0 +1,43 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/most-read-news",
+    "title": "Greenergy Most Read News",
+    "category": "greenergy-blocks",
+    "icon": "megaphone",
+    "editorScript": "greenergy-blocks-editor",
+    "description": "Most read news grid layout.",
+    "attributes": {
+        "badgeText": {
+            "type": "string",
+            "default": "الأكثر قراءة"
+        },
+        "description": {
+            "type": "string",
+            "default": "استكشف أبرز الأخبار التي حظيت باهتمام القراء في عالم الطاقة المتجددة، من المشاريع العملاقة إلى أحدث الابتكارات البيئية."
+        },
+        "buttonText": {
+            "type": "string",
+            "default": "عرض جميع الاخبار"
+        },
+        "selectionMode": {
+            "type": "string",
+            "default": "auto"
+        },
+        "selectedPosts": {
+            "type": "array",
+            "default": []
+        }
+    },
+    "supports": {
+        "align": [
+            "full",
+            "wide"
+        ],
+        "spacing": {
+            "margin": true,
+            "padding": true
+        }
+    },
+    "render": "file:./render.php"
+}

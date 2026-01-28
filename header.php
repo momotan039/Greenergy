@@ -16,10 +16,44 @@ $header_style = greenergy_option( 'header_style', 'default' );
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="profile" href="https://gmpg.org/xfn/11">
     
+    <!-- Design Assets -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            green: '#229924',
+                            darkGreen: '#064015',
+                            lightGreen: '#CDEECD',
+                            gold: '#D9A520',
+                            yellow: '#FFD700',
+                            blue: '#0284C7',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: Cairo, sans-serif !important;
+            background-color: #ffffff;
+            overflow-x: hidden;
+            width: 100%;
+        }
+    </style>
+
     <?php wp_head(); ?>
 </head>
 
-<body <?php body_class(); ?>>
+<body <?php body_class( 'bg-white' ); ?>>
 <?php wp_body_open(); ?>
 
 <div id="page" class="site">

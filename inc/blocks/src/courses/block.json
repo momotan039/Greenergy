@@ -1,0 +1,43 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/courses",
+    "title": "Greenergy Courses",
+    "category": "greenergy-blocks",
+    "icon": "welcome-learn-more",
+    "editorScript": "greenergy-blocks-editor",
+    "description": "Courses carousel section.",
+    "attributes": {
+        "badgeText": {
+            "type": "string",
+            "default": "التدريبات"
+        },
+        "title": {
+            "type": "string",
+            "default": "الدورات التدريبية"
+        },
+        "description": {
+            "type": "string",
+            "default": "كن على اطلاع دائم على آخر التطورات في عالم الطاقة المتجددة، مع لمحة سريعة عن أكثر المواضيع التي يتحدث عنها الجميع."
+        },
+        "buttonText": {
+            "type": "string",
+            "default": "عرض كل الدورات"
+        },
+        "imageId": {
+            "type": "number",
+            "default": 0
+        }
+    },
+    "supports": {
+        "align": [
+            "full",
+            "wide"
+        ],
+        "spacing": {
+            "margin": true,
+            "padding": true
+        }
+    },
+    "render": "file:./render.php"
+}

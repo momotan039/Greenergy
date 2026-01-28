@@ -1,0 +1,19 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/social-media-settings",
+    "version": "1.0.0",
+    "title": "Social Media Settings",
+    "category": "theme",
+    "icon": "share",
+    "description": "Configure social media links for your site.",
+    "attributes": {
+        "items": {
+            "type": "array",
+            "default": []
+        }
+    },
+    "textdomain": "greenergy",
+    "editorScript": "file:./index.js",
+    "style": "file:./style.css"
+}

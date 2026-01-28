@@ -1,0 +1,31 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "greenergy/stats",
+    "title": "Greenergy Global Stats",
+    "category": "greenergy-blocks",
+    "icon": "chart-area",
+    "editorScript": "greenergy-blocks-editor",
+    "description": "Global stats section with glassmorphism.",
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "أرقام تتحدث عن مستقبل الطاقة"
+        },
+        "description": {
+            "type": "string",
+            "default": "تعرف على أبرز إنجازات ومؤشرات قطاع الطاقة المتجددة حول العالم، في لمحة سريعة."
+        }
+    },
+    "supports": {
+        "align": [
+            "full",
+            "wide"
+        ],
+        "spacing": {
+            "margin": true,
+            "padding": true
+        }
+    },
+    "render": "file:./render.php"
+}

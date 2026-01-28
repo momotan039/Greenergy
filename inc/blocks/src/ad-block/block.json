@@ -1,0 +1,47 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/ad-block",
+    "title": "Greenergy Ad Block",
+    "category": "greenergy-blocks",
+    "icon": "megaphone",
+    "description": "Flexible ad section for images or custom scripts.",
+    "editorScript": "greenergy-blocks-editor",
+    "attributes": {
+        "adType": {
+            "type": "string",
+            "default": "image"
+        },
+        "imageUrl": {
+            "type": "string",
+            "default": ""
+        },
+        "imageId": {
+            "type": "number",
+            "default": 0
+        },
+        "adLink": {
+            "type": "string",
+            "default": "#"
+        },
+        "adCode": {
+            "type": "string",
+            "default": ""
+        },
+        "fullWidth": {
+            "type": "boolean",
+            "default": false
+        }
+    },
+    "supports": {
+        "align": [
+            "wide",
+            "full"
+        ],
+        "spacing": {
+            "margin": true,
+            "padding": true
+        }
+    },
+    "render": "file:./render.php"
+}
