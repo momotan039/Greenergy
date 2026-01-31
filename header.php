@@ -17,15 +17,15 @@ $header_style = greenergy_option( 'header_style', 'default' );
     <link rel="profile" href="https://gmpg.org/xfn/11">
     
     <!-- Design Assets -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://db.onlinewebfonts.com/c/aba1a083bf50980a05f0265179103a09?family=DIN+Next+LT+Arabic+Medium" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Cairo', 'sans-serif'],
+                        sans: ['DIN Next LT Arabic Medium', 'sans-serif'],
+                        'din': ['DIN Next LT Arabic Medium', 'sans-serif'],
                     },
                     colors: {
                         brand: {
@@ -43,10 +43,13 @@ $header_style = greenergy_option( 'header_style', 'default' );
     </script>
     <style>
         body {
-            font-family: Cairo, sans-serif !important;
+            font-family: 'DIN Next LT Arabic Medium', sans-serif !important;
             background-color: #ffffff;
             overflow-x: hidden;
             width: 100%;
+        }
+        * {
+            font-family: 'DIN Next LT Arabic Medium', sans-serif;
         }
     </style>
 

@@ -5,7 +5,7 @@ const { registerBlockType } = wp.blocks;
 const apiFetch = wp.apiFetch;
 
 // Import our custom blocks code
-import '../../../inc/blocks/src/social-media-settings';
+import '../../../inc/blocks/src/homepage/social-media-settings';
 
 const GreenergyAdmin = () => {
     // Initial blocks state from DB

@@ -81,25 +81,23 @@ if ( $query->have_posts() ) {
 }
 ?>
 <style>
-    .course-card {
-        background: #000000;
-        border-radius: 24px;
-        overflow: hidden;
-        transition: transform 0.3s ease;
-    }
-    .course-card:hover {
-        transform: translateY(-8px);
-    }
     .swiper-pagination-bullet {
         background: rgba(255, 255, 255, 0.3) !important;
-        width: 12px;
-        height: 12px;
+        width: 10px;
+        height: 10px;
         opacity: 1;
     }
     .swiper-pagination-bullet-active {
         background: #A3E635 !important;
-        width: 32px;
-        border-radius: 6px;
+        width: 10px;
+    }
+    .cutted-edge {
+           left: 2.4rem;
+           bottom: 2rem;
+           background-color: #013214;
+           border-radius: 11px 30px 10px 20px;
+           width: 6rem;
+           height: 6rem;
     }
 </style>
 
@@ -115,10 +113,10 @@ if ( $query->have_posts() ) {
             <div class="inline-block bg-white text-[#013214] px-6 py-1.5 rounded-full text-sm font-bold mb-6">
                 <?php echo esc_html( $attributes['badgeText'] ); ?>
             </div>
-            <h2 class="text-4xl md:text-5xl font-black text-white mb-6">
+            <h2 class="text-4xl md:text-5xl font-medium text-white mb-6">
                 <?php echo esc_html( $attributes['title'] ); ?>
             </h2>
-            <p class="text-white/70 max-w-2xl mx-auto text-lg leading-relaxed font-semibold">
+            <p class="text-white max-w-2xl mx-auto text-lg leading-relaxed ">
                 <?php echo esc_html( $attributes['description'] ); ?>
             </p>
         </div>
@@ -126,49 +124,54 @@ if ( $query->have_posts() ) {
         <!-- Carousel -->
         <div class="swiper swiper-container pb-16" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
             <div class="swiper-wrapper">
-                <?php foreach ( $courses as $course ) : ?>
-                    <div class="swiper-slide">
-                        <div class="course-card relative group cursor-pointer bg-black/40 backdrop-blur-sm border border-white/10">
-                            <!-- Floating Button -->
-                            <div class="absolute bottom-0 left-0 w-12 h-12 bg-[#bef264] rounded-full flex items-center justify-center text-[#013214] shadow-[0_4px_12px_rgba(163,230,53,0.4)] z-10 hover:scale-105 transition-transform">
-                                <i class="fas fa-arrow-up text-lg rotate-[-45deg]"></i>
-                            </div>
-                            <div class="relative h-64">
-                                <img src="<?php echo esc_url( $course['image'] ); ?>" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" alt="<?php echo esc_attr( $course['title'] ); ?>">
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <div class="w-14 h-14 rounded-full border border-white/60 flex items-center justify-center text-white backdrop-blur-[2px] hover:bg-white/20 transition-colors">
-                                        <i class="fas fa-play text-lg ml-1"></i>
+                <?php foreach ( $courses as $index => $course ) : ?>
+                    <div class="swiper-slide" data-aos="fade-up" data-aos-delay="<?php echo esc_attr(300 + ($index * 100)); ?>">
+                        <div class="h-64 rounded-2xl relative overflow-hidden bg-cover bg-center group transition-all duration-500 hover:shadow-2xl hover:shadow-lime-400/20"
+                            style="background-image: url('<?php echo esc_url( $course['image'] ); ?>');"  
+                        >
+                       
+                            <!-- Play Button -->
+                            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <div class="w-12 h-12 rounded-full border border-white/60 flex items-center justify-center text-white backdrop-blur-[4px] bg-white/10 hover:bg-white/30 transition-all scale-75 group-hover:scale-100 duration-500">
+                                        <i class="fas fa-play text-xl ml-1"></i>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="p-8 pt-10 text-right">
-                                <h3 class="text-white font-bold text-xl mb-4 leading-normal">
+                            <!-- Course Details -->
+                                <div class="absolute bottom-0 w-full text-right p-4 pt-20 bg-gradient-to-t from-black/90 to-transparent transition-all duration-300">
+                                <h3 class="text-white font-medium text-base w-3/4 mb-4 leading-normal">
                                     <?php echo esc_html( $course['title'] ); ?>
                                 </h3>
-                                <div class="flex-row-reverse flex items-center justify-end gap-5 text-white/70 text-xs font-semibold">
+                                <div class="flex flex items-center gap-5 text-white text-sm font-normal">
                                     <div class="flex items-center gap-2">
-                                        <span><?php echo esc_html( $course['duration'] ); ?></span>
                                         <i class="far fa-clock"></i>
+                                        <span><?php echo esc_html( $course['duration'] ); ?></span>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <span><?php echo esc_html( $course['users'] ); ?></span>
                                         <i class="fas fa-users"></i>
+                                        <span><?php echo esc_html( $course['users'] ); ?></span>
                                     </div>
                                 </div>
+                            </div>
+
+                             <!-- Cutted Edge -->
+                        <div class="cutted-edge absolute bottom-0 left-0 w-12 h-12 bg-white -translate-x-1/2 translate-y-1/2 rounded-lg"></div>
+                        <!-- Floating Button -->
+                            <div class="absolute bottom-[.5rem] left-[1rem] w-14 h-14 bg-[#bef264] rounded-full flex items-center justify-center text-[#013214] shadow-[0_4px_12px_rgba(163,230,53,0.4)] z-10 hover:scale-110 hover:rotate-[45deg] transition-all duration-300">
+                                <i class="fas fa-arrow-up text-lg rotate-[-45deg]"></i>
                             </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
             </div>
             <!-- Pagination -->
-            <div class="swiper-pagination mt-12"></div>
+            <div class="swiper-pagination !relative mt-12"></div>
         </div>
 
         <!-- Footer Button -->
-        <div class="text-center mt-12">
-            <a href="#" class="bg-white text-[#013214] hover:bg-[#A3E635] hover:text-[#013214] transition-colors px-12 py-4 rounded-xl font-black text-lg inline-flex items-center gap-4">
+        <div class="text-center mt-12" data-aos="fade-up" data-aos-delay="500">
+            <a href="#" class="bg-white text-[#013214] hover:bg-[#bef264] hover:text-[#013214] hover:scale-105 hover:shadow-xl transition-all duration-300 px-12 py-4 rounded-xl font-black text-lg inline-flex items-center gap-4 group">
                 <span><?php echo esc_html( $attributes['buttonText'] ); ?></span>
-                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-left transition-transform group-hover:-translate-x-2"></i>
             </a>
         </div>
     </div>

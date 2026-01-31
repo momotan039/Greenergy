@@ -139,21 +139,11 @@ if ( $query->have_posts() ) {
 }
 ?>
 <style>
-    .golden-card-bg {
-        background: linear-gradient(-45deg, #FDE68A, #F59E0B, #D97706, #FDE68A);
-        background-size: 400% 400%;
-        animation: gradient-bg 8s ease infinite;
-    }
-    @keyframes gradient-bg {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
     .scroll-mask {
+        filter: blur(3px);
         mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
         -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
         overflow: hidden;
-        height: 140px;
     }
     .scroll-container {
         display: flex;
@@ -206,8 +196,8 @@ if ( $query->have_posts() ) {
                     foreach ( $sidebar_jobs as $job ) : 
                         $delay += 100;
                 ?>
-                    <div class="bg-white rounded-3xl p-4 md:p-5 shadow-soft hover:shadow-lg transition-all flex items-center gap-4 border border-transparent hover:border-[#D9A520]/10" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
-                        <div class="w-14 h-14 md:w-16 md:h-16 rounded-full border border-gray-100 p-1 flex-shrink-0 bg-white shadow-sm overflow-hidden">
+                    <div class="bg-white rounded-3xl p-4 md:p-5 shadow-soft hover:shadow-2xl hover:shadow-[#D9A520]/10 hover:-translate-y-1 transition-all duration-500 flex items-center gap-4 border border-transparent hover:border-[#D9A520]/10 group" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
+                        <div class="w-14 h-14 md:w-16 md:h-16 rounded-full border border-gray-100 p-1 flex-shrink-0 bg-white shadow-sm overflow-hidden group-hover:scale-110 transition-transform duration-500">
                             <img src="<?php echo esc_url( $job['image'] ); ?>" class="w-full h-full object-cover rounded-full" alt="Logo">
                         </div>
                         <div class="flex-1 min-w-0">
@@ -218,28 +208,32 @@ if ( $query->have_posts() ) {
                                     <span><?php echo esc_html( $job['date'] ); ?></span>
                                 </div>
                             </div>
-                            <p class="text-gray-500 font-bold text-[9px] md:text-[10px] mb-2 truncate"><?php echo esc_html( $job['company'] ); ?></p>
+                            <p class="text-gray-500 text-[9px] md:text-[10px] mb-2 truncate"><?php echo esc_html( $job['company'] ); ?></p>
                             <div class="flex items-center justify-between gap-2">
-                                <div class="flex items-center gap-2 text-gray-400 text-[8px] md:text-[9px] font-black overflow-x-auto no-scrollbar">
+                                <div class="flex items-center gap-2  text-[8px] md:text-[9px]  overflow-x-auto no-scrollbar">
                                     <span class="flex items-center gap-0.5 whitespace-nowrap"><i class="fas fa-map-marker-alt"></i> <?php echo esc_html( $job['location'] ); ?></span>
                                     <span class="flex items-center gap-0.5 whitespace-nowrap"><i class="fas fa-users"></i> <?php echo esc_html( $job['users'] ); ?></span>
                                     <?php foreach ( $job['tags'] as $tag ) : ?>
-                                        <span class="bg-[#F9FAFB] px-1.5 py-0.5 rounded text-[7px] text-gray-500 border border-gray-100 whitespace-nowrap"><?php echo esc_html( $tag ); ?></span>
+                                        <span class="rounded-[123px] outline outline-1 outline-offset-[-1px] outline-zinc-200  bg-[#F9FAFB] px-1.5 py-0.5 rounded text-[7px] text-gray-500 border border-gray-100 whitespace-nowrap"><?php echo esc_html( $tag ); ?></span>
                                     <?php endforeach; ?>
                                 </div>
-                                <button class="bg-[#D9A520] text-white font-black py-1 px-3 rounded-lg text-[9px] md:text-[10px] hover:bg-[#B78B17] transition-all flex-shrink-0">تقدم</button>
+                                <button class="bg-[#D9A520] text-white py-1.5 px-3 md:px-4 rounded-lg text-[9px] md:text-[10px] hover:bg-[#B78B17] hover:scale-105 transition-all flex-shrink-0 shadow-md">
+                                     <span>تقدم الآن</span>
+                                    <i class="fas fa-arrow-left text-[8px] md:text-[9px]"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
 
                 <!-- Golden Card -->
-                <div class="golden-card-bg rounded-3xl p-6 shadow-lg relative overflow-hidden group h-[320px] md:h-[380px]">
-                    <div class="absolute inset-0 z-0 bg-white/10 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="rounded-3xl p-6 shadow-lg relative overflow-hidden group h-[320px] md:h-[380px]">
+                <div class="absolute w-full h-full bg-gradient-to-l from-yellow-50/25 via-yellow-500/50 to-amber-50/25 "></div>    
+                <div class="absolute inset-0 z-0 bg-white/10  opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="relative z-10 flex flex-col items-center justify-center h-full text-center">
-                        <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-2 drop-shadow-sm">وظائف ذهبية</h3>
-                        <p class="text-gray-700 font-bold text-sm md:text-base mb-6">كن الأول في التقديم</p>
-                        <div class="scroll-mask w-full mb-8">
+                        <h3 class="text-2xl md:text-3xl font-black  text-black mb-2 drop-shadow-sm px-6 pb-2 bg-gradient-to-l from-yellow-500/80 to-amber-300/80 rounded-3xl">وظيفة ذهبية</h3>
+                        <p class="text-gray-700 text-sm md:text-base mb-6">اكتشف احدث الوضائف المميزة</p>
+                        <div class="scroll-mask w-full h-full absolute">
                             <div class="scroll-container px-2">
                                 <?php 
                                 $all_golden = array_merge($golden_jobs, $golden_jobs); // Duplicate for seamless scroll
@@ -264,9 +258,9 @@ if ( $query->have_posts() ) {
                                 <?php endforeach; ?>
                             </div>
                         </div>
-                        <button class="bg-white text-[#D97706] font-black py-3 md:py-4 px-10 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 flex items-center gap-3 text-sm md:text-base mt-auto">
+                        <button class="bg-gradient-to-br from-amber-400 to-amber-400 text-white py-3 md:py-4 px-10 rounded-2xl shadow-xl hover:shadow-2xl hover:shadow-amber-500/30 transition-all transform hover:scale-110 flex items-center gap-3 text-sm md:text-base group-hover:from-amber-500 group-hover:to-amber-500">
                             <span>اكتشف الكل</span>
-                            <i class="fas fa-arrow-left text-xs md:text-sm"></i>
+                            <i class="fas fa-arrow-left text-xs md:text-sm group-hover:-translate-x-1 transition-transform"></i>
                         </button>
                     </div>
                 </div>
@@ -279,36 +273,36 @@ if ( $query->have_posts() ) {
                     foreach ( $jobs as $job ) : 
                         $delay += 150;
                 ?>
-                    <div class="bg-white rounded-3xl p-4 md:p-8 shadow-soft hover:shadow-lg transition-all flex items-center gap-4 md:gap-8 border border-transparent hover:border-[#D9A520]/20" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
-                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-full border border-gray-100 p-2 flex-shrink-0 bg-white shadow-sm overflow-hidden">
+                    <div class="bg-white rounded-3xl p-4 md:p-8 shadow-soft hover:shadow-2xl hover:shadow-[#D9A520]/10 hover:-translate-y-1 transition-all duration-500 flex items-center gap-4 md:gap-8 border border-transparent hover:border-[#D9A520]/20 group" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
+                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-full border border-gray-100 p-2 flex-shrink-0 bg-white shadow-sm overflow-hidden group-hover:scale-110 transition-transform duration-500">
                             <img src="<?php echo esc_url( $job['image'] ); ?>" class="w-full h-full object-cover rounded-full" alt="Logo">
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center justify-between mb-1">
-                                <h3 class="font-black text-sm md:text-2xl text-gray-900 truncate"><?php echo esc_html( $job['title'] ); ?></h3>
+                                <h3 class="font-black text-sm md:text-base text-gray-900 truncate"><?php echo esc_html( $job['title'] ); ?></h3>
                                 <div class="text-gray-400 text-[8px] md:text-xs font-bold flex items-center gap-2 flex-shrink-0" dir="ltr">
                                     <i class="far fa-clock"></i>
                                     <span><?php echo esc_html( $job['date'] ); ?></span>
                                 </div>
                             </div>
-                            <p class="text-gray-500 font-black text-[10px] md:text-sm mb-4 md:mb-6 truncate"><?php echo esc_html( $job['company'] ); ?></p>
+                            <p class="text-gray-500 text-[10px] md:text-sm mb-4 md:mb-6 truncate"><?php echo esc_html( $job['company'] ); ?></p>
                             <div class="flex flex-wrap items-center gap-3 md:gap-6">
-                                <div class="flex items-center gap-2 text-gray-400 text-[9px] md:text-sm font-black">
+                                <div class="flex items-center gap-2  text-[9px] md:text-sm">
                                     <i class="fas fa-map-marker-alt text-[10px] md:text-xs"></i>
                                     <span class="responsive-text-xs"><?php echo esc_html( $job['location'] ); ?></span>
                                 </div>
-                                <div class="flex items-center gap-2 text-gray-400 text-[9px] md:text-sm font-black">
+                                <div class="flex items-center gap-2  text-[9px] md:text-sm">
                                     <i class="fas fa-users text-[10px] md:text-xs"></i>
                                     <span class="responsive-text-xs"><?php echo esc_html( $job['users'] ); ?></span>
                                 </div>
                                 <div class="flex gap-1 md:gap-2">
                                     <?php foreach ( $job['tags'] as $tag ) : ?>
-                                        <span class="bg-[#F9FAFB] border border-gray-100 text-gray-500 px-2 py-0.5 md:px-4 md:py-1.5 rounded-lg md:rounded-xl text-[8px] md:text-xs font-black"><?php echo esc_html( $tag ); ?></span>
+                                        <span class="rounded-[123px] outline outline-1 outline-offset-[-1px] outline-zinc-200 bg-[#F9FAFB] border border-gray-100 px-2 py-0.5 md:px-4 md:py-1.5 rounded-lg md:rounded-xl text-[8px] md:text-xs font-black"><?php echo esc_html( $tag ); ?></span>
                                     <?php endforeach; ?>
                                 </div>
-                                <button class="bg-[#D9A520] text-white font-black py-1.5 md:py-3 px-4 md:px-10 rounded-xl md:rounded-2xl hover:bg-[#B78B17] transition-all transform hover:translate-x-[-4px] flex items-center gap-2 md:gap-3 mr-auto shadow-md text-[10px] md:text-base">
-                                    <span>تقدم</span>
-                                    <i class="fas fa-arrow-left text-[10px] md:text-sm"></i>
+                                <button class="bg-[#D9A520] text-white py-1.5 md:py-3 px-4 md:px-10 rounded-xl md:rounded-2xl hover:bg-[#B78B17] hover:scale-105 transition-all transform hover:translate-x-[-4px] flex items-center gap-2 md:gap-3 mr-auto shadow-md text-[10px] md:text-base">
+                                    <span>تقدم الآن</span>
+                                    <i class="fas fa-arrow-left text-[10px] md:text-sm group-hover:-translate-x-1 transition-transform"></i>
                                 </button>
                             </div>
                         </div>

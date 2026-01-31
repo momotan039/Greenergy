@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "greenergy/scroll-progress",
+    "title": "Scroll Progress Indicator",
+    "category": "greenergy-blocks",
+    "icon": "upload",
+    "editorScript": "greenergy-blocks-editor",
+    "description": "A fixed scroll progress indicator.",
+    "attributes": {},
+    "supports": {
+        "html": false
+    },
+    "render": "file:./render.php"
+}

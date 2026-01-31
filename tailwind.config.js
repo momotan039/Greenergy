@@ -106,9 +106,9 @@ module.exports = {
        * Font families - use self-hosted WOFF2 only
        */
       fontFamily: {
-        sans: ['Cairo', 'system-ui', '-apple-system', 'sans-serif'],
-        arabic: ['Cairo', 'Tahoma', 'sans-serif'],
-        heading: ['Cairo', 'system-ui', 'sans-serif'],
+        sans: ['DIN Next LT Arabic Medium', 'system-ui', '-apple-system', 'sans-serif'],
+        arabic: ['DIN Next LT Arabic Medium', 'Tahoma', 'sans-serif'],
+        heading: ['DIN Next LT Arabic Medium', 'system-ui', 'sans-serif'],
       },
 
       /**

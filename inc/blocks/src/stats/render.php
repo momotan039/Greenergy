@@ -38,45 +38,46 @@ if ( $query->have_posts() ) {
     $stats = [
         [
             'title' => 'إجمالي إنتاج الطاقة الشمسية',
-            'value' => '+120 GW',
-            'desc'  => 'تم إنتاجها عالمياً في آخر 12 شهر',
-            'icon'  => 'fa-solar-panel',
+            'value' => '120+ جيجاوات',
+            'desc'  => 'تم إنتاجها عالميًا في آخر 12 شهر',
+            'icon'  => 'wind-power.png ',
         ],
         [
             'title' => 'إجمالي إنتاج طاقة الرياح',
-            'value' => '+95 GW',
+            'value' => '95+ جيجاوات',
             'desc'  => 'عبر مزارع الرياح البرية والبحرية',
-            'icon'  => 'fa-wind',
+            'icon'  => 'energy.png  ',
         ],
         [
             'title' => 'انخفاض انبعاثات الكربون',
-            'value' => '+2.5 M Ton',
+            'value' => '2.5+ مليون طن',
             'desc'  => 'تم تجنبها باستخدام مصادر الطاقة النظيفة',
-            'icon'  => 'fa-smog',
-        ],
+            'icon'  => 'cardano-(ada).svg',
+        ], 
         [
-            'title' => 'عدد الدول المشاركة',
-            'value' => '+180',
-            'desc'  => 'تتبنى سياسات للطاقة المستدامة',
-            'icon'  => 'fa-globe-americas',
+            'title' => 'عدد المشاريع الجديدة',
+            'value' => '3,200+ مشروع',
+            'desc'  => 'في مجال الطاقة المتجددة خلال العام الحالي',
+            'icon'  => 'note-favorite.svg',
         ],
         [
             'title' => 'الاستثمارات العالمية',
-            'value' => '+$500 B',
+            'value' => '500+ مليار دولار',
             'desc'  => 'تم ضخها في قطاع الطاقة النظيفة',
-            'icon'  => 'fa-chart-line',
+            'icon'  => 'status-up.svg',
         ],
         [
-            'title' => 'عدد المشاريع الجديدة',
-            'value' => '+3,200',
-            'desc'  => 'في مجال الطاقة المتجددة خلال العام الحالي',
-            'icon'  => 'fa-calendar-check',
+            'title' => 'عدد الدول المشاركة',
+            'value' => '180+ دولة',
+            'desc'  => 'تتبنى سياسات للطاقة المستدامة',
+            'icon'  => 'global.svg',
         ],
     ];
 }
 
 $wrapper_attributes = get_block_wrapper_attributes( [
-    'class' => 'my-12 relative w-full max-w-[1400px] mx-auto bg-[#022C22] rounded-[3rem] overflow-hidden p-8 lg:p-16 min-h-[800px] flex flex-col items-center justify-center',
+    'class' => 'my-12 relative w-full max-w-[1400px] mx-auto rounded-[3rem] overflow-hidden p-8 lg:p-16 min-h-[800px] flex flex-col items-center justify-center',
+    'style' => 'background-image: url("' . get_template_directory_uri() . '/assets/images/home_stats.png"); background-size: cover; background-position: center; background-repeat: no-repeat;'
 ] );
 ?>
 <style>
@@ -93,31 +94,26 @@ $wrapper_attributes = get_block_wrapper_attributes( [
 </style>
 
 <div <?php echo $wrapper_attributes; ?>>
-    <!-- Background Map & Overlay -->
-    <div class="absolute inset-0 opacity-10 bg-[url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg')] bg-contain bg-center bg-no-repeat pointer-events-none"></div>
-    <div class="absolute inset-0 bg-overlay pointer-events-none"></div>
-
     <!-- Content -->
-    <div class="relative z-10 w-full">
+    <div class="relative z-10 w-full pt-10">
         <!-- Header -->
-        <div class="text-center mb-16" data-aos="fade-down" data-aos-duration="1000">
-            <h2 class="text-3xl lg:text-5xl font-black text-white mb-4"><?php echo esc_html( $attributes['title'] ); ?></h2>
-            <p class="text-white/60 text-sm font-medium"><?php echo esc_html( $attributes['description'] ); ?></p>
+        <div class="text-center mb-2" data-aos="fade-down" data-aos-duration="1000">
+            <h2 class="text-xl lg:text-4xl font-black text-white pb-3"><?php echo esc_html( $attributes['title'] ); ?></h2>
         </div>
 
         <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             <?php 
                 $delay = 0;
                 foreach ( $stats as $stat ) : 
                     $delay += 100;
             ?>
-                <div class="glass-card rounded-2xl p-8 flex flex-col items-center text-center hover:bg-white/15 transition duration-300 group" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
-                    <div class="text-[#4ADE80] text-4xl mb-6 group-hover:scale-110 transition duration-300">
-                        <i class="fas <?php echo esc_attr( $stat['icon'] ); ?>"></i>
+                <div class="glass-card rounded-2xl p-8 max-sm:p-3 flex flex-col items-center text-center hover:bg-white/20 transition-all duration-500 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-green-500/10 cursor-default" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
+                    <div class="text-[#4ADE80] text-4xl group-hover:scale-110 transition duration-300">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/homepage/<?php echo esc_attr( $stat['icon'] ); ?>" alt="<?php echo esc_attr( $stat['title'] ); ?>" class="w-12 h-12 mb-6 group-hover:scale-110 transition duration-300">
                     </div>
-                    <h3 class="text-white/80 font-bold text-lg mb-2"><?php echo esc_html( $stat['title'] ); ?></h3>
-                    <div class="text-4xl lg:text-5xl font-black text-white mb-4" dir="ltr">
+                    <span class="text-white text-base mb-2"><?php echo esc_html( $stat['title'] ); ?></span>
+                    <div class="text-xl lg:text-2xl font-black text-white mb-4">
                         <?php 
                             $val = $stat['value'];
                             preg_match('/(\d+[,.]?\d*)/', $val, $matches);
@@ -128,7 +124,7 @@ $wrapper_attributes = get_block_wrapper_attributes( [
                         ?>
                         <span class="js-counter" data-target="<?php echo esc_attr($number); ?>">0</span><?php echo esc_html($suffix); ?>
                     </div>
-                    <p class="text-white/60 text-sm font-medium"><?php echo esc_html( $stat['desc'] ); ?></p>
+                    <p class="text-white text-sm font-medium"><?php echo esc_html( $stat['desc'] ); ?></p>
                 </div>
             <?php endforeach; ?>
         </div>

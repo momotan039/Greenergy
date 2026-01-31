@@ -62,12 +62,17 @@ class Greenergy_Blocks_Loader {
         $blocks_dir = GREENERGY_INC_DIR . '/blocks/src/';
         if ( ! is_dir( $blocks_dir ) ) return;
 
-        $items = scandir( $blocks_dir );
-        foreach ( $items as $item ) {
-            if ( in_array( $item, [ '.', '..' ], true ) ) continue;
+        $blocks_dir = GREENERGY_INC_DIR . '/blocks/src/';
+        if ( ! is_dir( $blocks_dir ) ) return;
 
-            $block_path = $blocks_dir . $item;
-            if ( is_dir( $block_path ) && file_exists( $block_path . '/block.json' ) ) {
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator( $blocks_dir, RecursiveDirectoryIterator::SKIP_DOTS ),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ( $iterator as $item ) {
+            if ( $item->isFile() && $item->getFilename() === 'block.json' ) {
+                $block_path = $item->getPath();
                 $result = register_block_type_from_metadata( $block_path );
                 if ( ! $result ) {
                     error_log( "Greenergy Blocks: Failed to register block at $block_path" );

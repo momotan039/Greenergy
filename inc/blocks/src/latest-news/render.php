@@ -25,7 +25,7 @@ if ( ! empty( $attributes['imageId'] ) ) {
 }
 
 $wrapper_attributes = get_block_wrapper_attributes( [
-    'class' => 'bg-white py-8 lg:py-20 px-4 relative',
+    'class' => 'bg-green-100 py-8 lg:py-20 px-4 relative',
 ] );
 
 // Dynamic Data Fetching: Get news from CPT
@@ -84,8 +84,15 @@ if ( $query->have_posts() ) {
 }
 ?>
 <style>
+    .swiper-pagination-bullet {
+        width: 10px;
+        height: 10px;
+        background: #D9D9D9 !important;
+        opacity: 1;
+    }
     .swiper-pagination-bullet-active {
         background: #229924 !important;
+        width: 10px;
     }
     .swiper-container-latest {
         width: 100%;
@@ -111,31 +118,38 @@ if ( $query->have_posts() ) {
         </div>
 
         <!-- Filters -->
-        <div class="flex flex-wrap justify-center gap-3 mb-10" data-aos="fade-up" data-aos-delay="200">
-            <button class="bg-[#229924] text-white px-6 py-2 rounded-lg font-bold hover:bg-[#1a7a1c] transition">كل الاخبار</button>
-            <button class="bg-[#EFF2F5] text-gray-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-200 transition">طاقة شمسية</button>
-            <button class="bg-[#EFF2F5] text-gray-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-200 transition">رياح</button>
-            <button class="bg-[#EFF2F5] text-gray-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-200 transition">بيئة</button>
+        <div class="flex flex-wrap justify-center gap-3 mb-10 overflow-x-auto" data-aos="fade-up" data-aos-delay="200">
+            <button class="bg-[#229924] text-white px-6 py-2 rounded-lg hover:bg-[#1a7a1c] hover:scale-105 transition-all duration-300 shadow-md hover:shadow-green-500/20">كل الاخبار</button>
+            <button class="bg-[#EFF2F5] text-gray-600 px-6 py-2 rounded-lg hover:bg-green-600 hover:text-white hover:scale-105 transition-all duration-300">طاقة شمسية</button>
+            <button class="bg-[#EFF2F5] text-gray-600 px-6 py-2 rounded-lg hover:bg-green-600 hover:text-white hover:scale-105 transition-all duration-300">رياح</button>
+            <button class="bg-[#EFF2F5] text-gray-600 px-6 py-2 rounded-lg hover:bg-green-600 hover:text-white hover:scale-105 transition-all duration-300">بيئة</button>
         </div>
 
         <!-- Swiper Container -->
         <div class="swiper swiper-container-latest mb-12" data-aos="zoom-in" data-aos-delay="400" data-aos-duration="1000">
             <div class="swiper-wrapper">
-                <?php foreach ( $news_items as $news ) : ?>
-                    <div class="swiper-slide h-auto">
-                        <div class="bg-white rounded-2xl overflow-hidden cursor-pointer group hover:shadow-xl transition-all duration-300 h-full border border-gray-100 lg:border-none">
-                            <div class="relative h-44 md:h-56 overflow-hidden rounded-2xl">
+                <?php foreach ( $news_items as $index => $news ) : ?>
+                    <div class="swiper-slide h-auto" data-aos="fade-up" data-aos-delay="<?php echo esc_attr(300 + ($index * 100)); ?>">
+                        <div class="bg-white rounded-2xl overflow-hidden cursor-pointer group hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-2 transition-all duration-500 h-full border border-gray-100 lg:border-none">
+                            <div class="relative h-44 md:h-56 overflow-hidden">
                                 <img src="<?php echo esc_url( $news['image'] ); ?>" alt="News" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             </div>
                             <div class="px-2 py-4 text-right">
-                                <h3 class="text-gray-900 font-black text-sm md:text-lg leading-tight mb-3 group-hover:text-[#229924] transition-colors">
-                                    <?php echo esc_html( $news['title'] ); ?>
-                                </h3>
+                                <div class="self-stretch inline-flex justify-end items-start gap-4">
+                                        <div
+                                            class="flex-1 text-right justify-start text-neutral-800 text-sm leading-5">
+                                            الكويت تُطلق مشروعاً ضخماً للطاقة الشمسية بقدرة ١٥٠٠
+                                          
+                                        </div>
+                                          <svg class="w-6 h-4 inline" aria-hidden="true">
+                                                <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/more.svg"></use>
+                                            </svg>
+                                    </div>
                                 <p class="text-gray-600 text-xs md:text-sm mb-3"><?php echo esc_html( $news['excerpt'] ); ?></p>
                                 <div class="flex items-center justify-between text-[10px] md:text-xs font-bold text-gray-500 border-t border-gray-100 pt-3">
                                     <div class="flex items-center gap-1">
-                                        <span><?php echo esc_html( $news['views'] ); ?></span>
                                         <i class="far fa-eye"></i>
+                                        <span><?php echo esc_html( $news['views'] ); ?></span>
                                     </div>
                                     <div dir="ltr"><?php echo esc_html( $news['date'] ); ?></div>
                                 </div>
@@ -149,10 +163,10 @@ if ( $query->have_posts() ) {
         </div>
 
         <!-- View All Button -->
-        <div class="text-center">
-            <a href="#" class="inline-flex items-center gap-3 bg-white border border-gray-200 text-gray-800 px-8 py-3 rounded-xl font-bold hover:shadow-md transition">
+        <div class="text-center" data-aos="fade-up" data-aos-delay="500">
+            <a href="#" class="inline-flex items-center gap-3 bg-white border border-gray-200 text-gray-800 px-8 py-3 rounded-xl font-bold hover:bg-[#229924] hover:text-white hover:border-[#229924] hover:shadow-lg hover:scale-105 transition-all duration-300 group">
                 <span>عرض الكل</span>
-                <i class="fas fa-arrow-left text-sm"></i>
+                <i class="fas fa-arrow-left text-sm transition-transform group-hover:-translate-x-1"></i>
             </a>
         </div>
     </div>
@@ -168,6 +182,7 @@ if ( $query->have_posts() ) {
                 pagination: {
                     el: '.swiper-pagination',
                     clickable: true,
+                    
                 },
                 breakpoints: {
                     640: {

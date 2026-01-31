@@ -11,7 +11,6 @@
 
 get_header();
 ?>
-
 <main id="primary" class="site-main">
     <?php
     // Get the page content
@@ -23,14 +22,18 @@ get_header();
 
     // Default sequence of blocks if editor is empty
     $default_blocks = '
+        <!-- wp:greenergy/scroll-progress /-->
         <!-- wp:greenergy/hero-block /-->
         <!-- wp:greenergy/stories /-->
+        <!-- wp:greenergy/most-read-news /-->
+        <!-- wp:greenergy/ad-block /-->
         <!-- wp:greenergy/stats /-->
-        <!-- wp:greenergy/courses /-->
         <!-- wp:greenergy/ad-block /-->
         <!-- wp:greenergy/latest-news /-->
-        <!-- wp:greenergy/most-read-news /-->
+        <!-- wp:greenergy/ad-block /-->
+        <!-- wp:greenergy/courses /-->
         <!-- wp:greenergy/jobs /-->
+        <!-- wp:greenergy/ad-block /-->
     ';
 
     if ( empty( trim( strip_tags( $content ) ) ) ) {

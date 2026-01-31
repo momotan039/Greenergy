@@ -164,15 +164,18 @@ class Greenergy_Theme_Setup {
     public function register_patterns() {
         register_block_pattern_category(
             'greenergy',
-            array( 'label' => __( 'Greenergy', 'greenergy' ) )
+            [ 'label' => __( 'Greenergy', 'greenergy' ) ]
         );
 
-        if ( file_exists( GREENERGY_INC_DIR . '/patterns/homepage-content.php' ) ) {
-            $pattern_data = require GREENERGY_INC_DIR . '/patterns/homepage-content.php';
-            register_block_pattern(
-                'greenergy/homepage-content',
-                $pattern_data
-            );
+        $pattern_files = glob( GREENERGY_INC_DIR . '/patterns/*.php' );
+
+        if ( is_array( $pattern_files ) ) {
+            foreach ( $pattern_files as $file ) {
+                register_block_pattern(
+                    'greenergy/' . basename( $file, '.php' ),
+                    require $file
+                );
+            }
         }
     }
 }
