@@ -7,7 +7,7 @@ $cta_url = isset($attributes['ctaUrl']) ? $attributes['ctaUrl'] : '#';
 ?>
 <!-- Hero section -->
 <div class="container w-full m-auto">
-    <div class="w-full h-auto lg:h-[658px] px-4 pt-10 lg:px-28 lg:pt-28 lg:pb-20 flex flex-col lg:flex-row justify-between items-center overflow-hidden">
+    <div class="w-full h-auto lg:h-[658px] px-4 pt-2 lg:px-28 lg:pb-20 flex flex-col lg:flex-row justify-between items-center overflow-hidden">
         <!-- Text Content -->
         <div class="flex-1 flex flex-col justify-start items-center lg:items-start gap-4 w-full">
             <!-- Badge -->

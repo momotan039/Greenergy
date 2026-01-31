@@ -13,7 +13,7 @@
     "build:editor": "npx tailwindcss -i ./assets/css/src/editor.css -o ./assets/css/dist/editor.min.css --minify",
     "build:critical": "node scripts/extract-critical.js",
     "build:js": "npx esbuild assets/js/src/main.js --bundle --minify --outfile=assets/js/dist/main.min.js",
-    "build:blocks": "npx esbuild assets/js/src/blocks.js --bundle --minify --outfile=assets/js/dist/blocks.min.js --external:@wordpress/* --external:react --external:react-dom",
+    "build:blocks": "npx esbuild assets/js/src/blocks.js --bundle --minify --outfile=assets/js/dist/blocks.min.js --external:@wordpress/* --external:react --external:react-dom --loader:.js=jsx --jsx-factory=wp.element.createElement --jsx-fragment=wp.element.Fragment",
     "build:admin-js": "npx esbuild assets/js/src/admin-panel.js --bundle --minify --outfile=assets/js/dist/admin-panel.js --external:@wordpress/* --external:react --external:react-dom --loader:.js=jsx --jsx-factory=wp.element.createElement --jsx-fragment=wp.element.Fragment",
     "build:admin-css": "npx tailwindcss -i ./assets/css/src/admin.css -o ./assets/css/admin.css --minify",
     "build:all": "npm run build:css && npm run build:rtl && npm run build:editor && npm run build:js && npm run build:blocks && npm run build:admin-js && npm run build:admin-css",

@@ -51,7 +51,85 @@ $header_style = greenergy_option( 'header_style', 'default' );
         * {
             font-family: 'DIN Next LT Arabic Medium', sans-serif;
         }
+        
+        /* Sticky Nav Styles */
+        .greenergy-fixed-nav {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.3s ease-in-out;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AOS
+            setTimeout(function() {
+                if (typeof AOS !== 'undefined') {
+                    AOS.init({
+                        once: true,
+                        offset: 50,
+                        duration: 800,
+                    });
+                }
+            }, 500);
+
+            // Always Sticky Logic
+            const desktopNav = document.getElementById('desktop-smart-nav');
+            const mobileNav = document.getElementById('mobile-smart-header');
+            const desktopNavOffset = desktopNav ? desktopNav.offsetTop : 300;
+
+            window.addEventListener('scroll', function() {
+                let st = window.scrollY; // Current scroll position
+                
+                // Desktop Always Sticky
+                if(desktopNav && window.innerWidth >= 1024) {
+                    if (st > desktopNavOffset) {
+                         // We are past the initial nav position -> Stick it
+                         desktopNav.classList.add('greenergy-fixed-nav');
+                         desktopNav.classList.remove('my-4', 'rounded-[1000px]');
+                         desktopNav.classList.add('py-2');
+                         desktopNav.style.transform = 'translateY(0)';
+                    } else {
+                        // At top -> Reset
+                        desktopNav.classList.remove('greenergy-fixed-nav');
+                        desktopNav.classList.add('my-4', 'rounded-[1000px]');
+                        desktopNav.style.transform = 'translateY(0)';
+                    }
+                }
+                
+                // Mobile Always Sticky with Spacer
+                if(mobileNav && window.innerWidth < 1024) {
+                     const mobileParent = document.getElementById('mobile-header-container');
+                     
+                     if (st > 0) {
+                         // Scroll > 0 -> Fixed + Add Spacer
+                         if (!mobileNav.classList.contains('fixed')) {
+                             mobileNav.classList.remove('relative');
+                             mobileNav.classList.add('fixed', 'top-0', 'left-0', 'right-0', 'shadow-md');
+                             if(mobileParent) mobileParent.style.paddingTop = mobileNav.offsetHeight + 'px';
+                         }
+                     } else {
+                         // Scroll at top -> Relative + Remove Spacer
+                         if (mobileNav.classList.contains('fixed')) {
+                             mobileNav.classList.remove('fixed', 'top-0', 'left-0', 'right-0', 'shadow-md');
+                             mobileNav.classList.add('relative');
+                             if(mobileParent) mobileParent.style.paddingTop = '0px';
+                         }
+                     }
+                }
+            });
+        });
+    </script>
 
     <?php wp_head(); ?>
 </head>

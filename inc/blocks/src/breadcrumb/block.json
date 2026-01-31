@@ -1,12 +1,12 @@
 {
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
-    "name": "greenergy/scroll-progress",
-    "title": "Scroll Progress Indicator",
+    "name": "greenergy/breadcrumb",
+    "title": "Breadcrumb",
     "category": "greenergy-blocks",
-    "icon": "upload",
+    "icon": "admin-home",
     "editorScript": "greenergy-blocks-editor",
-    "description": "A fixed scroll progress indicator.",
+    "description": "Displays the current page breadcrumb.",
     "attributes": {},
     "supports": {
         "html": false

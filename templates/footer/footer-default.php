@@ -47,7 +47,7 @@ $copyright_text = str_replace( '{year}', date( 'Y' ), $copyright_text );
                         <input type="email" placeholder="<?php esc_attr_e( 'ادخل بريدك الالكتروني', 'greenergy' ); ?>"
                             class="flex-1 bg-transparent border-none outline-none text-neutral-800  h-10 md:h-12">
                         <button type="submit"
-                            class="bg-[#229924] rounded-lg  text-white  py-2.5 md:py-3 px-6 md:px-10 hover:bg-[#1a7a1b] transition-all shadow-sm whitespace-nowrap text-sm md:text-base">
+                            class="bg-[#229924] rounded-lg  text-white  py-2.5 md:py-3 px-2 md:px-10 hover:bg-[#1a7a1b] transition-all shadow-sm whitespace-nowrap text-sm md:text-base">
                             <?php esc_html_e( 'اشتراك الان', 'greenergy' ); ?>
                         </button>
                     </form>

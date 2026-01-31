@@ -1,0 +1,32 @@
+{
+    "apiVersion": 3,
+    "name": "greenergy/news-list",
+    "title": "News List",
+    "category": "greenergy-blocks",
+    "icon": "list-view",
+    "description": "Displays a list of latest news posts.",
+    "keywords": [
+        "news",
+        "list",
+        "archive"
+    ],
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ]
+    },
+    "attributes": {
+        "count": {
+            "type": "number",
+            "default": 5
+        },
+        "offset": {
+            "type": "number",
+            "default": 1
+        }
+    },
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php"
+}

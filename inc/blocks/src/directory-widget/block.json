@@ -1,0 +1,18 @@
+{
+    "apiVersion": 3,
+    "name": "greenergy/directory-widget",
+    "title": "Directory Widget",
+    "category": "greenergy-blocks",
+    "icon": "building",
+    "description": "Displays directory promo card.",
+    "keywords": [
+        "directory",
+        "widget",
+        "sidebar"
+    ],
+    "supports": {
+        "html": false
+    },
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php"
+}

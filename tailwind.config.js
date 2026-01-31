@@ -11,6 +11,7 @@ module.exports = {
     './patterns/**/*.php',
     './parts/**/*.html',
     './inc/blocks/src/**/*.{js,jsx,php}',
+    './inc/patterns/*.php',
     './assets/js/src/**/*.js',
   ],
 

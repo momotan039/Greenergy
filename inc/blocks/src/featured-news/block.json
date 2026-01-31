@@ -1,0 +1,28 @@
+{
+    "apiVersion": 3,
+    "name": "greenergy/featured-news",
+    "title": "Featured News",
+    "category": "greenergy-blocks",
+    "icon": "cover-image",
+    "description": "Displays the latest or selected news post in a large card.",
+    "keywords": [
+        "news",
+        "featured",
+        "hero"
+    ],
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ]
+    },
+    "attributes": {
+        "postId": {
+            "type": "number",
+            "default": 0
+        }
+    },
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php"
+}

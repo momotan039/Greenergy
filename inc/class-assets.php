@@ -125,6 +125,7 @@ class Greenergy_Assets {
                 'in_footer' => true,
             ]
         );
+        wp_add_inline_script( 'aos', 'AOS.init();' );
 
         // Localize script with theme data
         wp_localize_script( 'greenergy-main', 'greenergyData', [

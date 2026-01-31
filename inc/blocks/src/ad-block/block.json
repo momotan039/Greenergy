@@ -31,6 +31,10 @@
         "fullWidth": {
             "type": "boolean",
             "default": false
+        },
+        "height": {
+            "type": "string",
+            "default": "10rem"
         }
     },
     "supports": {

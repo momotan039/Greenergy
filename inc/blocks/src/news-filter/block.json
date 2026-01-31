@@ -1,0 +1,23 @@
+{
+    "apiVersion": 3,
+    "name": "greenergy/news-filter",
+    "title": "News Filter",
+    "category": "greenergy-blocks",
+    "icon": "filter",
+    "description": "Filter and sort bar for news page.",
+    "keywords": [
+        "news",
+        "filter",
+        "sort",
+        "category"
+    ],
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ]
+    },
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php"
+}

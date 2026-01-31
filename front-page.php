@@ -12,6 +12,7 @@
 get_header();
 ?>
 <main id="primary" class="site-main">
+    <h1>Home Page</h1>
     <?php
     // Get the page content
     $content = '';
@@ -20,25 +21,28 @@ get_header();
         $content = get_the_content();
     }
 
-    // Default sequence of blocks if editor is empty
-    $default_blocks = '
-        <!-- wp:greenergy/scroll-progress /-->
-        <!-- wp:greenergy/hero-block /-->
-        <!-- wp:greenergy/stories /-->
-        <!-- wp:greenergy/most-read-news /-->
-        <!-- wp:greenergy/ad-block /-->
-        <!-- wp:greenergy/stats /-->
-        <!-- wp:greenergy/ad-block /-->
-        <!-- wp:greenergy/latest-news /-->
-        <!-- wp:greenergy/ad-block /-->
-        <!-- wp:greenergy/courses /-->
-        <!-- wp:greenergy/jobs /-->
-        <!-- wp:greenergy/ad-block /-->
-    ';
+    // Default sequence of blocks (using the registered pattern)
+    // This follows DRY principles by referencing the single source of truth in inc/patterns/homepage.php
+    $default_blocks = '<!-- wp:pattern {"slug":"greenergy/homepage"} /-->';
 
-    if ( empty( trim( strip_tags( $content ) ) ) ) {
+    // Logic:
+    // 1. If "Your latest posts" is set: is_home() = true. We ignore the loop (which is posts) and show default blocks.
+    // 2. If "Static page" is set: is_home() = false. We check that page's content.
+    
+    $show_default = false;
+
+    if ( is_home() && is_front_page() ) {
+        // "Latest posts" setting - Force default homepage layout
+        $show_default = true;
+    } elseif ( empty( trim( strip_tags( $content ) ) ) ) {
+        // Static page with empty content
+        $show_default = true;
+    }
+
+    if ( $show_default ) {
         echo do_blocks( $default_blocks );
     } else {
+        // Static page with content
         the_content();
     }
     ?>

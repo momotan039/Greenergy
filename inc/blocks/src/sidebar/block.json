@@ -1,0 +1,22 @@
+{
+    "apiVersion": 3,
+    "name": "greenergy/sidebar",
+    "title": "Sidebar Container",
+    "category": "greenergy-blocks",
+    "icon": "sidebar",
+    "description": "Sidebar container for widgets.",
+    "keywords": [
+        "sidebar",
+        "container",
+        "widgets"
+    ],
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ]
+    },
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php"
+}

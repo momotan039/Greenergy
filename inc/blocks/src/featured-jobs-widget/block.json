@@ -1,0 +1,18 @@
+{
+    "apiVersion": 3,
+    "name": "greenergy/featured-jobs-widget",
+    "title": "Featured Jobs Widget",
+    "category": "greenergy-blocks",
+    "icon": "businessman",
+    "description": "Displays featured jobs list.",
+    "keywords": [
+        "jobs",
+        "widget",
+        "sidebar"
+    ],
+    "supports": {
+        "html": false
+    },
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php"
+}

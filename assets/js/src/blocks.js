@@ -231,6 +231,7 @@ const GreenergyBlockEdit = (props) => {
  * Registry
  */
 const blocks = [
+    // homepage blocks
     { name: 'hero-block', title: __('Hero Section', 'greenergy'), icon: 'cover-image' },
     { name: 'stories', title: __('Greenergy Stories', 'greenergy'), icon: 'groups' },
     { name: 'courses', title: __('Greenergy Courses', 'greenergy'), icon: 'welcome-learn-more' },
@@ -238,6 +239,20 @@ const blocks = [
     { name: 'latest-news', title: __('Greenergy Latest News', 'greenergy'), icon: 'admin-post' },
     { name: 'most-read-news', title: __('Greenergy Most Read News', 'greenergy'), icon: 'megaphone' },
     { name: 'stats', title: __('Greenergy Global Stats', 'greenergy'), icon: 'chart-area' },
+    // news page blocks
+    { name: 'news-filter', title: __('News Filter', 'greenergy'), icon: 'filter' },
+    { name: 'featured-news', title: __('Featured News', 'greenergy'), icon: 'cover-image' },
+    { name: 'news-list', title: __('News List', 'greenergy'), icon: 'list-view' },
+    { name: 'news-grid', title: __('News Grid', 'greenergy'), icon: 'grid-view' },
+    { name: 'sidebar', title: __('Sidebar Container', 'greenergy'), icon: 'sidebar' },
+    { name: 'directory-widget', title: __('Directory Widget', 'greenergy'), icon: 'building' },
+    { name: 'courses-widget', title: __('Courses Widget', 'greenergy'), icon: 'book' },
+    { name: 'featured-jobs-widget', title: __('Featured Jobs Widget', 'greenergy'), icon: 'businessman' },
+    { name: 'follow-us-widget', title: __('Follow Us Widget', 'greenergy'), icon: 'share' },
+    { name: 'breadcrumb', title: __('Breadcrumb', 'greenergy'), icon: 'admin-home' },
+    { name: 'main-banner', title: __('Main Banner', 'greenergy'), icon: 'cover-image' },
+    // theme blocks
+    { name: 'scroll-progress', title: __('Scroll Progress', 'greenergy'), icon: 'upload' },
 ];
 
 blocks.forEach(b => {
@@ -284,6 +299,12 @@ registerBlockType('greenergy/ad-block', {
                         createElement(TextControl, { label: __('Destination Link', 'greenergy'), value: adLink, onChange: (val) => setAttributes({ adLink: val }) })
                     ),
                     adType === 'code' && createElement(TextareaControl, { label: __('Ad Code', 'greenergy'), value: adCode, onChange: (val) => setAttributes({ adCode: val }) }),
+                    createElement(TextControl, {
+                        label: __('Height (e.g., 10rem, 200px)', 'greenergy'),
+                        value: attributes.height,
+                        onChange: (val) => setAttributes({ height: val }),
+                        help: __('Set the height of the ad container.', 'greenergy')
+                    }),
                     createElement(ToggleControl, { label: __('Full Width', 'greenergy'), checked: fullWidth, onChange: (val) => setAttributes({ fullWidth: val }) })
                 )
             ),

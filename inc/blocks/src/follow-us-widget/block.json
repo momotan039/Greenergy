@@ -1,0 +1,19 @@
+{
+    "apiVersion": 3,
+    "name": "greenergy/follow-us-widget",
+    "title": "Follow Us Widget",
+    "category": "greenergy-blocks",
+    "icon": "share",
+    "description": "Displays social media links.",
+    "keywords": [
+        "follow",
+        "social",
+        "widget",
+        "sidebar"
+    ],
+    "supports": {
+        "html": false
+    },
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php"
+}
