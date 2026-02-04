@@ -1,0 +1,24 @@
+/* Swiper Custom Styles */
+@layer components {
+    .swiper-pagination-bullet {
+        @apply w-2 h-2 bg-green-300 opacity-100 transition-colors duration-300;
+    }
+
+    .swiper-pagination-bullet-active {
+        background-color: #15803d !important;
+        /* green-700 */
+        opacity: 1 !important;
+    }
+
+    /* Navigation Buttons Customization if needed */
+    .swiper-button-next,
+    .swiper-button-prev {
+        @apply text-green-600 hover:text-green-700 transition-colors;
+    }
+
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+}

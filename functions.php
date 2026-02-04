@@ -102,6 +102,9 @@ function greenergy_init() {
     
     // REST API (Initialize always or checking is_admin/rest request context - usually always for routes)
     Greenergy_Admin_REST::get_instance();
+    
+    // AJAX functionality
+    Greenergy_Ajax::get_instance();
 }
 add_action( 'after_setup_theme', 'greenergy_init', 5 );
 

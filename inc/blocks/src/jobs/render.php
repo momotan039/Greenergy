@@ -196,7 +196,7 @@ if ( $query->have_posts() ) {
                     foreach ( $sidebar_jobs as $job ) : 
                         $delay += 100;
                 ?>
-                    <div class="bg-white rounded-3xl p-4 md:p-5 shadow-soft hover:shadow-2xl hover:shadow-[#D9A520]/10 hover:-translate-y-1 transition-all duration-500 flex items-center gap-4 border border-transparent hover:border-[#D9A520]/10 group" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
+                    <div class="bg-white rounded-3xl p-4 md:p-5 shadow-lg outline outline-1 outline-gray-200 hover:-translate-y-1 transition-all duration-500 flex items-center gap-4 border border-transparent hover:border-[#D9A520]/10 group" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
                         <div class="w-14 h-14 md:w-16 md:h-16 rounded-full border border-gray-100 p-1 flex-shrink-0 bg-white shadow-sm overflow-hidden group-hover:scale-110 transition-transform duration-500">
                             <img src="<?php echo esc_url( $job['image'] ); ?>" class="w-full h-full object-cover rounded-full" alt="Logo">
                         </div>
@@ -273,7 +273,7 @@ if ( $query->have_posts() ) {
                     foreach ( $jobs as $job ) : 
                         $delay += 150;
                 ?>
-                    <div class="bg-white rounded-3xl p-4 md:p-8 shadow-soft hover:shadow-2xl hover:shadow-[#D9A520]/10 hover:-translate-y-1 transition-all duration-500 flex items-center gap-4 md:gap-8 border border-transparent hover:border-[#D9A520]/20 group" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
+                    <div class="bg-white rounded-3xl p-4 md:p-8 shadow-lg outline outline-1 outline-gray-200 hover:-translate-y-1 transition-all duration-500 flex items-center gap-4 md:gap-8 border border-transparent hover:border-[#D9A520]/20 group" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
                         <div class="w-16 h-16 md:w-20 md:h-20 rounded-full border border-gray-100 p-2 flex-shrink-0 bg-white shadow-sm overflow-hidden group-hover:scale-110 transition-transform duration-500">
                             <img src="<?php echo esc_url( $job['image'] ); ?>" class="w-full h-full object-cover rounded-full" alt="Logo">
                         </div>

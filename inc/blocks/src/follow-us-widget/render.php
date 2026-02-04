@@ -6,7 +6,7 @@
  */
 
 $wrapper_attributes = get_block_wrapper_attributes( [
-    'class' => 'self-stretch p-2 bg-white rounded-xl shadow-[0px_4px_14px_0px_rgba(0,0,0,0.06)] flex flex-col justify-start items-center gap-2',
+    'class' => 'self-stretch p-2 bg-white rounded-xl shadow-lg outline outline-1 outline-gray-200 flex flex-col justify-start items-center gap-2',
 ] );
 ?>
 

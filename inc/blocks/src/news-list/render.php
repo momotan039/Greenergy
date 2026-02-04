@@ -79,8 +79,9 @@ if ( $query->have_posts() ) :
             $idx++;
         ?>
             <!-- News Card -->
-            <div class="w-full rounded-lg outline outline-1 outline-offset-[-1px] outline-zinc-100 inline-flex justify-start items-center gap-4 overflow-hidden max-sm:flex-col hover:shadow-lg transition-all duration-300 hover:scale-[1.01]" data-aos="fade-up" data-aos-delay="<?php echo $delay; ?>">
-                <a href="<?php echo esc_url( $permalink ); ?>" class="max-sm:h-60 max-sm:w-full w-36 self-stretch p-4 bg-cover bg-center rounded block" style="background-image: url('<?php echo esc_url( $thumbnail_url ); ?>');">
+             <div class="relative hover:bg-green-200 shadow-lg outline outline-1 outline-gray-200 w-full rounded-lg inline-flex justify-start items-center gap-4 overflow-hidden max-sm:flex-col hover:shadow-md transition-shadow duration-300">
+                <a href="<?php echo esc_url( $permalink ); ?>" class="absolute inset-0 z-10 w-full h-full"></a>
+                <a href="<?php echo esc_url( $permalink ); ?>" class="max-sm:h-60 max-sm:w-full w-36 h-36 shrink-0 bg-cover bg-center rounded block" style="background-image: url('<?php echo esc_url( $thumbnail_url ); ?>');">
                 </a>
                 
                 <div class="flex-1 self-stretch pl-3 py-3 inline-flex flex-col justify-start items-end gap-1.5">
@@ -98,13 +99,11 @@ if ( $query->have_posts() ) :
                             <?php echo esc_html( $excerpt ); ?>
                         </div>
                         
-                        <?php if ( $cat_name ) : ?>
-                            <div class="h-6 px-2 bg-green-100 rounded-[100px] inline-flex justify-center items-center gap-2.5 self-start">
-                                <div class="w-auto px-2 h-11 text-right justify-start text-neutral-950 text-xs font-normal capitalize leading-10">
-                                    #<?php echo esc_html( $cat_name ); ?>
-                                </div>
+                        <div class="h-6 px-2 bg-green-100 rounded-[100px] inline-flex justify-center items-center gap-2.5 self-start">
+                            <div class="w-auto px-2 h-11 text-right justify-start text-neutral-950 text-xs font-normal capitalize leading-10">
+                                #<?php echo esc_html( $cat_name ); ?>
                             </div>
-                        <?php endif; ?>
+                        </div>
                     </div>
                     
                     <div class="self-stretch inline-flex justify-between items-center flex-row-reverse mt-auto">
@@ -116,7 +115,7 @@ if ( $query->have_posts() ) :
                                 <svg class="w-4 h-4 inline" aria-hidden="true">
                                     <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/eye.svg"></use>
                                 </svg>
-                                <?php echo esc_html( number_format_i18n( (int) $views ) ); ?>
+                                <?php echo esc_html( $views ); ?>
                             </div>
                         </div>
                     </div>
@@ -215,8 +214,9 @@ if ( $query->have_posts() ) :
         foreach ( $mock_news as $item ) :
         ?>
             <!-- News Card (Fallback) -->
-            <div class="w-full rounded-lg outline outline-1 outline-offset-[-1px] outline-zinc-100 inline-flex justify-start items-center gap-4 overflow-hidden max-sm:flex-col hover:shadow-md transition-shadow duration-300">
-                <a href="#" class="max-sm:h-60 max-sm:w-full w-36 self-stretch p-4 bg-cover bg-center rounded block" style="background-image: url('<?php echo esc_url( $item['image'] ); ?>');">
+            <div class="relative hover:bg-green-200 shadow-lg outline outline-1 outline-gray-200 w-full rounded-lg inline-flex justify-start items-center gap-4 overflow-hidden max-sm:flex-col hover:shadow-md transition-shadow duration-300">
+                <a href="#" class="absolute inset-0 z-10 w-full h-full"></a>
+                <a href="#" class="max-sm:h-60 max-sm:w-full w-36 h-36 shrink-0 bg-cover bg-center rounded block" style="background-image: url('<?php echo esc_url( $item['image'] ); ?>');">
                 </a>
                 
                 <div class="flex-1 self-stretch pl-3 py-3 inline-flex flex-col justify-start items-end gap-1.5">

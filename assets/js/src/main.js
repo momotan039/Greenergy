@@ -12,6 +12,8 @@ import { initNavigation } from './modules/navigation.js';
 import { initLazyLoad } from './modules/lazyload.js';
 import { initThemeToggle } from './modules/theme-toggle.js';
 import { initCounter } from './modules/counter.js';
+import { initCarousel } from './modules/carousel.js';
+import { initAjaxPagination } from './modules/ajax-pagination.js';
 
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
@@ -19,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initLazyLoad();
     initThemeToggle();
     initCounter();
+    initCarousel();
+    initAjaxPagination();
 
     // Initialize AOS
     if (typeof AOS !== 'undefined') {

@@ -7,7 +7,7 @@ $cta_url = isset($attributes['ctaUrl']) ? $attributes['ctaUrl'] : '#';
 ?>
 <!-- Hero section -->
 <div class="container w-full m-auto">
-    <div class="w-full h-auto lg:h-[658px] px-4 pt-2 lg:px-28 lg:pb-20 flex flex-col lg:flex-row justify-between items-center overflow-hidden">
+    <div class="flex flex-col h-auto items-center justify-between lg:flex-row lg:pb-20 lg:px-28 px-4 w-full">
         <!-- Text Content -->
         <div class="flex-1 flex flex-col justify-start items-center lg:items-start gap-4 w-full">
             <!-- Badge -->
@@ -39,81 +39,94 @@ $cta_url = isset($attributes['ctaUrl']) ? $attributes['ctaUrl'] : '#';
                     </svg>
                 </a>
                 
-                <!-- Stats Row -->
-                <div class="w-full pb-4" data-aos="fade-up" data-aos-delay="500">
-                    <div class="py-2 max-sm:pb-8 bg-lime-100 rounded-3xl flex justify-center lg:justify-start items-center gap-2">
-                        <div class="w-28 max-sm:w-20 rounded-xl inline-flex flex-col justify-center items-center hover:scale-110 transition-transform duration-300">
-                            <svg class="w-12 max-sm:w-8 h-10 inline self-center" aria-hidden="true">
-                                <use href="<?php echo get_template_directory_uri(); ?>/assets/images/hero/user-octagon.svg"></use>
-                            </svg>
-                            <div class="flex flex-col justify-start items-center gap-2.5">
-                                <div class="text-center justify-start text-green-700 text-2xl max-sm:text-lg font-bold leading-6">
-                                    +<span class="js-counter" data-target="1000">0</span>
-                                </div>
-                                <div class="text-center justify-start text-stone-500 text-sm font-normal leading-6">
-                                    خبير ومختص
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-28 max-sm:w-20 rounded-xl inline-flex flex-col justify-center items-center hover:scale-110 transition-transform duration-300">
-                            <svg class="w-12 max-sm:w-8 h-10 inline self-center" aria-hidden="true">
-                                <use href="<?php echo get_template_directory_uri(); ?>/assets/images/hero/status-up.svg"></use>
-                            </svg>
-                            <div class="flex flex-col justify-center items-center gap-2.5">
-                                <div class="text-center justify-start text-green-700 text-2xl max-sm:text-lg font-bold leading-6">
-                                    +<span class="js-counter" data-target="500">0</span>
-                                </div>
-                                <div class="text-center justify-start text-stone-500 text-sm font-normal leading-6">
-                                    شركة
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-32 h-28  bg-gradient-to-b from-sky-500 to-blue-700 rounded-[32px] outline outline-[11px] outline-stone-50 inline-flex flex-col justify-center items-center hover:scale-110 transition-transform duration-300 shadow-xl">
-                            <svg class="w-12 h-10 inline self-center" aria-hidden="true">
-                                <use href="<?php echo get_template_directory_uri(); ?>/assets/images/hero/eye.svg"></use>
-                            </svg>
-                            <div class="flex flex-col justify-start items-center gap-2">
-                                <div class="text-center justify-start text-white text-2xl max-sm:text-lg font-bold leading-6">
-                                    +<span class="js-counter" data-target="500">0</span>
-                                </div>
-                                <div class="w-28 h-7  text-center  text-white text-sm font-normal leading-6">
-                                    زيارة و مهتمين
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-28 max-sm:w-20 rounded-xl inline-flex flex-col justify-center items-center hover:scale-110 transition-transform duration-300">
-                            <svg class="w-12 max-sm:w-8 h-10 inline self-center" aria-hidden="true">
-                                <use href="<?php echo get_template_directory_uri(); ?>/assets/images/hero/global.svg"></use>
-                            </svg>
-                            <div class="flex flex-col justify-center items-center gap-2.5">
-                                <div class="text-center justify-start text-green-700 text-2xl max-sm:text-lg font-bold leading-6">
-                                    +<span class="js-counter" data-target="50">0</span>
-                                </div>
-                                <div class="text-center justify-start text-stone-500 text-sm font-normal leading-6">
-                                    منظمة
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-28 max-sm:w-20 rounded-xl inline-flex flex-col justify-center items-center hover:scale-110 transition-transform duration-300">
-                            <svg class="w-12 max-sm:w-8 h-10 inline self-center" aria-hidden="true">
-                                <use href="<?php echo get_template_directory_uri(); ?>/assets/images/hero/buliding.svg"></use>
-                            </svg>
-                            <div class="flex flex-col justify-center items-center gap-2.5">
-                                <div class="text-center justify-start text-green-700 text-2xl max-sm:text-lg font-bold leading-6">
-                                    +<span class="js-counter" data-target="11">0</span>M
-                                </div>
-                                <div class="text-center justify-start text-stone-500 text-sm font-normal leading-6">
-                                    محطة و مشروع
-                                </div>
-                            </div>
-                        </div>
-
+             <!-- Stats Row -->
+<div class="w-full pb-4" data-aos="fade-up" data-aos-delay="500">
+    <div class="py-2 max-sm:py-4 max-sm:gap-[1rem] bg-lime-100 rounded-3xl flex flex-nowrap justify-center lg:justify-start items-center gap-2 overflow-x-auto">
+        <a href="" class="flex-shrink-0">
+            <div class="w-28 max-sm:w-14 rounded-xl inline-flex flex-col gap-2 justify-center items-center hover:scale-110 transition-transform duration-300">
+                <svg class="w-9 h-10  max-sm:h-8 inline self-center" aria-hidden="true">
+                    <use href="<?php echo get_template_directory_uri(); ?>/assets/images/hero/user-octagon.svg"></use>
+                </svg>
+                <div class="flex flex-col justify-start items-center gap-2.5 max-sm:gap-1">
+                    <div class="text-center justify-start text-green-700 text-2xl max-sm:text-base font-bold leading-6 max-sm:leading-tight whitespace-nowrap">
+                        +<span class="js-counter" data-target="1000">0</span>
+                    </div>
+                    <div class="text-center justify-start text-stone-500 text-sm max-sm:text-xs font-normal leading-6 max-sm:leading-tight">
+                        خبير ومختص
                     </div>
                 </div>
             </div>
+        </a> 
+        
+        <a href="" class="flex-shrink-0">
+            <div class="w-28 max-sm:w-14 rounded-xl inline-flex flex-col gap-2 justify-center items-center hover:scale-110 transition-transform duration-300">
+                <svg class="w-9 h-10  max-sm:h-8 inline self-center" aria-hidden="true">
+                    <use href="<?php echo get_template_directory_uri(); ?>/assets/images/hero/status-up.svg"></use>
+                </svg>
+                <div class="flex flex-col justify-center items-center gap-2.5 max-sm:gap-1">
+                    <div class="text-center justify-start text-green-700 text-2xl max-sm:text-base font-bold leading-6 max-sm:leading-tight whitespace-nowrap">
+                        +<span class="js-counter" data-target="500">0</span>
+                    </div>
+                    <div class="text-center justify-start text-stone-500 text-sm max-sm:text-xs font-normal leading-6 max-sm:leading-tight">
+                        شركة
+                    </div>
+                </div>
+            </div>
+        </a>
+        
+        <a href="" class="flex-shrink-0">
+            <div class="w-32 h-28 max-sm:w-16 max-sm:h-26 gap-2 bg-gradient-to-b from-sky-500 to-blue-700 rounded-[32px] max-sm:rounded-2xl outline outline-[11px] max-sm:outline-8 outline-stone-50 inline-flex flex-col justify-center items-center hover:scale-110 transition-transform duration-300 shadow-xl">
+                <svg class="w-9 h-10  max-sm:h-8 inline self-center" aria-hidden="true">
+                    <use href="<?php echo get_template_directory_uri(); ?>/assets/images/hero/eye.svg"></use>
+                </svg>
+                <div class="flex flex-col justify-start items-center gap-2 max-sm:gap-1">
+                    <div class="text-center justify-start text-white text-2xl max-sm:text-base font-bold leading-6 max-sm:leading-tight whitespace-nowrap">
+                        +<span class="js-counter" data-target="500">0</span>
+                    </div>
+                    <div class="w-28 max-sm:w-auto text-center text-white text-sm max-sm:text-xs font-normal leading-6 max-sm:leading-tight">
+                        زيارة و مهتمين
+                    </div>
+                </div>
+            </div>
+        </a>
+        
+        <a href="" class="flex-shrink-0">
+            <div class="w-28 max-sm:w-14 rounded-xl inline-flex flex-col gap-2 justify-center items-center hover:scale-110 transition-transform duration-300">
+                <svg class="w-9 h-10  max-sm:h-8 inline self-center" aria-hidden="true">
+                    <use href="<?php echo get_template_directory_uri(); ?>/assets/images/hero/global.svg"></use>
+                </svg>
+                <div class="flex flex-col justify-center items-center gap-2.5 max-sm:gap-1">
+                    <div class="text-center justify-start text-green-700 text-2xl max-sm:text-base font-bold leading-6 max-sm:leading-tight whitespace-nowrap">
+                        +<span class="js-counter" data-target="50">0</span>
+                    </div>
+                    <div class="text-center justify-start text-stone-500 text-sm max-sm:text-xs font-normal leading-6 max-sm:leading-tight">
+                        منظمة
+                    </div>
+                </div>
+            </div>
+        </a>
+        
+        <a href="" class="flex-shrink-0">
+            <div class="w-28 max-sm:w-14 rounded-xl inline-flex flex-col gap-2 justify-center items-center hover:scale-110 transition-transform duration-300">
+                <svg class="w-9 h-10  max-sm:h-8 inline self-center" aria-hidden="true">
+                    <use href="<?php echo get_template_directory_uri(); ?>/assets/images/hero/buliding.svg"></use>
+                </svg>
+                <div class="flex flex-col justify-center items-center gap-2.5 max-sm:gap-1">
+                    <div class="text-center justify-start text-green-700 text-2xl max-sm:text-base font-bold leading-6 max-sm:leading-tight whitespace-nowrap">
+                        +<span class="js-counter" data-target="11">0</span>M
+                    </div>
+                    <div class="text-center justify-start text-stone-500 text-sm max-sm:text-xs font-normal leading-6 max-sm:leading-tight break-words">
+                        محطة و مشروع
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+            </div>
         </div>
         <!-- Hero Image (Desktop Only) -->
-        <div class="flex-1 h-full px-3 py-6 rounded-3xl gap-2.5 max-lg:hidden bg-cover bg-center bg-no-repeat floating-animation" 
+        <div class="bg-center bg-cover bg-no-repeat flex-1 floating-animation gap-2.5 max-lg:hidden min-h-[450px] py-6 px-2 rounded-3xl" 
                 style="background-image: url('<?php echo get_template_directory_uri(); ?>/assets/images/hero/image.png');"
                 data-aos="zoom-in" data-aos-duration="1500">
         </div>

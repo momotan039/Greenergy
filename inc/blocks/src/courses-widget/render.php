@@ -6,7 +6,7 @@
  */
 
 $wrapper_attributes = get_block_wrapper_attributes( [
-    'class' => 'self-stretch p-2 bg-white rounded-xl shadow-[0px_4px_14px_0px_rgba(0,0,0,0.06)] flex flex-col justify-start items-center gap-2',
+    'class' => 'self-stretch p-2 bg-white rounded-xl shadow-lg outline outline-1 outline-gray-200 flex flex-col justify-start items-center gap-2 max-md:min-w-[18rem] flex-none',
 ] );
 ?>
 
@@ -21,8 +21,8 @@ $wrapper_attributes = get_block_wrapper_attributes( [
     </div>
     <div class="self-stretch p-2 bg-stone-50 rounded-2xl flex flex-col justify-start items-end gap-5">
         <div class="self-stretch flex flex-col justify-start items-end gap-4">
-            <div class="self-stretch h-72 px-3 py-6 rounded-lg inline-flex justify-start items-end gap-2.5 bg-cover bg-center" style="background-image: url('<?php echo get_template_directory_uri(); ?>/assets/images/new-2.jpg');">
-                <div class="text-center justify-start text-white text-2xl leading-6">
+            <div class="self-stretch max-md:h-[120px] md:h-72 px-3 py-6 rounded-lg inline-flex justify-start items-end gap-2.5 bg-cover bg-center" style="background-image: url('<?php echo get_template_directory_uri(); ?>/assets/images/new-2.jpg');">
+                <div class="text-center justify-start text-white text-lg md:text-2xl leading-6">
                     تعلم معنا
                 </div>
             </div>

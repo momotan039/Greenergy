@@ -87,21 +87,6 @@ class Greenergy_Assets {
     public function enqueue_scripts() {
         $js_dir = GREENERGY_ASSETS_URI . '/js/dist';
 
-        // Remove jQuery dependency for better performance
-        // Only use if absolutely necessary for third-party plugins
-        
-        // Main theme script (deferred)
-        wp_enqueue_script(
-            'greenergy-main',
-            $js_dir . '/main.min.js',
-            [],
-            $this->js_version,
-            [
-                'strategy'  => 'defer',
-                'in_footer' => true,
-            ]
-        );
-
         // Swiper JS from CDN (deferred)
         wp_enqueue_script(
             'swiper',
@@ -126,6 +111,18 @@ class Greenergy_Assets {
             ]
         );
         wp_add_inline_script( 'aos', 'AOS.init();' );
+
+        // Main theme script (deferred)
+        wp_enqueue_script(
+            'greenergy-main',
+            $js_dir . '/main.min.js',
+            ['swiper', 'aos'], // Dependencies
+            $this->js_version,
+            [
+                'strategy'  => 'defer',
+                'in_footer' => true,
+            ]
+        );
 
         // Localize script with theme data
         wp_localize_script( 'greenergy-main', 'greenergyData', [

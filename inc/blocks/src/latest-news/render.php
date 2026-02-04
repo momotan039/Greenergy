@@ -129,15 +129,15 @@ if ( $query->have_posts() ) {
         <div class="swiper swiper-container-latest mb-12" data-aos="zoom-in" data-aos-delay="400" data-aos-duration="1000">
             <div class="swiper-wrapper">
                 <?php foreach ( $news_items as $index => $news ) : ?>
-                    <div class="swiper-slide h-auto" data-aos="fade-up" data-aos-delay="<?php echo esc_attr(300 + ($index * 100)); ?>">
+                    <div class="swiper-slide h-auto group" data-aos="fade-up" data-aos-delay="<?php echo esc_attr(300 + ($index * 100)); ?>">
                         <div class="bg-white rounded-2xl overflow-hidden cursor-pointer group hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-2 transition-all duration-500 h-full border border-gray-100 lg:border-none">
-                            <div class="relative h-44 md:h-56 overflow-hidden">
+                            <div class="relative aspect-square overflow-hidden">
                                 <img src="<?php echo esc_url( $news['image'] ); ?>" alt="News" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             </div>
-                            <div class="px-2 py-4 text-right">
+                            <div class="px-2 py-4 text-right group-hover:bg-green-600">
                                 <div class="self-stretch inline-flex justify-end items-start gap-4">
                                         <div
-                                            class="flex-1 text-right justify-start text-neutral-800 text-sm leading-5">
+                                            class="group-hover:text-white flex-1 text-right justify-start text-neutral-800 text-sm leading-5">
                                             الكويت تُطلق مشروعاً ضخماً للطاقة الشمسية بقدرة ١٥٠٠
                                           
                                         </div>
@@ -145,13 +145,13 @@ if ( $query->have_posts() ) {
                                                 <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/more.svg"></use>
                                             </svg>
                                     </div>
-                                <p class="text-gray-600 text-xs md:text-sm mb-3"><?php echo esc_html( $news['excerpt'] ); ?></p>
+                                <p class="group-hover:text-white text-gray-600 text-xs md:text-sm mb-3"><?php echo esc_html( $news['excerpt'] ); ?></p>
                                 <div class="flex items-center justify-between text-[10px] md:text-xs font-bold text-gray-500 border-t border-gray-100 pt-3">
                                     <div class="flex items-center gap-1">
-                                        <i class="far fa-eye"></i>
-                                        <span><?php echo esc_html( $news['views'] ); ?></span>
+                                        <i class="far fa-eye group-hover:text-white"></i>
+                                        <span class="group-hover:text-white"><?php echo esc_html( $news['views'] ); ?></span>
                                     </div>
-                                    <div dir="ltr"><?php echo esc_html( $news['date'] ); ?></div>
+                                    <div dir="ltr" class="group-hover:text-white"><?php echo esc_html( $news['date'] ); ?></div>
                                 </div>
                             </div>
                         </div>

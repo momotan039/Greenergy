@@ -92,146 +92,147 @@ $wrapper_attributes = get_block_wrapper_attributes( [
     </div>
 
     <!-- Main Grid Layout -->
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 text-right relative z-10">
-        <!-- Right Column -->
-        <div class="flex lg:col-span-3 flex-col gap-6 order-2 lg:order-1" data-aos="fade-left" data-aos-delay="200">
-            <?php 
-                $delay = 400;
-                foreach ( $small_cards as $news ) : 
-                    $delay += 100;
-            ?>
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-2 transition-all duration-500 group" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
-                    <div class="relative h-48 overflow-hidden">
-                        <img src="<?php echo esc_url( $news['image'] ); ?>" alt="News" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+   <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 text-right relative z-10">
+    
+    <div class="flex lg:col-span-3 flex-col gap-6 order-2 lg:order-1" data-aos="fade-left" data-aos-delay="200">
+        <?php 
+            $delay = 400;
+            foreach ( $small_cards as $news ) : 
+                $delay += 100;
+        ?>
+            <div class="hover:cursor-pointer group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-2 transition-all duration-500" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
+                <div class="relative aspect-[4/3] overflow-hidden">
+                    <img src="<?php echo esc_url( $news['image'] ); ?>" alt="News" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-4">
+                    <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
+                        <span class="bg-[#E6F6EC] text-[#1F2937] px-2 py-1 rounded font-semibold text-[10px]"><?php echo esc_html( $news['tag'] ?? '' ); ?></span>
+                        <span><?php echo esc_html( $news['date'] ); ?></span>
                     </div>
-                    <div class="p-4">
-                        <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
-                            <span class="bg-[#E6F6EC] text-[#1F2937] px-2 py-1 rounded font-semibold text-[10px]"><?php echo esc_html( $news['tag'] ?? '' ); ?></span>
-                            <span><?php echo esc_html( $news['date'] ); ?></span>
+                    <h3 class="group-hover:text-[#22C55E] text-[#1F2937] font-bold text-base leading-snug mb-3 line-clamp-2"><?php echo esc_html( $news['title'] ); ?></h3>
+                    <div class="flex items-center justify-between mt-auto">
+                        <div class="flex items-center text-gray-400 text-xs gap-1">
+                            <i class="far fa-eye"></i>
+                            <span><?php echo esc_html( $news['views'] ); ?></span>
                         </div>
-                        <h3 class="text-[#1F2937] font-bold text-base leading-snug mb-3 line-clamp-2"><?php echo esc_html( $news['title'] ); ?></h3>
-                        <div class="flex items-center justify-between mt-auto">
-                            <div class="flex items-center text-gray-400 text-xs gap-1">
-                                <i class="far fa-eye"></i>
-                                <span><?php echo esc_html( $news['views'] ); ?></span>
-                            </div>
-                            <a href="<?php echo esc_url($news['link'] ?? '#'); ?>" class="text-[#22C55E] font-bold text-sm hover:underline">المزيد</a>
-                        </div>
+                        <a href="<?php echo esc_url($news['link'] ?? '#'); ?>" class="text-[#22C55E] font-bold text-sm hover:underline">المزيد</a>
                     </div>
                 </div>
-            <?php endforeach; ?>
-        </div>
-
-        <!-- Center Column -->
-        <div class="col-span-1 lg:col-span-6 flex flex-col gap-6 order-1 lg:order-2 h-full" data-aos="fade-up" data-aos-delay="200">
-             
-             <!-- Top Slider -->
-             <div class="relative flex-1">
-                 <div class="swiper most-read-swiper-top w-full h-full rounded-2xl overflow-hidden">
-                    <div class="swiper-wrapper">
-                        <?php foreach ( $large_cards_1 as $news ) : ?>
-                            <div class="swiper-slide h-auto">
-                                <div class="bg-white h-full rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-1 transition-all duration-500 group relative flex flex-col">
-                                    <div class="relative flex-1 min-h-[250px] overflow-hidden">
-                                        <img src="<?php echo esc_url( $news['image'] ); ?>" alt="News" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                    </div>
-                                    <div class="p-5 md:p-6 mt-auto">
-                                        <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
-                                            <span class="bg-[#E6F6EC] text-[#1F2937] px-3 py-1 rounded font-semibold"><?php echo esc_html( $news['tag'] ?? '' ); ?></span>
-                                            <span><?php echo esc_html( $news['date'] ); ?></span>
-                                        </div>
-                                        <h3 class="text-[#1F2937] font-bold text-xl md:text-2xl leading-snug mb-3"><?php echo esc_html( $news['title'] ); ?></h3>
-                                        <div class="flex items-center justify-between mt-4">
-                                            <div class="flex items-center text-gray-400 text-sm gap-1">
-                                                <i class="far fa-eye"></i>
-                                                <span><?php echo esc_html( $news['views'] ); ?></span>
-                                            </div>
-                                            <a href="<?php echo esc_url($news['link'] ?? '#'); ?>" class="text-[#22C55E] font-bold text-base hover:underline">المزيد</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-                <!-- Custom Navigation Buttons Top -->
-                <div class="swiper-button-next-top absolute top-1/2 -left-3 transform -translate-y-1/2 z-20 w-10 h-10 bg-[#22C55E] rounded-full border-2 border-white flex items-center justify-center text-white cursor-pointer shadow-lg hover:bg-[#1a9945] transition-colors">
-                    <i class="fas fa-arrow-left"></i>
-                </div>
-                <div class="swiper-button-prev-top absolute top-1/2 -right-3 transform -translate-y-1/2 z-20 w-10 h-10 bg-[#22C55E] rounded-full border-2 border-white flex items-center justify-center text-white cursor-pointer shadow-lg hover:bg-[#1a9945] transition-colors">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-             </div>
-
-             <!-- Bottom Slider -->
-             <div class="relative flex-1">
-                 <div class="swiper most-read-swiper-bottom w-full h-full rounded-2xl overflow-hidden">
-                    <div class="swiper-wrapper">
-                        <?php foreach ( $large_cards_2 as $news ) : ?>
-                            <div class="swiper-slide h-auto">
-                                <div class="bg-white h-full rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-1 transition-all duration-500 group relative flex flex-col">
-                                    <div class="relative flex-1 min-h-[250px] overflow-hidden">
-                                        <img src="<?php echo esc_url( $news['image'] ); ?>" alt="News" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                    </div>
-                                    <div class="p-5 md:p-6 mt-auto">
-                                        <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
-                                            <span class="bg-[#E6F6EC] text-[#1F2937] px-3 py-1 rounded font-semibold"><?php echo esc_html( $news['tag'] ?? '' ); ?></span>
-                                            <span><?php echo esc_html( $news['date'] ); ?></span>
-                                        </div>
-                                        <h3 class="text-[#1F2937] font-bold text-xl md:text-2xl leading-snug mb-3"><?php echo esc_html( $news['title'] ); ?></h3>
-                                        <div class="flex items-center justify-between mt-4">
-                                            <div class="flex items-center text-gray-400 text-sm gap-1">
-                                                <i class="far fa-eye"></i>
-                                                <span><?php echo esc_html( $news['views'] ); ?></span>
-                                            </div>
-                                            <a href="<?php echo esc_url($news['link'] ?? '#'); ?>" class="text-[#22C55E] font-bold text-base hover:underline">المزيد</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-                <!-- Custom Navigation Buttons Bottom -->
-                <div class="swiper-button-next-bottom absolute top-1/2 -left-3 transform -translate-y-1/2 z-20 w-10 h-10 bg-[#22C55E] rounded-full border-2 border-white flex items-center justify-center text-white cursor-pointer shadow-lg hover:bg-[#1a9945] transition-colors">
-                    <i class="fas fa-arrow-left"></i>
-                </div>
-                <div class="swiper-button-prev-bottom absolute top-1/2 -right-3 transform -translate-y-1/2 z-20 w-10 h-10 bg-[#22C55E] rounded-full border-2 border-white flex items-center justify-center text-white cursor-pointer shadow-lg hover:bg-[#1a9945] transition-colors">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-             </div>
-
-        </div>
-
-        <!-- Left Column -->
-        <div class="flex lg:col-span-3 flex-col gap-6 order-3 lg:order-3" data-aos="fade-right" data-aos-delay="200">
-            <?php 
-                $delay = 400;
-                foreach ( $other_small_cards as $news ) : 
-                    $delay += 100;
-            ?>
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-2 transition-all duration-500 group" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
-                    <div class="relative h-48 overflow-hidden">
-                        <img src="<?php echo esc_url( $news['image'] ); ?>" alt="News" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <div class="p-4">
-                        <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
-                            <span class="bg-[#E6F6EC] text-[#1F2937] px-2 py-1 rounded font-semibold text-[10px]"><?php echo esc_html( $news['tag'] ?? '' ); ?></span>
-                            <span><?php echo esc_html( $news['date'] ); ?></span>
-                        </div>
-                        <h3 class="text-[#1F2937] font-bold text-base leading-snug mb-3 line-clamp-2"><?php echo esc_html( $news['title'] ); ?></h3>
-                        <div class="flex items-center justify-between mt-auto">
-                            <div class="flex items-center text-gray-400 text-xs gap-1">
-                                <i class="far fa-eye"></i>
-                                <span><?php echo esc_html( $news['views'] ); ?></span>
-                            </div>
-                            <a href="<?php echo esc_url($news['link'] ?? '#'); ?>" class="text-[#22C55E] font-bold text-sm hover:underline">المزيد</a>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
+            </div>
+        <?php endforeach; ?>
     </div>
+
+    <div class="col-span-1 lg:col-span-6 flex flex-col gap-6 order-1 lg:order-2 h-full" data-aos="fade-up" data-aos-delay="200">
+         
+         <div class="relative">
+             <div class="swiper most-read-swiper-top js-swiper-init w-full rounded-2xl overflow-hidden" 
+                  data-swiper-config='{
+                      "navigation": {"nextEl": ".swiper-button-next-top", "prevEl": ".swiper-button-prev-top"},
+                      "autoplay": {"delay": 5000}
+                  }'>
+                <div class="swiper-wrapper">
+                    <?php foreach ( $large_cards_1 as $news ) : ?>
+                        <div class="swiper-slide">
+                            <div class="hover:cursor-pointer group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-1 transition-all duration-500 relative flex flex-col">
+                                <div class="relative aspect-[3/2] overflow-hidden">
+                                    <img src="<?php echo esc_url( $news['image'] ); ?>" alt="News" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <div class="p-5 md:p-6">
+                                    <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
+                                        <span class="bg-[#E6F6EC] text-[#1F2937] px-3 py-1 rounded font-semibold"><?php echo esc_html( $news['tag'] ?? '' ); ?></span>
+                                        <span><?php echo esc_html( $news['date'] ); ?></span>
+                                    </div>
+                                    <h3 class="group-hover:text-[#22C55E] text-[#1F2937] font-bold text-xl md:text-2xl leading-snug mb-3"><?php echo esc_html( $news['title'] ); ?></h3>
+                                    <div class="flex items-center justify-between mt-4">
+                                        <div class="flex items-center text-gray-400 text-sm gap-1">
+                                            <i class="far fa-eye"></i>
+                                            <span><?php echo esc_html( $news['views'] ); ?></span>
+                                        </div>
+                                        <a href="<?php echo esc_url($news['link'] ?? '#'); ?>" class="text-[#22C55E] font-bold text-base hover:underline">المزيد</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+             </div>
+             <div class="swiper-button-next-top absolute top-1/2 -left-3 transform -translate-y-1/2 z-20 w-10 h-10 bg-[#22C55E] rounded-full border-2 border-white flex items-center justify-center text-white cursor-pointer shadow-lg">
+                <i class="fas fa-arrow-left"></i>
+             </div>
+             <div class="swiper-button-prev-top absolute top-1/2 -right-3 transform -translate-y-1/2 z-20 w-10 h-10 bg-[#22C55E] rounded-full border-2 border-white flex items-center justify-center text-white cursor-pointer shadow-lg">
+                <i class="fas fa-arrow-right"></i>
+             </div>
+         </div>
+
+         <div class="relative">
+             <div class="swiper most-read-swiper-bottom js-swiper-init w-full rounded-2xl overflow-hidden"
+                  data-swiper-config='{
+                      "navigation": {"nextEl": ".swiper-button-next-bottom", "prevEl": ".swiper-button-prev-bottom"},
+                      "autoplay": {"delay": 6000}
+                  }'>
+                <div class="swiper-wrapper">
+                    <?php foreach ( $large_cards_2 as $news ) : ?>
+                        <div class="swiper-slide">
+                            <div class="hover:cursor-pointer group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-1 transition-all duration-500 relative flex flex-col">
+                                <div class="relative aspect-[3/2] overflow-hidden">
+                                    <img src="<?php echo esc_url( $news['image'] ); ?>" alt="News" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <div class="p-5 md:p-6">
+                                    <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
+                                        <span class="bg-[#E6F6EC] text-[#1F2937] px-3 py-1 rounded font-semibold"><?php echo esc_html( $news['tag'] ?? '' ); ?></span>
+                                        <span><?php echo esc_html( $news['date'] ); ?></span>
+                                    </div>
+                                    <h3 class="group-hover:text-[#22C55E] text-[#1F2937] font-bold text-xl md:text-2xl leading-snug mb-3"><?php echo esc_html( $news['title'] ); ?></h3>
+                                    <div class="flex items-center justify-between mt-4">
+                                        <div class="flex items-center text-gray-400 text-sm gap-1">
+                                            <i class="far fa-eye"></i>
+                                            <span><?php echo esc_html( $news['views'] ); ?></span>
+                                        </div>
+                                        <a href="<?php echo esc_url($news['link'] ?? '#'); ?>" class="text-[#22C55E] font-bold text-base hover:underline">المزيد</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+             </div>
+             <div class="swiper-button-next-bottom absolute top-1/2 -left-3 transform -translate-y-1/2 z-20 w-10 h-10 bg-[#22C55E] rounded-full border-2 border-white flex items-center justify-center text-white cursor-pointer shadow-lg">
+                <i class="fas fa-arrow-left"></i>
+             </div>
+             <div class="swiper-button-prev-bottom absolute top-1/2 -right-3 transform -translate-y-1/2 z-20 w-10 h-10 bg-[#22C55E] rounded-full border-2 border-white flex items-center justify-center text-white cursor-pointer shadow-lg">
+                <i class="fas fa-arrow-right"></i>
+             </div>
+         </div>
+    </div>
+
+    <div class="flex lg:col-span-3 flex-col gap-6 order-3 lg:order-3" data-aos="fade-right" data-aos-delay="200">
+        <?php 
+            $delay = 400;
+            foreach ( $other_small_cards as $news ) : 
+                $delay += 100;
+        ?>
+            <div class="hover:cursor-pointer group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-2 transition-all duration-500" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
+                <div class="relative aspect-[4/3] overflow-hidden">
+                    <img src="<?php echo esc_url( $news['image'] ); ?>" alt="News" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-4">
+                    <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
+                        <span class="bg-[#E6F6EC] text-[#1F2937] px-2 py-1 rounded font-semibold text-[10px]"><?php echo esc_html( $news['tag'] ?? '' ); ?></span>
+                        <span><?php echo esc_html( $news['date'] ); ?></span>
+                    </div>
+                    <h3 class="group-hover:text-[#22C55E] text-[#1F2937] font-bold text-base leading-snug mb-3 line-clamp-2"><?php echo esc_html( $news['title'] ); ?></h3>
+                    <div class="flex items-center justify-between mt-auto">
+                        <div class="flex items-center text-gray-400 text-xs gap-1">
+                            <i class="far fa-eye"></i>
+                            <span><?php echo esc_html( $news['views'] ); ?></span>
+                        </div>
+                        <a href="<?php echo esc_url($news['link'] ?? '#'); ?>" class="text-[#22C55E] font-bold text-sm hover:underline">المزيد</a>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
 
     <div class="mt-10 text-center relative z-10" data-aos="fade-up" data-aos-delay="500">
         <a href="#" class="inline-flex items-center bg-white border border-gray-200 text-[#1F2937] font-bold py-3 px-8 rounded-[20px] shadow-sm hover:bg-[#229924] hover:text-white hover:border-[#229924] hover:shadow-lg hover:scale-105 transition-all duration-300 group">
@@ -245,38 +246,6 @@ $wrapper_attributes = get_block_wrapper_attributes( [
 </div>
 <?php if ( ! is_admin() ) : ?>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        if (typeof Swiper !== 'undefined') {
-            // Top Slider
-            new Swiper('.most-read-swiper-top', {
-                slidesPerView: 1,
-                spaceBetween: 24,
-                loop: true,
-                navigation: {
-                    nextEl: '.swiper-button-next-top',
-                    prevEl: '.swiper-button-prev-top',
-                },
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false,
-                },
-            });
-            
-            // Bottom Slider
-            new Swiper('.most-read-swiper-bottom', {
-                slidesPerView: 1,
-                spaceBetween: 24,
-                loop: true,
-                navigation: {
-                    nextEl: '.swiper-button-next-bottom',
-                    prevEl: '.swiper-button-prev-bottom',
-                },
-                autoplay: {
-                    delay: 6000,
-                    disableOnInteraction: false,
-                },
-            });
-        }
-    });
+    // Inline script removed in favor of generic Swiper module
 </script>
 <?php endif; ?>
