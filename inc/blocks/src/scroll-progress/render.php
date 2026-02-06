@@ -17,6 +17,30 @@
     </div>
 </div>
 
+
+<style>
+    @keyframes particle-scatter {
+        0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: translate(var(--tx), var(--ty)) scale(0);
+            opacity: 0;
+        }
+    }
+    .particle {
+        position: fixed;
+        width: 8px;
+        height: 8px;
+        background: #0ea5e9; /* sky-500 */
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        animation: particle-scatter 0.8s ease-out forwards;
+    }
+</style>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const indicator = document.getElementById('scroll-progress-indicator');
@@ -43,12 +67,6 @@
             text.textContent = percentage + '%';
             
             // Map percentage to position. 
-            // At 0%, top should be 56px (hidden at bottom). 
-            // At 100%, top should be 0px (fully filling).
-            // Actually, based on the description "top-[56px]", it seems it starts offset. 
-            // Let's assume the gradient moves UP into view.
-            // Wait, "origin-top-left -rotate-90" suggests rotation.
-            // Let's stick to the visual manipulation: changing 'top' from 56px to 0px.
             const offset = 70 - (70 * scrollPercent);
             fill.style.top = `${offset}px`;
 
@@ -64,12 +82,52 @@
             requestId = null;
         }
 
-        // Click to scroll to top
-        indicator.addEventListener('click', function() {
+        // Particle effect function
+        function createParticles(x, y) {
+            const particleCount = 12;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random destination using CSS custom properties
+                // Try to scatter in all directions but with some downward tendency for gravity
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 50 + Math.random() * 50;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance + 30; // +30 for gravity
+
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                
+                // Random color variations (sky-500 to blue-700)
+                const colors = ['#0ea5e9', '#0284c7', '#0369a1', '#22c55e'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                
+                document.body.appendChild(particle);
+                
+                // Cleanup
+                particle.addEventListener('animationend', () => {
+                    particle.remove();
+                });
+            }
+        }
+
+        // Click to scroll to top + particles
+        indicator.addEventListener('click', function(e) {
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
             });
+            
+            // Get center position of the button
+            const rect = indicator.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            createParticles(centerX, centerY);
         });
 
         // Optimize with rAF

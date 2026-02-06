@@ -108,7 +108,7 @@ if ( $query->have_posts() ) {
         </div>
 
         <!-- Filters -->
-        <div class="flex md:justify-center gap-3 mb-10  overflow-x-auto" data-aos="fade-up" data-aos-delay="200">
+        <div class="flex md:justify-center gap-3 mb-10  overflow-x-auto overflow-y-hidden" data-aos="fade-up" data-aos-delay="200">
             <button class="bg-[#229924] min-w-max text-white px-6 py-2 rounded-lg hover:bg-[#1a7a1c] hover:scale-105 transition-all duration-300 shadow-md hover:shadow-green-500/20">كل الاخبار</button>
             <button class="bg-[#EFF2F5] min-w-max text-gray-600 px-6 py-2 rounded-lg hover:bg-green-600 hover:text-white hover:scale-105 transition-all duration-300">طاقة شمسية</button>
             <button class="bg-[#EFF2F5] min-w-max text-gray-600 px-6 py-2 rounded-lg hover:bg-green-600 hover:text-white hover:scale-105 transition-all duration-300">رياح</button>

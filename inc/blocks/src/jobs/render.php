@@ -244,7 +244,7 @@ function render_golden_card($jobs) {
     <div class="max-w-7xl mx-auto relative z-10">
         <!-- Header -->
         <div class="text-center mb-8 md:mb-12" data-aos="fade-down" data-aos-duration="1000">
-            <div class="inline-block bg-[#E6F6EC] text-[#229924] px-6 py-2 rounded-full text-base md:text-lg font-bold mb-4">
+            <div class="inline-block bg-[#229924] text-white px-6 py-2 rounded-full text-base md:text-lg font-bold mb-4">
                 <?php echo esc_html($attributes['badgeText']); ?>
             </div>
             <p class="text-gray-500 max-w-2xl mx-auto text-sm md:text-lg leading-relaxed font-semibold px-4">
