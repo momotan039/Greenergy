@@ -1,65 +1,109 @@
 <?php
 /**
- * Render for Stories Block
+ * Stories Block
  */
-$attributes = isset($attributes) ? $attributes : [];
-$stories = isset($attributes['stories']) ? $attributes['stories'] : [];
+$attrs   = $attributes ?? [];
+$stories = $attrs['stories'] ?? [];
+
+$default_image = get_template_directory_uri() . '/assets/images/new-1.jpg';
+
+$stories = $stories ?: [[
+    'image' => $default_image,
+    'label' => 'أخبار عاجلة',
+    'seen'  => false,
+    'link'  => '#',
+]];
+
+$swiper_options = [
+    'slidesPerView' => 'auto',
+    'spaceBetween' => 0,
+    'loop'          => true,
+    'freeMode'      => true,
+    'grabCursor'    => true,
+    'autoplay'      => [
+        'delay' => 900,
+        'disableOnInteraction' => false,
+    ],
+    'breakpoints' => [
+        768 => ['spaceBetween' => 0],
+    ],
+];
 ?>
-<!-- Status Section -->
-<div class="container w-full m-auto sticky top-[80px] z-30 transition-all duration-300">
-    <div class="bg-gradient-to-l from-green-700 via-lime-600 to-lime-300 rounded-3xl relative z-[2] max-w-7xl mx-auto px-4 shadow-lg">
-        <div class="py-5 overflow-x-auto overflow-y-hidden">
-            <div class="flex gap-4">
-                <?php if ( ! empty( $stories ) ) : ?>
-                    <?php foreach ( $stories as $index => $story ) : 
-                        $is_unseen = !$story['seen']; // Force all to look active? Or maybe random? Let's stick to Active style.
-                        if($is_unseen): ?>
-                        <a href="<?php echo isset($story['link']) ? esc_url($story['link']) : '#'; ?>"
-                            class="group block text-center transition-all duration-300 hover:scale-110 flex-shrink-0 w-[68px] h-[101px] lg:w-[134px] lg:h-[179px]"
-                            data-aos="fade-up" data-aos-delay="<?php echo esc_attr(100 + ($index * 50)); ?>">
-                            <div class="rounded-full mx-auto mb-3 max-sm:mb-0 p-1 border-4 border-[#00E704] transition-colors duration-300 group-hover:border-white shadow-lg">
-                                <div class="w-full h-full rounded-full overflow-hidden border-2 max-sm:border-0 border-[#00E704] bg-gray-100 group-hover:border-white transition-colors duration-300">
-                                    <img src="<?php echo !empty($story['image']) ? esc_url($story['image']) : get_template_directory_uri() . '/assets/images/new-1.jpg'; ?>" 
-                                         loading="lazy" decoding="async" alt="<?php echo esc_attr($story['label']); ?>"
-                                         class="w-full h-full object-cover block grayscale group-hover:grayscale-0 group-hover:rotate-6 transition-all duration-500">
+
+<div id="stories-block-wrapper" class="relative w-full transition-all">
+    <div id="stories-block-inner" class="container mx-auto relative z-30 transition-all">
+        <div class="py-6 px-8 max-md:px-4 bg-gradient-to-l from-green-700 via-lime-600 to-lime-300 rounded-3xl shadow-lg max-w-7xl mx-auto">
+            
+            <div class="swiper js-swiper-init py-6"
+                 data-swiper-config="<?= esc_attr(wp_json_encode($swiper_options)) ?>">
+                 
+                <div class="swiper-wrapper items-center">
+                    <?php foreach ($stories as $i => $story):
+                        $seen  = !empty($story['seen']);
+                        $img   = esc_url($story['image'] ?? $default_image);
+                        $link  = esc_url($story['link'] ?? '#');
+                        $label = esc_html($story['label'] ?? 'Story');
+
+                        $border = $seen
+                            ? 'border-white border-dashed group-hover:border-solid'
+                            : 'border-[#00E704]';
+
+                        $imgAnim = $seen
+                            ? 'group-hover:scale-116'
+                            : 'group-hover:rotate-6';
+                    ?>
+                        <a href="<?= $link ?>"
+                           class="swiper-slide !w-[160px] max-md:!w-[115px] group flex flex-col items-center justify-center gap-5 transition hover:scale-105"
+                           data-aos="fade-up"
+                           data-aos-delay="<?= 100 + $i * 50 ?>">
+
+                            <div class="justify-self-center w-[120px] h-[120px] max-md:w-[70px] max-md:h-[70px] rounded-full p-1 border-4 <?= $border ?> transition group-hover:border-white shadow-lg">
+                                <div class="rounded-full overflow-hidden border-2 <?= $border ?> bg-gray-100 transition">
+                                    <img src="<?= $img ?>"
+                                         alt="<?= $label ?>"
+                                         loading="lazy"
+                                         decoding="async"
+                                         class="block w-full h-full object-cover grayscale group-hover:grayscale-0 <?= $imgAnim ?> transition duration-500">
                                 </div>
                             </div>
-                            <span class="text-white text-sm leading-[1.3] group-hover:font-bold transition-all">
-                                <?php echo esc_html($story['label']); ?>
+
+                            <span class="mt-2 text-center w-full truncate text-white text-xl max-md:text-sm line-clamp-2 transition group-hover:scale-105">
+                            <?php echo $label?>                                
                             </span>
+
                         </a>
-                         <!-- Story seen -->
-                          <?php else: ?>
-                    <a href="#"
-                        class="group block text-center transition-all duration-300 hover:scale-110 flex-shrink-0 w-[68px] h-[101px] lg:w-[134px] lg:h-[179px]"
-                        data-aos="fade-up" data-aos-delay="<?php echo esc_attr(100 + ($index * 50)); ?>">
-                        <div class="rounded-full mx-auto mb-3 max-sm:mb-0 p-1 border-4 border-white border-dashed transition-all duration-300 group-hover:border-solid shadow-lg">
-                            <div class="w-full h-full rounded-full overflow-hidden border-2 max-sm:border-0 border-white border-dashed group-hover:border-solid transition-all duration-300">
-                                <img src="<?php echo !empty($story['image']) ? esc_url($story['image']) : get_template_directory_uri() . '/assets/images/new-1.jpg'; ?>" loading="lazy" decoding="async" alt="Story title"
-                                    class="w-full h-full object-cover block grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500">
-                            </div>
-                        </div>
-                        <span class="text-white text-sm leading-[1.3] group-hover:font-bold transition-all">
-                            ملخص تقرير عالمي
-                        </span>
-                    </a>
-                    <?php endif; ?>
                     <?php endforeach; ?>
-                <?php else: ?>
-                    <!-- Fallback if no stories -->
-                    <a href="#" class="group block text-center transition-transform duration-200 hover:scale-105 flex-shrink-0 w-[68px] h-[101px] lg:w-[134px] lg:h-[179px]">
-                         <div class="rounded-full mx-auto mb-3 p-1 border-4 border-[#00E704] ">
-                            <div class="w-full h-full rounded-full overflow-hidden border-2 border-[#00E704] bg-gray-100">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/new-1.jpg" loading="lazy" decoding="async" alt="Story title"
-                                    class="w-full h-full object-cover block grayscale group-hover:grayscale-0 transition-all duration-300">
-                            </div>
-                        </div>
-                        <span class="text-white text-xl font-bold leading-[1.3]">
-                            أخبار عاجلة
-                        </span>
-                    </a>
-                <?php endif; ?>
+                </div>
             </div>
+
         </div>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const wrapper = document.getElementById('stories-block-wrapper');
+    const inner   = document.getElementById('stories-block-inner');
+    if (!wrapper || !inner) return;
+
+    const STICKY_TOP = 116;
+    let offsetTop = wrapper.offsetTop;
+
+    const setSticky = (on) => {
+        inner.classList.toggle('fixed', on);
+        inner.classList.toggle('relative', !on);
+        inner.classList.toggle('is-sticky-stories', on);
+        wrapper.style.height = on ? inner.offsetHeight + 'px' : 'auto';
+
+        if (on) {
+            inner.classList.add('top-[116px]', 'max-md:top-[100px]', 'left-0', 'right-0', 'z-40');
+        } else {
+            inner.classList.remove('top-[116px]', 'max-md:top-[100px]', 'left-0', 'right-0', 'z-40');
+        }
+    };
+
+    window.addEventListener('resize', () => offsetTop = wrapper.offsetTop);
+    window.addEventListener('scroll', () => {
+        setSticky(window.scrollY > offsetTop - STICKY_TOP);
+    }, { passive: true });
+});
+</script>

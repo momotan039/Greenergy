@@ -47,13 +47,6 @@
                     "seen": true
                 },
                 {
-                    "label": "ملخص تقرير عالمي",
-                    "image": "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=200&h=200&fit=crop",
-                    "imageId": 0,
-                    "link": "#",
-                    "seen": true
-                },
-                {
                     "label": "قصة نجاح",
                     "image": "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?w=200&h=200&fit=crop",
                     "imageId": 0,
@@ -61,7 +54,21 @@
                     "seen": true
                 },
                 {
-                    "label": "ابتكار جديد",
+                    "label": "عوامل النجاح",
+                    "image": "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?w=200&h=200&fit=crop",
+                    "imageId": 0,
+                    "link": "#",
+                    "seen": true
+                },
+                {
+                    "label": "خطوات النجاح",
+                    "image": "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?w=200&h=200&fit=crop",
+                    "imageId": 0,
+                    "link": "#",
+                    "seen": true
+                },
+                {
+                    "label": "الإلتزام",
                     "image": "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?w=200&h=200&fit=crop",
                     "imageId": 0,
                     "link": "#",

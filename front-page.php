@@ -12,7 +12,6 @@
 get_header();
 ?>
 <main id="primary" class="site-main">
-    <h1>Home Page</h1>
     <?php
     // Get the page content
     $content = '';

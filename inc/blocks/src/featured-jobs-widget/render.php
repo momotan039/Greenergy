@@ -6,7 +6,7 @@
  */
 
 $wrapper_attributes = get_block_wrapper_attributes( [
-    'class' => 'flex self-stretch p-2 bg-white rounded-xl shadow-lg outline outline-1 outline-gray-200 flex flex-col justify-start items-center gap-2 max-md:min-w-[18rem] flex-none',
+    'class' => 'self-stretch p-2 bg-white rounded-xl shadow-lg outline outline-1 outline-gray-200 flex flex-col justify-start items-center gap-2 max-md:max-w-[18rem] flex-none',
 ] );
 
 // Query Jobs
@@ -49,8 +49,8 @@ if ( ! $has_jobs ) {
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>
-    <div class="inline-flex justify-end items-center gap-2 self-start">
-        <div class="text-center justify-start text-neutral-950 text-base leading-6">
+    <div class="inline-flex justify-end items-center gap-2">
+        <div class="text-center justify-start text-neutral-950 text-base font-bold leading-6">
             <svg class="w-6 h-6 inline self-center" aria-hidden="true">
                 <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/bold/briefcase.svg"></use>
             </svg>
@@ -60,7 +60,7 @@ if ( ! $has_jobs ) {
 
     <div class="self-stretch p-2 rounded-2xl flex flex-col justify-start items-end gap-5">
         <div class="self-stretch flex flex-col justify-start items-center gap-4">
-            <div class="self-stretch flex  md:flex-col flex-row justify-start items-center gap-2">
+            <div class="self-stretch flex  md:flex-col flex-row justify-start items-center gap-2 max-md:overflow-x-auto">
                 <?php 
                 if ( $has_jobs ) { 
                     while ( $query->have_posts() ) : $query->the_post(); 
@@ -170,9 +170,9 @@ if ( ! $has_jobs ) {
                 </div>
             </div>
             
-            <a href="#" class="self-stretch h-9 px-4 bg-gradient-to-br from-sky-500 to-blue-700 rounded-[55px] inline-flex justify-center items-center gap-2 hover:shadow-lg transition-shadow">
-                <div class="leading-5 h-6 text-white pt-1">عرض كل الوضائف</div>
-                <span class="pb-1 text-white text-2xl leading-6">←</span>
+            <a href="#" class="self-stretch h-9 px-4 max-md:border-2 max-md:border-sky-500 max-md:bg-white md:bg-gradient-to-br from-sky-500 to-blue-700 rounded-[55px] inline-flex justify-center items-center gap-2 hover:shadow-lg transition-shadow">
+                <div class="leading-5 h-6 text-white max-md:text-sky-500 pt-1">عرض كل الوضائف</div>
+                <span class="pb-1 text-white max-md:text-sky-500 text-2xl leading-6">←</span>
             </a>
         </div>
     </div>

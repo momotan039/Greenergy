@@ -35,6 +35,10 @@
         "height": {
             "type": "string",
             "default": "10rem"
+        },
+        "hasContainer": {
+            "type": "boolean",
+            "default": true
         }
     },
     "supports": {

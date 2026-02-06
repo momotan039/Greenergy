@@ -1,24 +1,45 @@
-/* Swiper Custom Styles */
-@layer components {
-    .swiper-pagination-bullet {
-        @apply w-2 h-2 bg-green-300 opacity-100 transition-colors duration-300;
-    }
+  /* Swiper Custom Styles */
+  @layer utilities {
 
-    .swiper-pagination-bullet-active {
-        background-color: #15803d !important;
-        /* green-700 */
-        opacity: 1 !important;
-    }
+      /* Pagination Bullets */
+      .swiper-pagination-bullet {
+          width: 0.5rem;
+          /* w-2 */
+          height: 0.5rem;
+          /* h-2 */
+          background-color: white !important;
+          opacity: 1 !important;
+          transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+          transition-duration: 300ms;
+          /* duration-300 */
+      }
 
-    /* Navigation Buttons Customization if needed */
-    .swiper-button-next,
-    .swiper-button-prev {
-        @apply text-green-600 hover:text-green-700 transition-colors;
-    }
+      .swiper-pagination-bullet-active {
+          background-color: #15803d !important;
+          /* green-700 */
+          opacity: 1 !important;
+      }
 
-    .swiper-button-next::after,
-    .swiper-button-prev::after {
-        font-size: 1.5rem;
-        font-weight: bold;
-    }
-}
+      /* Navigation Buttons */
+      .swiper-button-next,
+      .swiper-button-prev {
+          color: #16a34a;
+          /* text-green-600 */
+          transition-property: color;
+          transition-duration: 300ms;
+          /* transition-colors */
+      }
+
+      .swiper-button-next:hover,
+      .swiper-button-prev:hover {
+          color: #15803d;
+          /* hover:text-green-700 */
+      }
+
+      /* Arrows styling */
+      .swiper-button-next::after,
+      .swiper-button-prev::after {
+          font-size: 1.5rem;
+          font-weight: bold;
+      }
+  }

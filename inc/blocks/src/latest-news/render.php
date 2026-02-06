@@ -84,16 +84,6 @@ if ( $query->have_posts() ) {
 }
 ?>
 <style>
-    .swiper-pagination-bullet {
-        width: 10px;
-        height: 10px;
-        background: #D9D9D9 !important;
-        opacity: 1;
-    }
-    .swiper-pagination-bullet-active {
-        background: #229924 !important;
-        width: 10px;
-    }
     .swiper-container-latest {
         width: 100%;
         padding-bottom: 50px !important;
@@ -109,7 +99,7 @@ if ( $query->have_posts() ) {
     <div class="max-w-[1400px] mx-auto relative z-10">
         <!-- Header -->
         <div class="text-center mb-10" data-aos="fade-down" data-aos-duration="1000">
-            <div class="inline-block bg-[#E6F6EC] text-[#229924] font-bold px-6 py-2 rounded-full mb-4 text-xl">
+            <div class="inline-block bg-[#229924] text-white font-bold px-6 py-2 rounded-full mb-4 text-xl">
                 <?php echo esc_html( $attributes['badgeText'] ); ?>
             </div>
             <p class="text-[#656865] max-w-2xl mx-auto text-lg leading-relaxed">
@@ -118,11 +108,11 @@ if ( $query->have_posts() ) {
         </div>
 
         <!-- Filters -->
-        <div class="flex flex-wrap justify-center gap-3 mb-10 overflow-x-auto" data-aos="fade-up" data-aos-delay="200">
-            <button class="bg-[#229924] text-white px-6 py-2 rounded-lg hover:bg-[#1a7a1c] hover:scale-105 transition-all duration-300 shadow-md hover:shadow-green-500/20">كل الاخبار</button>
-            <button class="bg-[#EFF2F5] text-gray-600 px-6 py-2 rounded-lg hover:bg-green-600 hover:text-white hover:scale-105 transition-all duration-300">طاقة شمسية</button>
-            <button class="bg-[#EFF2F5] text-gray-600 px-6 py-2 rounded-lg hover:bg-green-600 hover:text-white hover:scale-105 transition-all duration-300">رياح</button>
-            <button class="bg-[#EFF2F5] text-gray-600 px-6 py-2 rounded-lg hover:bg-green-600 hover:text-white hover:scale-105 transition-all duration-300">بيئة</button>
+        <div class="flex md:justify-center gap-3 mb-10  overflow-x-auto" data-aos="fade-up" data-aos-delay="200">
+            <button class="bg-[#229924] min-w-max text-white px-6 py-2 rounded-lg hover:bg-[#1a7a1c] hover:scale-105 transition-all duration-300 shadow-md hover:shadow-green-500/20">كل الاخبار</button>
+            <button class="bg-[#EFF2F5] min-w-max text-gray-600 px-6 py-2 rounded-lg hover:bg-green-600 hover:text-white hover:scale-105 transition-all duration-300">طاقة شمسية</button>
+            <button class="bg-[#EFF2F5] min-w-max text-gray-600 px-6 py-2 rounded-lg hover:bg-green-600 hover:text-white hover:scale-105 transition-all duration-300">رياح</button>
+            <button class="bg-[#EFF2F5] min-w-max text-gray-600 px-6 py-2 rounded-lg hover:bg-green-600 hover:text-white hover:scale-105 transition-all duration-300">بيئة</button>
         </div>
 
         <!-- Swiper Container -->
@@ -172,7 +162,6 @@ if ( $query->have_posts() ) {
     </div>
 </section>
 
-<?php if ( ! is_admin() ) : ?>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         if (typeof Swiper !== 'undefined') {
@@ -198,4 +187,3 @@ if ( $query->have_posts() ) {
         }
     });
 </script>
-<?php endif; ?>

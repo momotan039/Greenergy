@@ -16,9 +16,9 @@ return [
         <!-- wp:greenergy/main-banner /-->
         </div>
         </div>
-        <!-- wp:greenergy/stories /-->
+        <!-- wp:greenergy/stories/-->
         <div class="container mx-auto mt-8">
-                <!-- wp:greenergy/news-filter /-->
+        <!-- wp:greenergy/news-filter /-->
         </div>
 
         <div class="container mx-auto mt-8">
@@ -44,11 +44,11 @@ return [
             <!-- Sidebar -->
             <div class="max-lg:hidden lg:w-1/4 w-full flex flex-col justify-start items-stretch gap-4 lg:sticky lg:top-4" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200" max-md:hidden>
                 <!-- wp:greenergy/directory-widget /-->
-                <!-- wp:greenergy/ad-block {"height":"136px"} /-->
+                <!-- wp:greenergy/ad-block {"height":"136px","hasContainer":false} /-->
                 <!-- wp:greenergy/courses-widget /-->
-                <!-- wp:greenergy/ad-block {"height":"136px"} /-->
+                <!-- wp:greenergy/ad-block {"height":"136px","hasContainer":false} /-->
                 <!-- wp:greenergy/featured-jobs-widget /-->
-                <!-- wp:greenergy/ad-block {"height":"136px"} /-->
+                <!-- wp:greenergy/ad-block {"height":"136px","hasContainer":false} /-->
                 <!-- wp:greenergy/follow-us-widget /-->
             </div>
             

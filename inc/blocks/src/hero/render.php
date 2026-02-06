@@ -7,7 +7,7 @@ $cta_url = isset($attributes['ctaUrl']) ? $attributes['ctaUrl'] : '#';
 ?>
 <!-- Hero section -->
 <div class="container w-full m-auto">
-    <div class="flex flex-col h-auto items-center justify-between lg:flex-row lg:pb-20 lg:px-28 px-4 w-full">
+    <div class="flex flex-col h-auto items-center justify-between lg:flex-row lg:pb-20 w-full gap-4">
         <!-- Text Content -->
         <div class="flex-1 flex flex-col justify-start items-center lg:items-start gap-4 w-full">
             <!-- Badge -->
@@ -30,18 +30,25 @@ $cta_url = isset($attributes['ctaUrl']) ? $attributes['ctaUrl'] : '#';
                 </div>
                 
                 <!-- CTA -->
-                <a href="<?php echo esc_url($cta_url); ?>" class="h-12 px-3 py-2 bg-gradient-to-l from-green-700 via-lime-600 to-lime-300 rounded-3xl inline-flex justify-start items-center gap-3 overflow-hidden hover:scale-105 transition-transform duration-300 shadow-lg hover:shadow-green-500/20" data-aos="zoom-in" data-aos-delay="400">
-                    <div class="justify-start text-white text-sm font-medium leading-3">
-                        المستقبل يبدأ من هنا
+                <!-- CTA -->
+                <a href="<?php echo esc_url($cta_url); ?>" 
+                   class="group h-12 px-4 bg-gradient-to-l from-green-700 via-lime-600 to-lime-300 rounded-3xl inline-flex justify-center items-center gap-3 overflow-hidden transition-all duration-500 shadow-lg hover:shadow-green-500/20" 
+                   data-aos="zoom-in" data-aos-delay="400">
+                    
+                    <div class="overflow-hidden whitespace-nowrap animate-typing">
+                        <div class="pl-2 text-white text-sm  border-l-2 border-transparent animate-blink">
+                             المستقبل يبدأ من هنا
+                        </div>
                     </div>
-                    <svg class="w-8 h-8 inline self-center bg-white rounded-full" aria-hidden="true">
+
+                    <svg class="flex-shrink-0 w-8 h-8 bg-white rounded-full animate-icon-zoom" aria-hidden="true">
                         <use href="<?php echo get_template_directory_uri(); ?>/assets/images/hero/arrow-up.svg"></use>
                     </svg>
                 </a>
                 
              <!-- Stats Row -->
 <div class="w-full pb-4" data-aos="fade-up" data-aos-delay="500">
-    <div class="py-2 max-sm:py-4 max-sm:gap-[1rem] bg-lime-100 rounded-3xl flex flex-nowrap justify-center lg:justify-start items-center gap-2 overflow-x-auto">
+    <div class="py-2 max-sm:py-4 max-sm:gap-[.3rem] bg-lime-100 rounded-3xl flex flex-nowrap justify-center lg:justify-start items-center gap-2 overflow-x-auto">
         <a href="" class="flex-shrink-0">
             <div class="w-28 max-sm:w-14 rounded-xl inline-flex flex-col gap-2 justify-center items-center hover:scale-110 transition-transform duration-300">
                 <svg class="w-9 h-10  max-sm:h-8 inline self-center" aria-hidden="true">
@@ -141,5 +148,30 @@ $cta_url = isset($attributes['ctaUrl']) ? $attributes['ctaUrl'] : '#';
 }
 .floating-animation {
     animation: floating 4s ease-in-out infinite;
+}
+
+@keyframes icon-zoom {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+.animate-icon-zoom {
+    animation: icon-zoom 1s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes typing {
+    from { max-width: 0; }
+    to { max-width: 200px; }
+}
+.animate-typing {
+    animation: typing 5s steps(40, end) forwards;
+}
+
+@keyframes blink {
+    0%, 100% { border-color: transparent; }
+    50% { border-color: white; }
+}
+.animate-blink {
+    animation: blink 1s step-end 0s 3 normal forwards; /* 5 iterations then stop */
 }
 </style>

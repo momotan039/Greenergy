@@ -246,5 +246,10 @@ module.exports = {
     // Animation states
     'animate-fade-in',
     'animate-slide-up',
+    // Swiper classes
+    'swiper-pagination-bullet',
+    'swiper-pagination-bullet-active',
+    'swiper-button-next',
+    'swiper-button-prev',
   ],
 };

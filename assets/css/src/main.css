@@ -17,11 +17,12 @@
 /* =========================================
    COMPONENT IMPORTS
    ========================================= */
-@import './components/buttons.css';
+/* @import './components/buttons.css';
 @import './components/forms.css';
 @import './components/cards.css';
 @import './components/navigation.css';
-@import './components/swiper.css';
+@import './components/swiper.css'; */
+
 
 /* =========================================
    BASE LAYER OVERRIDES
@@ -75,6 +76,7 @@
     }
 }
 
+
 /* =========================================
    UTILITIES LAYER
    Custom utility classes
@@ -104,5 +106,26 @@
     /* Container query ready */
     .container-query {
         container-type: inline-size;
+    }
+
+    .swiper-pagination-bullet {
+        @apply w-2 h-2 !bg-gray-500 opacity-100 transition-colors duration-300;
+    }
+
+    .swiper-pagination-bullet-active {
+        background-color: #15803d !important;
+        opacity: 1 !important;
+    }
+
+    /* Navigation Buttons Customization if needed */
+    .swiper-button-next,
+    .swiper-button-prev {
+        @apply text-green-600 hover:text-green-700 transition-colors;
+    }
+
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
+        font-size: 1.5rem;
+        font-weight: bold;
     }
 }

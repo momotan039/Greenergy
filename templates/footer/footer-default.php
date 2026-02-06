@@ -42,8 +42,8 @@ $copyright_text = str_replace( '{year}', date( 'Y' ), $copyright_text );
                     </p>
                 </div>
 
-                <div class="w-full max-w-2xl px-4">
-                    <form class="bg-white p-2 rounded-xl shadow-lg flex items-center justify-between pl-2 pr-6">
+                <div class="w-full max-w-2xl px-4 max-md:px-0">
+                    <form class="bg-white p-2 rounded-xl shadow-lg flex items-center justify-between">
                         <input type="email" placeholder="<?php esc_attr_e( 'ادخل بريدك الالكتروني', 'greenergy' ); ?>"
                             class="flex-1 bg-transparent border-none outline-none text-neutral-800  h-10 md:h-12">
                         <button type="submit"
@@ -59,12 +59,12 @@ $copyright_text = str_replace( '{year}', date( 'Y' ), $copyright_text );
 </div>
 
 <!-- Footer Section -->
-<footer class="bg-[#054F1C] text-white pt-24 pb-8 mt-12 relative overflow-hidden">
+<footer class="bg-[#054F1C] text-white pt-8 pb-8 mt-12 relative overflow-hidden">
 
     <div class="max-w-7xl mx-auto px-6 relative z-10">
 
         <!-- Main Grid -->
-        <div class="grid grid-cols-2 lg:grid-cols-12 gap-x-6 gap-y-10 lg:gap-8 pb-12 border-b border-white/10">
+        <div class="grid grid-cols-2 lg:grid-cols-12 gap-x-6 gap-y-10 lg:gap-8 border-b border-white/10">
 
             <!-- Column 1 (Widget Area) -->
             <div class="col-span-1 lg:col-span-2 flex flex-col items-center text-center lg:text-right order-1 lg:order-1" data-aos="fade-up" data-aos-delay="100">
@@ -99,17 +99,9 @@ $copyright_text = str_replace( '{year}', date( 'Y' ), $copyright_text );
             <!-- Center: Logo Block -->
             <div class="col-span-2 lg:col-span-4 flex flex-col items-center text-center order-0 lg:order-3 lg:mx-auto" data-aos="zoom-in" data-aos-delay="300">
                 <div class="flex flex-col items-center hover:scale-105 transition-transform duration-500 cursor-pointer">
-                    <?php if ( has_custom_logo() ) : ?>
-                        <div class="!w-32 !h-36">
-                            <?php the_custom_logo(); ?>
+                        <div class="!w-[134px] !h-[138px]">
+                            <img class="mix-blend-darken transition-transform duration-300 hover:scale-105" src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.png" />
                         </div>
-                    <?php else : ?>
-                        <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-yellow-400 rounded-full flex items-center justify-center mb-2 shadow-lg">
-                            <i class="fas fa-leaf text-3xl text-white"></i>
-                        </div>
-                        <h3 class="text-2xl font-black tracking-wider"><?php bloginfo( 'name' ); ?></h3>
-                        <span class="text-[10px] tracking-[0.2em] opacity-60 uppercase"><?php bloginfo( 'description' ); ?></span>
-                    <?php endif; ?>
                 </div>
 
                 <p class="text-white text-base font-normal leading-loose max-w-xs px-2 opacity-80 hover:opacity-100 transition-opacity">
@@ -150,7 +142,7 @@ $copyright_text = str_replace( '{year}', date( 'Y' ), $copyright_text );
         </div>
 
         <!-- Bottom Bar -->
-        <div class="flex flex-col md:flex-row items-center justify-between pt-8 gap-6 md:gap-0 mt-8 md:mt-0">
+        <div class="flex flex-col md:flex-row items-center justify-between pt-2 gap-6 md:gap-0 mt-8 md:mt-0">
 
             <!-- Copyright -->
             <div class="text-white text-base order-last md:order-first">

@@ -71,11 +71,9 @@ if ( isset( $attributes['offset'] ) && $attributes['offset'] > 0 ) {
     <div <?php echo $wrapper_attributes; ?>>
         <!-- Header -->
         <div class="self-stretch inline-flex justify-center items-center gap-6 mb-8">
-            <div class="px-8 py-2.5 bg-teal-50 rounded-3xl flex justify-center items-center gap-2.5">
-                <div class="w-auto px-4 h-7 text-center justify-start text-green-700 text-2xl font-medium leading-5">
+                <div class="justify-self-center max-w-max bg-[#229924] text-white font-bold px-6 py-2 rounded-full mb-4 text-xl max-sm:text-lg">
                     <?php echo esc_html( $attributes['title'] ); ?>
                 </div>
-            </div>
         </div>
 
         <!-- Carousel -->
@@ -176,47 +174,48 @@ if ( isset( $attributes['offset'] ) && $attributes['offset'] > 0 ) {
              <!-- Pagination for swiper -->
              <div class="swiper-pagination !relative mt-4"></div>
              
-             <!-- Pagination for page -->
-             <?php
-                get_template_part('templates/components/pagination');
-             ?>
+            
         </div>
     </div>
 
-<?php if ( ! is_admin() ) : ?>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        if (typeof Swiper !== 'undefined') {
-            new Swiper('.news-grid-swiper', {
-                slidesPerView: 1.2,
-                spaceBetween: 16,
-                centeredSlides: false,
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false,
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                breakpoints: {
-                    640: {
-                        slidesPerView: 2,
-                        spaceBetween: 24,
+        const swiperContainers = document.querySelectorAll('.news-grid-swiper');
+        
+        swiperContainers.forEach(container => {
+            const paginationEl = container.parentElement.querySelector('.swiper-pagination');
+            
+            if (typeof Swiper !== 'undefined') {
+                new Swiper(container, {
+                    slidesPerView: 1.2,
+                    spaceBetween: 16,
+                    centeredSlides: false,
+                    autoplay: {
+                        delay: 5000,
+                        disableOnInteraction: false,
                     },
-                    1024: {
-                        slidesPerView: 3,
-                        spaceBetween: 32,
+                    pagination: {
+                        el: paginationEl,
+                        clickable: true,
                     },
-                    1280: {
-                        slidesPerView: 3,
-                        spaceBetween: 32,
-                    }
-                },
-                observer: true,
-                observeParents: true,
-            });
-        }
+                    breakpoints: {
+                        640: {
+                            slidesPerView: 2,
+                            spaceBetween: 24,
+                        },
+                        1024: {
+                            slidesPerView: 3,
+                            spaceBetween: 32,
+                        },
+                        1280: {
+                            slidesPerView: 3,
+                            spaceBetween: 32,
+                        }
+                    },
+                    observer: true,
+                    observeParents: true,
+                });
+            }
+        });
     });
 </script>
-<?php endif; ?>

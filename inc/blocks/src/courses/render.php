@@ -81,16 +81,6 @@ if ( $query->have_posts() ) {
 }
 ?>
 <style>
-    .swiper-pagination-bullet {
-        background: rgba(255, 255, 255, 0.3) !important;
-        width: 10px;
-        height: 10px;
-        opacity: 1;
-    }
-    .swiper-pagination-bullet-active {
-        background: #A3E635 !important;
-        width: 10px;
-    }
     .cutted-edge {
            left: 2.4rem;
            bottom: 2rem;
@@ -121,8 +111,35 @@ if ( $query->have_posts() ) {
             </p>
         </div>
 
+
         <!-- Carousel -->
-        <div class="swiper swiper-container pb-16" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+        <?php
+        $swiper_settings = [
+            'slidesPerView' => 1.2,
+            'spaceBetween' => 16,
+            'centeredSlides' => false,
+            'pagination' => [
+                'clickable' => true,
+            ],
+            'breakpoints' => [
+                '640' => [
+                    'slidesPerView' => 2,
+                    'spaceBetween' => 24,
+                ],
+                '1024' => [
+                    'slidesPerView' => 3,
+                    'spaceBetween' => 32,
+                ],
+                '1280' => [
+                    'slidesPerView' => 3,
+                    'spaceBetween' => 40,
+                ]
+            ]
+        ];
+        ?>
+        <div class="swiper swiper-container js-swiper-init pb-16" 
+             data-swiper-config="<?php echo esc_attr( json_encode( $swiper_settings ) ); ?>"
+             data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
             <div class="swiper-wrapper">
                 <?php foreach ( $courses as $index => $course ) : ?>
                     <div class="swiper-slide" data-aos="fade-up" data-aos-delay="<?php echo esc_attr(300 + ($index * 100)); ?>">
@@ -178,33 +195,5 @@ if ( $query->have_posts() ) {
 </section>
 
 <?php if ( ! is_admin() ) : ?>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        if (typeof Swiper !== 'undefined') {
-            new Swiper('.swiper-container', {
-                slidesPerView: 1.2,
-                spaceBetween: 16,
-                centeredSlides: false,
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                breakpoints: {
-                    640: {
-                        slidesPerView: 2,
-                        spaceBetween: 24,
-                    },
-                    1024: {
-                        slidesPerView: 3,
-                        spaceBetween: 32,
-                    },
-                    1280: {
-                        slidesPerView: 3,
-                        spaceBetween: 40,
-                    }
-                }
-            });
-        }
-    });
-</script>
+
 <?php endif; ?>

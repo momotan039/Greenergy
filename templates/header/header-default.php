@@ -17,7 +17,7 @@
             
             <!-- Logo -->
             <a href="<?php echo esc_url( home_url( '/' ) ); ?>">
-                <img class="h-16 w-16 mix-blend-darken transition-transform duration-300 hover:scale-105" src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.png" />
+                <img class="h-20 w-20 mix-blend-darken transition-transform duration-300 hover:scale-105" src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.png" />
             </a>
             
             <!-- Search Icon -->
@@ -138,16 +138,16 @@
         <!-- ads and logo-->
         <div class="self-stretch h-50 px-2 pt-2 flex justify-center items-start gap-8">
             <!-- right ad -->
-            <div class="self-stretch h-28 flex-1 rounded-2xl border-2 border-green-700 shadow-sm transition-transform hover:scale-[1.01] duration-500">
+            <div class="self-stretch h-[136px] flex-1 rounded-2xl border-2 border-green-700 shadow-sm transition-transform hover:scale-[1.01] duration-500">
                 <img class="self-stretch h-full rounded-2xl w-full object-cover" src="<?php echo get_template_directory_uri(); ?>/assets/images/google-ad.png" />
             </div>
             
             <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="inline-block transition-transform duration-300 hover:scale-105">
-                <img class="flex mix-blend-darken" src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.png" />
+                <img class="flex mix-blend-darken w-[194px] h-[171px]" src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.png" />
             </a>
 
             <!-- left ad -->
-            <div class="self-stretch h-28 flex-1 rounded-2xl border-2 border-green-700 shadow-sm transition-transform hover:scale-[1.01] duration-500">
+            <div class="self-stretch h-[136px] flex-1 rounded-2xl border-2 border-green-700 shadow-sm transition-transform hover:scale-[1.01] duration-500">
                 <img class="self-stretch h-full rounded-2xl w-full object-cover" src="<?php echo get_template_directory_uri(); ?>/assets/images/ad-spolar.jpg" />
             </div>
         </div>
