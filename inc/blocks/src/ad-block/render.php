@@ -5,12 +5,13 @@
 $attributes = isset($attributes) ? $attributes : [];
 $imageUrl = isset($attributes['imageUrl']) ? $attributes['imageUrl'] : '';
 $height = isset($attributes['height']) ? $attributes['height'] : '72';
+$width = isset($attributes['width']) ? $attributes['width'] : '100%';
 $hasContainer = isset($attributes['hasContainer']) ? $attributes['hasContainer'] : true;
 $containerClass = $hasContainer ? 'container' : '';
 ?>
 <!-- AD section -->
 <div class="<?php echo $containerClass; ?> w-full m-auto my-10" data-aos="zoom-in" data-aos-duration="1000">
-    <div class="self-stretch w-full rounded-2xl border-2 border-green-700 overflow-hidden group relative" style="height: <?php echo esc_attr( $height ); ?>;">
+    <div class="self-stretch rounded-2xl border-2 border-green-700 overflow-hidden group relative" style="height: <?php echo esc_attr( $height ); ?>; width:<?php echo esc_attr( $width ); ?>">
         <?php if ( ! empty( $imageUrl ) ) : ?>
             <img class="self-stretch h-full rounded-2xl w-full object-cover transition-transform duration-700 group-hover:scale-105" src="<?php echo esc_url( $imageUrl ); ?>" />
         <?php else : ?>

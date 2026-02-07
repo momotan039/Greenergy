@@ -17,7 +17,7 @@
             
             <!-- Logo -->
             <a href="<?php echo esc_url( home_url( '/' ) ); ?>">
-                <img class="h-20 w-20 mix-blend-darken transition-transform duration-300 hover:scale-105" src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.png" />
+                <img class="h-20 w-20 mix-blend-darken transition-transform duration-300 scale-105" src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.png" />
             </a>
             
             <!-- Search Icon -->
@@ -47,17 +47,16 @@
                         <div class="w-7 h-7 text-right justify-start text-neutral-950 text-base font-normal leading-6">
                             تابعنا
                         </div>
-
-                        <svg class="w-6 h-6 inline self-center transition-transform duration-300 hover:scale-125 hover:text-green-600 cursor-pointer" aria-hidden="true">
+                        <svg class="w-6 h-6 inline scale-[0.8] self-center transition-transform duration-300 hover:scale-125 hover:text-green-600 cursor-pointer" aria-hidden="true">
                             <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/bold/ic16-linkedin.svg"></use>
                         </svg>
-                        <svg class="w-6 h-6 inline self-center transition-transform duration-300 hover:scale-125 hover:text-red-600 cursor-pointer" aria-hidden="true">
+                        <svg class="w-6 h-6 inline scale-[0.8] self-center transition-transform duration-300 hover:scale-125 hover:text-red-600 cursor-pointer" aria-hidden="true">
                             <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/bold/youtube.svg"></use>
                         </svg>
-                        <svg class="w-6 h-6 inline self-center transition-transform duration-300 hover:scale-125 hover:text-blue-600 cursor-pointer" aria-hidden="true">
+                        <svg class="w-6 h-6 inline scale-[0.8] self-center transition-transform duration-300 hover:scale-125 hover:text-blue-600 cursor-pointer" aria-hidden="true">
                             <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/bold/google.svg"></use>
                         </svg>
-                        <svg class="w-6 h-6 inline self-center transition-transform duration-300 hover:scale-125 hover:text-blue-700 cursor-pointer" aria-hidden="true">
+                        <svg class="w-6 h-6 inline scale-[0.8] self-center transition-transform duration-300 hover:scale-125 hover:text-blue-700 cursor-pointer" aria-hidden="true">
                             <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/bold/facebook.svg"></use>
                         </svg>
                     </div>
@@ -68,7 +67,7 @@
                             <div class="w-4 h-5 justify-start text-neutral-950 text-base font-normal  leading-6">
                                 Ar
                             </div>
-                            <svg class="w-6 h-4 transform group-hover:rotate-180 transition-transform duration-300" aria-hidden="true">
+                            <svg class="w-[2rem] h-[1.2rem] transform group-hover:rotate-180 transition-transform duration-300" aria-hidden="true">
                                 <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/arrow-down.svg"></use>
                             </svg>
                         </div>
@@ -79,36 +78,98 @@
         <div id="mobile-menu-backdrop" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300"></div>
 
         <!-- Mobile Menu Drawer -->
-        <div id="mobile-menu" class="fixed top-0 right-[-100%] w-[80%] max-w-sm bg-white/95 backdrop-blur-xl shadow-2xl z-50 h-screen transition-all duration-300 ease-in-out">
-             <div class="flex flex-col h-full">
-                <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                    <span class="font-bold text-lg text-green-700">القائمة</span>
-                    <button id="mobile-menu-close" class="p-2 hover:bg-red-50 hover:text-red-500 rounded-full transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <div id="mobile-menu" class="fixed top-0 right-[-100%] w-[85%] max-w-[400px] h-[100dvh] bg-white/95 backdrop-blur-xl text-neutral-950 z-50 shadow-2xl transition-all duration-300 ease-in-out flex flex-col">
+            
+            <!-- 1. Header: Logo & Close -->
+            <div class="px-6 py-5 flex justify-between items-center bg-white/50 border-b border-gray-100">
+                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="block">
+                    <img class="h-12 w-auto object-contain mix-blend-darken" src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.png" alt="Logo" />
+                </a>
+                <button id="mobile-menu-close" class="p-2 -mr-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-all duration-300">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- 2. Search Bar -->
+            <div class="px-6 py-6">
+               <form role="search" method="get" class="relative group" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+                    <input type="search" class="w-full h-12 pl-12 pr-4 bg-gray-50 text-neutral-900 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-green-500 focus:bg-white transition-all duration-300 placeholder-gray-400 font-medium" placeholder="بحث عن..." name="s" />
+                    <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 p-1 text-gray-400 group-focus-within:text-green-600 transition-colors">
+                         <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </button>
-                </div>
-                <div class="p-4 overflow-y-auto flex-1">
-                     <div class="flex flex-col gap-2">
-                        <!-- Static Home Link for Mobile -->
-                        <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="block py-3 px-4 rounded-xl bg-green-50 text-green-700 font-medium hover:bg-green-100 transition-colors">
-                            الرئيسية
-                        </a>
-                        <!-- Dynamic Menu -->
-                        <?php
-                            wp_nav_menu( [
-                                'theme_location' => 'primary', // Use primary menu so user sees the same links
-                                'container'      => false,
-                                'items_wrap'     => '<ul class="flex flex-col gap-2">%3$s</ul>',
-                                'fallback_cb'    => false,
-                                // Using a simplified output for mobile
-                                'walker'         => '', 
-                            ] );
-                        ?>
+                </form>
+            </div>
+
+            <!-- 3. Navigation Links -->
+            <div class="flex-1 overflow-y-auto px-4 py-2 custom-scrollbar">
+                <nav class="flex flex-col gap-1.5">
+                    <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="flex items-center gap-3 px-4 py-3.5 rounded-xl <?php echo is_front_page() ? 'bg-green-50 text-green-700 font-bold' : 'text-neutral-700 font-medium hover:bg-gray-50 hover:text-green-700'; ?> transition-all duration-200">
+                        <span class="text-base">الرئيسية</span>
+                    </a>
+
+                    <?php
+                    $locations = get_nav_menu_locations();
+                    if ( isset( $locations['primary'] ) ) {
+                        $menu_items = wp_get_nav_menu_items( $locations['primary'] );
+                        if ( $menu_items ) {
+                            foreach ( $menu_items as $item ) {
+                                // Minimal active state check
+                                $is_active = ( get_queried_object_id() == $item->object_id ); 
+                                $active_class = $is_active ? 'bg-green-50 text-green-700 font-bold' : 'text-neutral-700 font-medium hover:bg-gray-50 hover:text-green-700';
+                                ?>
+                                <a href="<?php echo esc_url( $item->url ); ?>" class="flex items-center gap-3 px-4 py-3.5 rounded-xl <?php echo $active_class; ?> transition-all duration-200 group">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-green-500 transition-colors <?php echo $is_active ? 'bg-green-500' : ''; ?>"></span>
+                                    <span class="text-base"><?php echo esc_html( $item->title ); ?></span>
+                                </a>
+                                <?php
+                            }
+                        }
+                    }
+                    ?>
+                </nav>
+            </div>
+
+            <!-- 4. Footer: Social & Tools -->
+            <div class="p-6 bg-gray-50/80 border-t border-gray-100 mt-auto backdrop-blur-sm">
+                 <div class="flex flex-col gap-4">
+                     <div class="flex justify-between items-center">
+                        <span class="text-sm font-semibold text-gray-500">تابعنا على</span>
+                        <div class="flex gap-4">
+                            <a href="#" class="text-gray-400 hover:text-[#0077b5] hover:scale-110 transition-all"><svg class="w-6 h-6"><use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/bold/ic16-linkedin.svg"></use></svg></a>
+                            <a href="#" class="text-gray-400 hover:text-[#FF0000] hover:scale-110 transition-all"><svg class="w-6 h-6"><use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/bold/youtube.svg"></use></svg></a>
+                            <a href="#" class="text-gray-400 hover:text-[#4285F4] hover:scale-110 transition-all"><svg class="w-6 h-6"><use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/bold/google.svg"></use></svg></a>
+                            <a href="#" class="text-gray-400 hover:text-[#1877F2] hover:scale-110 transition-all"><svg class="w-6 h-6"><use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/bold/facebook.svg"></use></svg></a>
+                        </div>
                      </div>
-                </div>
-             </div>
+                     
+                     <div class="w-full h-px bg-gray-200"></div>
+
+                     <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-200 shadow-sm cursor-pointer hover:border-green-500 transition-colors group">
+                         <div class="flex items-center gap-3">
+                             <img src="<?php echo get_template_directory_uri(); ?>/assets/images/flag-1.png" class="w-6 h-6" alt="Lang">
+                             <span class="text-sm font-bold text-neutral-800">العربية - AR</span>
+                         </div>
+                          <svg class="w-[2rem] h-[1.2rem] text-gray-400 group-hover:text-green-600 transition-colors"><use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/arrow-down.svg"></use></svg>
+                     </div>
+                 </div>
+            </div>
         </div>
 
+        <style>
+            #mobile-menu .custom-scrollbar::-webkit-scrollbar {
+                width: 5px;
+            }
+            #mobile-menu .custom-scrollbar::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            #mobile-menu .custom-scrollbar::-webkit-scrollbar-thumb {
+                background-color: #e5e7eb;
+                border-radius: 20px;
+            }
+            #mobile-menu .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+                background-color: #d1d5db;
+            }
+        </style>
         <script>
             const toggleBtn = document.getElementById('mobile-menu-toggle');
             const closeBtn = document.getElementById('mobile-menu-close');
@@ -191,7 +252,7 @@
                             <div class="w-4 h-5 justify-start text-neutral-950 text-base font-normal  leading-6">
                                 Ar
                             </div>
-                            <svg class="w-6 h-4 transform group-hover:rotate-180 transition-transform duration-300" aria-hidden="true">
+                            <svg class="w-[2rem] h-[1.2rem] transform group-hover:rotate-180 transition-transform duration-300" aria-hidden="true">
                                 <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/arrow-down.svg"></use>
                             </svg>
                         </div>

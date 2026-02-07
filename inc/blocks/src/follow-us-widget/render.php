@@ -10,7 +10,7 @@ $wrapper_attributes = get_block_wrapper_attributes( [
 ] );
 ?>
 
-<div <?php echo $wrapper_attributes; ?>>
+<div style="justify-content: space-evenly;" <?php echo $wrapper_attributes; ?>>
     <div class="inline-flex justify-end items-center gap-2">
         <div class="text-center justify-start text-neutral-950 text-base leading-6">
             <svg class="w-6 h-6 inline self-center" aria-hidden="true">

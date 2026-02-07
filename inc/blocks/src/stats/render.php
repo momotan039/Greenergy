@@ -98,7 +98,7 @@ $wrapper_attributes = get_block_wrapper_attributes( [
     <div class="relative z-10 w-full pt-10">
         <!-- Header -->
         <div class="text-center mb-2" data-aos="fade-down" data-aos-duration="1000">
-            <h2 class="text-xl lg:text-4xl font-black text-white pb-3"><?php echo esc_html( $attributes['title'] ); ?></h2>
+            <h2 class="text-xl lg:text-4xl font-black text-white pb-12"><?php echo esc_html( $attributes['title'] ); ?></h2>
         </div>
 
         <!-- Stats Grid -->

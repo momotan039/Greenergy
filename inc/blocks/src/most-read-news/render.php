@@ -78,7 +78,7 @@ function render_news_card($news, $size = 'small', $delay = 0) {
     $padding_class = $is_large ? 'p-5 md:p-6' : 'p-4';
     $tag_class = $is_large ? 'px-3 py-1' : 'px-2 py-1 text-[10px]';
     ?>
-    <div class="h-full hover:cursor-pointer group bg-white hover:bg-green-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-2 transition-all duration-500" 
+    <div class="h-full hover:cursor-pointer group bg-white hover:bg-green-600 rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-2 transition-all duration-500" 
          data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
         <div class="relative aspect-<?php echo $is_large ? '[3/2]' : '[4/3]'; ?> overflow-hidden">
             <img src="<?php echo esc_url($news['image']); ?>" alt="<?php echo esc_attr($news['title']); ?>" 
@@ -89,18 +89,18 @@ function render_news_card($news, $size = 'small', $delay = 0) {
                 <span class="bg-[#E6F6EC] text-[#1F2937] <?php echo $tag_class; ?> rounded font-semibold">
                     <?php echo esc_html($news['tag'] ?? ''); ?>
                 </span>
-                <span class="group-hover:font-bold"><?php echo esc_html($news['date']); ?></span>
+                <span class="group-hover:text-white"><?php echo esc_html($news['date']); ?></span>
             </div>
-            <h3 class="text-[#1F2937]  font-bold <?php echo $title_class; ?> leading-snug mb-3 line-clamp-2">
+            <h3 class="text-[#1F2937] group-hover:text-white  font-bold <?php echo $title_class; ?> leading-snug mb-3 line-clamp-2">
                 <?php echo esc_html($news['title']); ?>
             </h3>
             <div class="flex items-center justify-between mt-auto">
                 <div class="flex items-center text-gray-400 text-<?php echo $is_large ? 'sm' : 'xs'; ?> gap-1">
                     <i class="far fa-eye"></i>
-                    <span class="group-hover:font-bold"><?php echo esc_html($news['views']); ?></span>
+                    <span class="group-hover:text-white"><?php echo esc_html($news['views']); ?></span>
                 </div>
                 <a href="<?php echo esc_url($news['link'] ?? '#'); ?>" 
-                   class="group-hover:text-green-600 text-[#22C55E] font-bold text-<?php echo $is_large ? 'base' : 'sm'; ?> hover:underline">المزيد</a>
+                   class="group-hover:text-white text-[#22C55E] font-bold text-<?php echo $is_large ? 'base' : 'sm'; ?> hover:underline">المزيد</a>
             </div>
         </div>
     </div>
@@ -141,7 +141,7 @@ function render_swiper_slider($cards, $slider_id, $autoplay_delay = 5000) {
 
     <!-- Header -->
     <div class="max-w-7xl mx-auto mb-10 text-center relative z-10" data-aos="fade-down" data-aos-duration="1000">
-        <span class="inline-block bg-[#229924] text-white px-6 py-2 rounded-full mb-4 text-2xl">
+        <span class="inline-block bg-[#229924] text-white px-6 py-2 pb-3 rounded-full mb-4 text-2xl">
             <?php echo esc_html($attributes['badgeText']); ?>
         </span>
         <h2 class="text-[#333333] text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">

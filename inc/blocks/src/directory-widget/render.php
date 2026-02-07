@@ -61,7 +61,7 @@ $wrapper_attributes = get_block_wrapper_attributes( [
                         <div class="text-neutral-800 text-xs font-normal">+150 خبير</div>
                     </div>
                 </div>
-                <a href="#" class="self-stretch h-9 px-4 max-md:border-2 max-md:border-sky-500 max-md:bg-white md:bg-gradient-to-br from-sky-500 to-blue-700 rounded-[55px] inline-flex justify-center items-center gap-2 hover:shadow-lg transition-shadow">
+                <a href="#" class="self-stretch h-9 px-4 max-md:border-2 max-md:border-sky-500 max-md:bg-white md:bg-gradient-to-br from-sky-500 to-blue-700 rounded-[55px] inline-flex justify-center  gap-2 hover:shadow-lg transition-shadow">
                     <div class="leading-5 h-6 text-white max-md:text-sky-500 pt-1">الانتقال الى الدليل</div>
                     <span class="pb-1 text-white max-md:text-sky-500 text-2xl leading-6">←</span>
                 </a>

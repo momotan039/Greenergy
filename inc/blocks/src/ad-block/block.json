@@ -36,6 +36,10 @@
             "type": "string",
             "default": "10rem"
         },
+        "width": {
+            "type": "string",
+            "default": "100%"
+        },
         "hasContainer": {
             "type": "boolean",
             "default": true

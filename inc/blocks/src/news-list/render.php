@@ -110,7 +110,7 @@ $wrapper_attributes = get_block_wrapper_attributes([
 if (!function_exists('render_news_card')) {
     function render_news_card($item) {
         ?>
-        <div class="relative hover:bg-green-200 shadow-lg outline outline-1 outline-gray-200 w-full rounded-lg inline-flex justify-start items-center gap-4 overflow-hidden max-sm:flex-col hover:shadow-md transition-shadow duration-300">
+        <div class="relative group hover:bg-green-600 shadow-lg outline outline-1 outline-gray-200 w-full rounded-lg inline-flex justify-start items-center gap-4 overflow-hidden max-sm:flex-col hover:shadow-md transition-shadow duration-300">
             <a href="<?php echo esc_url($item['permalink']); ?>" class="absolute inset-0 z-10 w-full h-full" aria-label="<?php echo esc_attr($item['title']); ?>"></a>
             
             <div class="max-sm:h-60 max-sm:w-full w-36 h-36 shrink-0 bg-cover bg-center rounded" 
@@ -121,16 +121,16 @@ if (!function_exists('render_news_card')) {
             
             <div class="flex-1 self-stretch pl-3 max-sm:pr-3 py-3 inline-flex flex-col justify-start items-end gap-1.5">
                 <div class="self-stretch flex flex-col justify-start items-end gap-4 max-sm:gap-2">
-                    <div class="self-stretch inline-flex justify-between items-center flex-row-reverse">
-                        <time datetime="<?php echo esc_attr($item['date']); ?>" class="text-center justify-start text-neutral-800 text-xs font-normal leading-5">
+                    <div class="self-stretch inline-flex justify-between flex-row-reverse">
+                        <time datetime="<?php echo esc_attr($item['date']); ?>" class="group-hover:text-white text-center justify-start text-neutral-800 text-xs font-normal leading-5">
                             <?php echo esc_html($item['date']); ?>
                         </time>
-                        <h3 class="text-right justify-start text-neutral-950 text-sm font-medium leading-5 hover:text-green-700 transition-colors">
+                        <h3 class="group-hover:text-white text-right justify-start text-neutral-950 text-sm font-medium leading-5 hover:text-green-700 transition-colors">
                             <?php echo esc_html($item['title']); ?>
                         </h3>
                     </div>
                     
-                    <p class="self-stretch text-right justify-start text-stone-500 text-xs font-normal capitalize leading-6 line-clamp-2">
+                    <p class="group-hover:text-white self-stretch text-right justify-start text-stone-500 text-xs font-normal capitalize leading-6 line-clamp-2">
                         <?php echo esc_html($item['excerpt']); ?>
                     </p>
                     
@@ -144,14 +144,14 @@ if (!function_exists('render_news_card')) {
                 </div>
                 
                 <div class="self-stretch inline-flex justify-between items-center flex-row-reverse mt-auto">
-                    <span class="text-center text-green-700 text-sm font-normal underline leading-5 hover:text-green-900 relative z-20">
+                    <span class="group-hover:text-white text-center text-green-700 text-sm font-normal underline leading-5 relative z-20">
                         المزيد
                     </span>
-                    <div class="flex justify-start items-center gap-1.5 text-neutral-950 text-sm">
+                    <div class="flex justify-start items-center gap-1.5 text-neutral-950 text-sm ">
                         <svg class="w-4 h-4" aria-hidden="true">
                             <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/eye.svg"></use>
                         </svg>
-                        <span><?php echo esc_html($item['views']); ?></span>
+                        <span class="group-hover:text-white"><?php echo esc_html($item['views']); ?></span>
                     </div>
                 </div>
             </div>

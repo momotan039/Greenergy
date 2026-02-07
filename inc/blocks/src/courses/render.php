@@ -100,7 +100,7 @@ if ( $query->have_posts() ) {
     <div class="max-w-7xl mx-auto relative z-10">
         <!-- Header -->
         <div class="text-center mb-16 px-4" data-aos="fade-down" data-aos-duration="1000">
-            <div class="inline-block bg-[#229924] text-white px-6 py-1.5 rounded-full text-sm font-bold mb-6">
+            <div class="inline-block  bg-[#229924] text-white px-6 py-1.5 pb-2 rounded-full text-sm font-bold mb-6">
                 <?php echo esc_html( $attributes['badgeText'] ); ?>
             </div>
             <h2 class="text-4xl md:text-5xl font-medium text-white mb-6">

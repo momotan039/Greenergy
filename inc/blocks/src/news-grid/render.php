@@ -71,7 +71,7 @@ if ( isset( $attributes['offset'] ) && $attributes['offset'] > 0 ) {
     <div <?php echo $wrapper_attributes; ?>>
         <!-- Header -->
         <div class="self-stretch inline-flex justify-center items-center gap-6 mb-8">
-                <div class="justify-self-center max-w-max bg-[#229924] text-white font-bold px-6 py-2 rounded-full mb-4 text-xl max-sm:text-lg">
+                <div class="justify-self-center max-w-max bg-[#229924] text-white font-bold px-6 py-2 pb-3 rounded-full mb-4 text-xl max-sm:text-lg">
                     <?php echo esc_html( $attributes['title'] ); ?>
                 </div>
         </div>
@@ -131,27 +131,27 @@ if ( isset( $attributes['offset'] ) && $attributes['offset'] > 0 ) {
                         foreach ( $mock_grid as $item ) :
                         ?>
                             <div class="swiper-slide">
-                                <div class="hover:bg-green-200 relative  w-full bg-neutral-50 rounded-lg inline-flex flex-col justify-start items-center overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.03]">
+                                <div class="group hover:bg-green-600 relative  w-full bg-neutral-50 rounded-lg inline-flex flex-col justify-start items-center overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.03]">
                                     <a href="#" class="self-stretch h-60 p-4 bg-cover bg-center block" style="background-image: url('<?php echo esc_url( $item['image'] ); ?>');">
                                     </a>
                                     <a href="" class="absolute top-0 left-0 w-full h-full"></a>
                                     <div class="self-stretch p-2 flex flex-col justify-start items-end gap-2">
                                         <div class="self-stretch flex flex-col justify-start items-end gap-4">
                                             <div class="self-stretch inline-flex justify-end items-start gap-4">
-                                                <a href="#" class="flex-1 text-right justify-start text-neutral-800 text-sm leading-5 hover:text-green-700 transition-colors line-clamp-2">
+                                                <a href="#" class="group-hover:text-white flex-1 text-right justify-start text-neutral-800 text-sm leading-5 hover:text-green-700 transition-colors line-clamp-2">
                                                     <?php echo esc_html( $item['title'] ); ?>
                                                 </a>
                                                 <svg class="w-6 h-4 inline" aria-hidden="true">
                                                     <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/more.svg"></use>
                                                 </svg>
                                             </div>
-                                            <div class="self-stretch text-right justify-start text-neutral-800 text-sm font-normal leading-5 line-clamp-2">
+                                            <div class="group-hover:text-white self-stretch text-right justify-start text-neutral-800 text-sm font-normal leading-5 line-clamp-2">
                                                 <?php echo esc_html( $item['excerpt'] ); ?>
                                             </div>
                                         </div>
                                         
                                         <div class="self-stretch inline-flex justify-between items-center flex-row-reverse mt-auto pt-2">
-                                            <div class="text-center justify-start text-neutral-800 text-xs font-normal leading-5">
+                                            <div class="group-hover:text-white text-center justify-start text-neutral-800 text-xs font-normal leading-5">
                                                 <?php echo esc_html( $item['date'] ); ?>
                                             </div>
                                             <div class="flex justify-start items-center gap-1.5">
@@ -159,7 +159,7 @@ if ( isset( $attributes['offset'] ) && $attributes['offset'] > 0 ) {
                                                     <svg class="w-4 h-4 inline" aria-hidden="true">
                                                         <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/eye.svg"></use>
                                                     </svg>
-                                                    <?php echo esc_html( $item['views'] ); ?>
+                                                    <span class="group-hover:text-white"><?php echo esc_html( $item['views'] ); ?></span>
                                                 </div>
                                             </div>
                                         </div>

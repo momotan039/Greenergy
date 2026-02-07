@@ -85,24 +85,24 @@ if ( ! $has_jobs ) {
                                     </div>
                                 </div>
                                 <div class="self-stretch inline-flex justify-between items-center w-full">
-                                    <div class="w-1/3">
-                                        <div class="flex gap-1 text-right justify-start text-stone-500 text-xs font-normal">
+                                    <div >
+                                        <div class="flex gap-1 text-right justify-start text-stone-500 text-[10px] font-normal">
                                             <svg class="w-6 h-6 inline pt-[3px]" aria-hidden="true">
                                                 <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/location.svg"></use>
                                             </svg>
                                             <?php echo esc_html( $location ); ?>
                                         </div>
                                     </div>
-                                    <div class="w-1/3">
-                                        <div class="flex gap-1 text-right justify-start text-stone-500 text-xs font-normal">
+                                    <div >
+                                        <div class="flex gap-1 text-right justify-start text-stone-500 text-[10px] font-normal">
                                             <svg class="w-6 h-6 inline pt-[3px]" aria-hidden="true">
                                                 <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/briefcase.svg"></use>
                                             </svg>
                                             <?php echo esc_html( $type ); ?>
                                         </div>
                                     </div>
-                                    <div class="w-1/3">
-                                        <div class="flex gap-1 text-right justify-start text-stone-500 text-xs font-normal">
+                                    <div >
+                                        <div class="flex gap-1 text-right justify-start text-stone-500 text-[10px] font-normal">
                                             <svg class="w-6 h-6 inline pt-[3px]" aria-hidden="true">
                                                 <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/clock.svg"></use>
                                             </svg>
@@ -132,24 +132,24 @@ if ( ! $has_jobs ) {
                                     </div>
                                 </div>
                                 <div class="self-stretch inline-flex justify-between items-center w-full">
-                                    <div class="w-1/3">
-                                        <div class="flex gap-1 text-right justify-start text-stone-500 text-xs font-normal">
+                                    <div class="flex-1">
+                                        <div class="flex gap-1 text-right justify-start text-stone-500 text-[10px] font-normal">
                                             <svg class="w-6 h-6 inline pt-[3px]" aria-hidden="true">
                                                 <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/location.svg"></use>
                                             </svg>
                                             <?php echo esc_html( $job['location'] ); ?>
                                         </div>
                                     </div>
-                                    <div class="w-1/3">
-                                        <div class="flex gap-1 text-right justify-start text-stone-500 text-xs font-normal">
+                                    <div >
+                                        <div class="flex gap-1 text-right justify-start text-stone-500 text-[10px] font-normal">
                                             <svg class="w-6 h-6 inline pt-[3px]" aria-hidden="true">
                                                 <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/briefcase.svg"></use>
                                             </svg>
                                             <?php echo esc_html( $job['type'] ); ?>
                                         </div>
                                     </div>
-                                    <div class="w-1/3">
-                                        <div class="flex gap-1 text-right justify-start text-stone-500 text-xs font-normal">
+                                    <div >
+                                        <div class="flex gap-1 text-right justify-start text-stone-500 text-[10px] font-normal">
                                             <svg class="w-6 h-6 inline pt-[3px]" aria-hidden="true">
                                                 <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/clock.svg"></use>
                                             </svg>
@@ -170,7 +170,7 @@ if ( ! $has_jobs ) {
                 </div>
             </div>
             
-            <a href="#" class="self-stretch h-9 px-4 max-md:border-2 max-md:border-sky-500 max-md:bg-white md:bg-gradient-to-br from-sky-500 to-blue-700 rounded-[55px] inline-flex justify-center items-center gap-2 hover:shadow-lg transition-shadow">
+            <a href="#" class="self-stretch h-9 px-4 max-md:border-2 max-md:border-sky-500 max-md:bg-white md:bg-gradient-to-br from-sky-500 to-blue-700 rounded-[55px] inline-flex justify-center  gap-2 hover:shadow-lg transition-shadow">
                 <div class="leading-5 h-6 text-white max-md:text-sky-500 pt-1">عرض كل الوضائف</div>
                 <span class="pb-1 text-white max-md:text-sky-500 text-2xl leading-6">←</span>
             </a>

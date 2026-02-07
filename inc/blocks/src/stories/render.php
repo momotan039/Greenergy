@@ -32,7 +32,7 @@ $swiper_options = [
 
 <div id="stories-block-wrapper" class="relative w-full transition-all">
     <div id="stories-block-inner" class="container mx-auto relative z-30 transition-all">
-        <div class="py-6 px-8 max-md:px-4 bg-gradient-to-l from-green-700 via-lime-600 to-lime-300 rounded-3xl shadow-lg max-w-7xl mx-auto">
+        <div class="py-6 bg-gradient-to-l from-green-700 via-lime-600 to-lime-300 rounded-3xl shadow-lg max-w-7xl mx-auto">
             
             <div class="swiper js-swiper-init py-6"
                  data-swiper-config="<?= esc_attr(wp_json_encode($swiper_options)) ?>">
@@ -80,30 +80,30 @@ $swiper_options = [
     </div>
 </div>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const wrapper = document.getElementById('stories-block-wrapper');
-    const inner   = document.getElementById('stories-block-inner');
-    if (!wrapper || !inner) return;
+// document.addEventListener('DOMContentLoaded', () => {
+//     const wrapper = document.getElementById('stories-block-wrapper');
+//     const inner   = document.getElementById('stories-block-inner');
+//     if (!wrapper || !inner) return;
 
-    const STICKY_TOP = 116;
-    let offsetTop = wrapper.offsetTop;
+//     const STICKY_TOP = 116;
+//     let offsetTop = wrapper.offsetTop;
 
-    const setSticky = (on) => {
-        inner.classList.toggle('fixed', on);
-        inner.classList.toggle('relative', !on);
-        inner.classList.toggle('is-sticky-stories', on);
-        wrapper.style.height = on ? inner.offsetHeight + 'px' : 'auto';
+//     const setSticky = (on) => {
+//         inner.classList.toggle('fixed', on);
+//         inner.classList.toggle('relative', !on);
+//         inner.classList.toggle('is-sticky-stories', on);
+//         wrapper.style.height = on ? inner.offsetHeight + 'px' : 'auto';
 
-        if (on) {
-            inner.classList.add('top-[116px]', 'max-md:top-[100px]', 'left-0', 'right-0', 'z-40');
-        } else {
-            inner.classList.remove('top-[116px]', 'max-md:top-[100px]', 'left-0', 'right-0', 'z-40');
-        }
-    };
+//         if (on) {
+//             inner.classList.add('top-[116px]', 'max-md:top-[100px]', 'left-0', 'right-0', 'z-40');
+//         } else {
+//             inner.classList.remove('top-[116px]', 'max-md:top-[100px]', 'left-0', 'right-0', 'z-40');
+//         }
+//     };
 
-    window.addEventListener('resize', () => offsetTop = wrapper.offsetTop);
-    window.addEventListener('scroll', () => {
-        setSticky(window.scrollY > offsetTop - STICKY_TOP);
-    }, { passive: true });
-});
+//     window.addEventListener('resize', () => offsetTop = wrapper.offsetTop);
+//     window.addEventListener('scroll', () => {
+//         setSticky(window.scrollY > offsetTop - STICKY_TOP);
+//     }, { passive: true });
+// });
 </script>

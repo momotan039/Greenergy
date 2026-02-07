@@ -29,15 +29,14 @@ $all_news_class = empty( $current_cat )
 $all_news_text_class = empty( $current_cat ) ? 'text-white' : 'text-neutral-950';
 
 ?>
-
-    <div class="justify-self-center max-w-max bg-[#229924] text-white font-bold px-6 py-2 rounded-full mb-4 text-xl max-sm:text-lg">
+    <div class="justify-self-center max-w-max bg-[#229924] text-white font-bold px-6 py-2 pb-3 rounded-full mb-4 text-xl max-sm:text-lg">
         اخر الاخبار
     </div>
 
 <div <?php echo $wrapper_attributes; ?>>
     <!-- categories -->
-    <div class="overflow-x-auto bg-green-200 w-2/3 max-md:w-full h-14 p-1.5 bg-green-100 rounded-xl inline-flex justify-start items-center gap-4">
-        <div class="inline-flex justify-end items-center gap-4 max-sm:gap-0">
+    <div style="scrollbar-width:none" class="overflow-x-auto bg-green-200 w-2/3 max-md:w-full h-14 p-1.5 bg-green-100 rounded-xl inline-flex justify-start items-center gap-4">
+        <div class="px-4 w-full inline-flex justify-between items-center gap-4 max-sm:gap-0 max-md:hide-scrollbar">
             
             <!-- All News -->
             <a href="<?php echo esc_url( remove_query_arg( 'news_cat' ) ); ?>" class="<?php echo esc_attr( $all_news_class ); ?>">
@@ -77,7 +76,7 @@ $all_news_text_class = empty( $current_cat ) ? 'text-white' : 'text-neutral-950'
     </div>
 
     <!-- sort by -->
-    <div class="max-lg:flex-col flex flex-1">
+    <div class="max-lg:flex-col flex flex-1 max-sm:pl-[5px]">
         <div class="self-center pl-4 max-sm:pl-0 text-sm truncate">
             ترتيب حسب :
         </div>
