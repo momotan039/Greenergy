@@ -1,7 +1,7 @@
 {
     "apiVersion": 3,
     "name": "greenergy/news-grid",
-    "title": "News Grid",
+    "title": "شبكة الأخبار",
     "category": "greenergy-blocks",
     "icon": "grid-view",
     "description": "Displays a grid of news posts (Secondary/Other News).",
@@ -29,6 +29,10 @@
         "title": {
             "type": "string",
             "default": "اخبار اخرى"
+        },
+        "queryCategories": {
+            "type": "array",
+            "default": []
         }
     },
     "editorScript": "greenergy-blocks-editor",

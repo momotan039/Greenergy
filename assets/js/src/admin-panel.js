@@ -1,11 +1,12 @@
 const { createRoot, useState, useEffect } = wp.element;
-const { BlockEditorProvider, BlockTools, WritingFlow, ObserveTyping } = wp.blockEditor;
+const { BlockEditorProvider, BlockTools, WritingFlow, ObserveTyping, BlockList } = wp.blockEditor;
 const { SlotFillProvider, Popover, Button, SnackbarList } = wp.components;
 const { registerBlockType } = wp.blocks;
 const apiFetch = wp.apiFetch;
 
 // Import our custom blocks code
 import '../../../inc/blocks/src/social-media-settings';
+import '../../../inc/blocks/src/news-settings';
 
 const GreenergyAdmin = () => {
     // Initial blocks state from DB
@@ -36,20 +37,39 @@ const GreenergyAdmin = () => {
             try {
                 const parsedBlocks = wp.blocks.parse(savedBlocks);
                 console.log('Greenergy Admin: Parsed blocks successfully. Count:', parsedBlocks.length);
+
+                // Check if News Settings block is missing and append it
+                const newsBlockName = 'greenergy/news-settings';
+                const hasNewsBlock = parsedBlocks.some(block => block.name === newsBlockName);
+                
+                if (!hasNewsBlock && wp.blocks.getBlockType(newsBlockName)) {
+                     console.log('Greenergy Admin: News block missing from saved data. Appending default.');
+                     const newsBlock = wp.blocks.createBlock(newsBlockName);
+                     parsedBlocks.push(newsBlock);
+                }
+
                 updateBlocks(parsedBlocks);
             } catch (e) {
                 console.error('Greenergy Admin: Error parsing saved blocks:', e);
             }
         } else {
             console.log('Greenergy Admin: No saved blocks or empty. Attempting default init.');
-            const blockName = 'greenergy/social-media-settings';
-            const blockType = wp.blocks.getBlockType(blockName);
-            if (blockType) {
-                console.log('Greenergy Admin: Block type found. Creating default.');
-                const defaultBlock = wp.blocks.createBlock(blockName);
-                updateBlocks([defaultBlock]);
+            const socialBlockName = 'greenergy/social-media-settings';
+            const newsBlockName = 'greenergy/news-settings';
+            
+            const initialBlocks = [];
+            
+            if (wp.blocks.getBlockType(socialBlockName)) {
+                initialBlocks.push(wp.blocks.createBlock(socialBlockName));
+            }
+            if (wp.blocks.getBlockType(newsBlockName)) {
+                initialBlocks.push(wp.blocks.createBlock(newsBlockName));
+            }
+
+            if (initialBlocks.length > 0) {
+                updateBlocks(initialBlocks);
             } else {
-                console.error(`Greenergy Admin: Block "${blockName}" NOT registered.`);
+                console.error(`Greenergy Admin: Default blocks NOT registered.`);
             }
         }
     }, []);
@@ -70,17 +90,22 @@ const GreenergyAdmin = () => {
         // Serialize blocks for editor state restoration
         const serializedBlocks = wp.blocks.serialize(blocks);
 
-        // Extracting Social Media Data manually for now to send cleaner data
-        // We find the block(s) and take the items from the attributes
+        // Extracting Social Media Data
         let socialData = [];
+        let newsSettingsData = {};
+
         blocks.forEach(block => {
             if (block.name === 'greenergy/social-media-settings' && block.attributes && block.attributes.items) {
                 socialData = [...socialData, ...block.attributes.items];
             }
+            if (block.name === 'greenergy/news-settings') {
+                newsSettingsData = block.attributes;
+            }
         });
 
         const settingsData = {
-            social_media: socialData
+            social_media: socialData,
+            news_settings: newsSettingsData
         };
 
         try {
@@ -143,7 +168,7 @@ const GreenergyAdmin = () => {
                             <ObserveTyping>
                                 <BlockTools>
                                     <div className="editor-styles-wrapper">
-                                        <wp.blockEditor.BlockList />
+                                        <BlockList />
                                     </div>
                                 </BlockTools>
                             </ObserveTyping>
@@ -164,20 +189,37 @@ const GreenergyAdmin = () => {
 const initAdminPanel = () => {
     console.log('Greenergy Admin: Initializing...');
     const rootElement = document.getElementById('greenergy-admin-app');
+    
     if (rootElement) {
         if (!wp.element) {
             console.error('Greenergy Admin: wp.element is missing!');
-            rootElement.innerHTML = '<div class="error"><p>Error: WordPress dependencies incorrectly loaded.</p></div>';
+            rootElement.innerHTML = '<div class="notice notice-error"><p>Error: WordPress Element (React) package is missing.</p></div>';
             return;
         }
 
         try {
-            const root = createRoot(rootElement);
-            root.render(<GreenergyAdmin />);
-            console.log('Greenergy Admin: Rendered.');
+            // Check for React 18+ createRoot
+            if (wp.element.createRoot) {
+                console.log('Greenergy Admin: Using createRoot (React 18+)');
+                const root = wp.element.createRoot(rootElement);
+                root.render(<GreenergyAdmin />);
+            } else if (wp.element.render) {
+                // Fallback for older WordPress versions
+                console.log('Greenergy Admin: Using legacy render');
+                wp.element.render(<GreenergyAdmin />, rootElement);
+            } else {
+                throw new Error('No render method found in wp.element');
+            }
+            console.log('Greenergy Admin: Render process started.');
         } catch (err) {
             console.error('Greenergy Admin: Render Error', err);
-            rootElement.innerHTML = '<div class="error"><p>Critical Error: ' + err.message + '</p></div>';
+            rootElement.innerHTML = `
+                <div class="notice notice-error" style="padding: 20px; border: 2px solid red;">
+                    <h3>Critical Error: Admin Panel failed to load</h3>
+                    <p><strong>Message:</strong> ${err.message}</p>
+                    <p>Check the browser console for more details.</p>
+                </div>
+            `;
         }
     } else {
         console.error('Greenergy Admin: Root element #greenergy-admin-app not found.');

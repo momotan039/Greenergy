@@ -1,7 +1,7 @@
 {
     "apiVersion": 3,
     "name": "greenergy/news-list",
-    "title": "News List",
+    "title": "قائمة الأخبار",
     "category": "greenergy-blocks",
     "icon": "list-view",
     "description": "Displays a list of latest news posts.",
@@ -24,7 +24,15 @@
         },
         "offset": {
             "type": "number",
-            "default": 1
+            "default": 0
+        },
+        "title": {
+            "type": "string",
+            "default": "آخر الأخبار"
+        },
+        "queryCategories": {
+            "type": "array",
+            "default": []
         }
     },
     "editorScript": "greenergy-blocks-editor",

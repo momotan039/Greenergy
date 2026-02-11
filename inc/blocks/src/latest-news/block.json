@@ -2,7 +2,7 @@
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
     "name": "greenergy/latest-news",
-    "title": "Greenergy Latest News",
+    "title": "آخر أخبار جرينرجي",
     "category": "greenergy-blocks",
     "icon": "admin-post",
     "editorScript": "greenergy-blocks-editor",

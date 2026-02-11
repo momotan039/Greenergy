@@ -7,7 +7,7 @@
     "dev": "concurrently \"npm run dev:css\" \"npm run dev:js\"",
     "dev:css": "npx tailwindcss -i ./assets/css/src/main.css -o ./assets/css/dist/main.min.css --watch",
     "dev:js": "npx esbuild assets/js/src/main.js --bundle --outfile=assets/js/dist/main.min.js --watch",
-    "build": "npm run build:css && npm run build:js",
+    "build": "npm run build:css && npm run build:js && npm run build:blocks && npm run build:admin-js",
     "build:css": "npx tailwindcss -i ./assets/css/src/main.css -o ./assets/css/dist/main.min.css --minify",
     "build:rtl": "npx rtlcss ./assets/css/dist/main.min.css ./assets/css/dist/main-rtl.min.css",
     "build:editor": "npx tailwindcss -i ./assets/css/src/editor.css -o ./assets/css/dist/editor.min.css --minify",

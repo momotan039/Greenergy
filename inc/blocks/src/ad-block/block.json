@@ -43,6 +43,10 @@
         "hasContainer": {
             "type": "boolean",
             "default": true
+        },
+        "paddingY": {
+            "type": "boolean",
+            "default": true
         }
     },
     "supports": {

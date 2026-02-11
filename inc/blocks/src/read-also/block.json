@@ -1,0 +1,49 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/read-also",
+    "title": "اقرأ أيضاً",
+    "category": "greenergy-blocks",
+    "icon": "book",
+    "editorScript": "greenergy-blocks-editor",
+    "description": "Display related or selected news items.",
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "اقرأ أيضا"
+        },
+        "selectionMode": {
+            "type": "string",
+            "default": "auto"
+        },
+        "postsToShow": {
+            "type": "number",
+            "default": 3
+        },
+        "selectedPosts": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "object"
+            }
+        },
+        "queryCategories": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "number"
+            }
+        },
+        "queryTags": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "number"
+            }
+        }
+    },
+    "supports": {
+        "align": false
+    },
+    "render": "file:./render.php"
+}

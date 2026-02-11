@@ -2,7 +2,7 @@
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
     "name": "greenergy/breadcrumb",
-    "title": "Breadcrumb",
+    "title": "فتات الخبز",
     "category": "greenergy-blocks",
     "icon": "admin-home",
     "editorScript": "greenergy-blocks-editor",

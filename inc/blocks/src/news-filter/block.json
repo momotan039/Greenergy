@@ -1,7 +1,7 @@
 {
     "apiVersion": 3,
     "name": "greenergy/news-filter",
-    "title": "News Filter",
+    "title": "تصفية الأخبار",
     "category": "greenergy-blocks",
     "icon": "filter",
     "description": "Filter and sort bar for news page.",

@@ -10,7 +10,23 @@
     "attributes": {
         "items": {
             "type": "array",
-            "default": []
+            "default": [{
+                    "platform": "facebook",
+                    "url": "https://facebook.com"
+                },
+                {
+                    "platform": "twitter",
+                    "url": "https://twitter.com"
+                },
+                {
+                    "platform": "instagram",
+                    "url": "https://instagram.com"
+                },
+                {
+                    "platform": "linkedin",
+                    "url": "https://linkedin.com"
+                }
+            ]
         }
     },
     "textdomain": "greenergy",

@@ -4,6 +4,7 @@ module.exports = {
    * Content paths for purging unused CSS
    * CRITICAL: All PHP templates and JS files containing Tailwind classes
    */
+  darkMode: false,
   content: [
     './*.php',
     './templates/**/*.php',
@@ -19,7 +20,6 @@ module.exports = {
    * Dark mode strategy
    * 'class' allows manual toggle via .dark class on html/body
    */
-  // darkMode: 'class',
 
   /**
    * RTL Support
@@ -66,13 +66,13 @@ module.exports = {
           200: '#A7F3D0',
           300: '#6EE7B7',
           400: '#34D399',
-          500: '#10B981', // DEFAULT
+          500: '#198f51', // DEFAULT
           600: '#059669',
           700: '#047857',
           800: '#065F46',
           900: '#064E3B',
           950: '#022C22',
-          DEFAULT: '#10B981',
+          DEFAULT: '#198f51',
         },
         // Secondary (dark/neutral)
         secondary: {

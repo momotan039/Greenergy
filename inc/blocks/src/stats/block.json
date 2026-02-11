@@ -2,7 +2,7 @@
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 2,
     "name": "greenergy/stats",
-    "title": "Greenergy Global Stats",
+    "title": "إحصائيات عالمية",
     "category": "greenergy-blocks",
     "icon": "chart-area",
     "editorScript": "greenergy-blocks-editor",

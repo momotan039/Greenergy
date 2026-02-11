@@ -1,7 +1,7 @@
 {
     "apiVersion": 3,
     "name": "greenergy/sidebar",
-    "title": "Sidebar Container",
+    "title": "حاوية الشريط الجانبي",
     "category": "greenergy-blocks",
     "icon": "sidebar",
     "description": "Sidebar container for widgets.",

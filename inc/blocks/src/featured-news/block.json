@@ -1,7 +1,7 @@
 {
     "apiVersion": 3,
     "name": "greenergy/featured-news",
-    "title": "Featured News",
+    "title": "أخبار مميزة",
     "category": "greenergy-blocks",
     "icon": "cover-image",
     "description": "Displays the latest or selected news post in a large card.",

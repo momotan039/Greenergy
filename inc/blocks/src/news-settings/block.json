@@ -1,0 +1,43 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/news-settings",
+    "version": "1.0.0",
+    "title": "إعدادات الأخبار",
+    "category": "greenergy-blocks",
+    "icon": "format-aside",
+    "description": "إعدادات اللافتة والمشاركة الخاصة بصفحة الأخبار.",
+    "attributes": {
+        "bannerType": {
+            "type": "string",
+            "default": "image"
+        },
+        "bannerImage": {
+            "type": "string",
+            "default": ""
+        },
+        "bannerVideo": {
+            "type": "string",
+            "default": ""
+        },
+        "bannerTitle": {
+            "type": "string",
+            "default": ""
+        },
+        "bannerSubtitle": {
+            "type": "string",
+            "default": "الأخبار"
+        },
+        "shareProviders": {
+            "type": "array",
+            "default": ["whatsapp", "telegram", "facebook", "instagram", "youtube", "rss", "copy"]
+        }
+    },
+    "supports": {
+        "html": false,
+        "multiple": false,
+        "reusable": false
+    },
+    "textdomain": "greenergy",
+    "editorScript": "file:./index.js"
+}
