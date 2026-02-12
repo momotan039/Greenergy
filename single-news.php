@@ -34,7 +34,7 @@ get_header();
                     $categories = get_the_terms(get_the_ID(), 'news_category');
                     if ($categories && ! is_wp_error($categories)) {
                         foreach ($categories as $cat) {
-                            echo '<a href="' . esc_url(get_term_link($cat)) . '" class="text-sm text-black px-4 bg-green-700/20 rounded-[100px] py-1"># ' . esc_html($cat->name) . '</a>';
+                            echo '<a href="#" class="text-sm text-black px-4 bg-green-700/20 rounded-[100px] py-1"># ' . esc_html($cat->name) . '</a>';
                         }
                     }
                     ?>
@@ -136,6 +136,7 @@ get_header();
 
                 $author_title = get_post_meta(get_the_ID(), '_news_author_title', true);
                 $author_img_id = get_post_meta(get_the_ID(), '_news_author_image_id', true);
+                $author_url = get_post_meta(get_the_ID(), '_news_author_url', true);
             ?>
                 <div class="inline-flex gap-6">
                     <div class="bg-stone-50 rounded-lg flex justify-center items-center gap-2">
@@ -150,7 +151,13 @@ get_header();
                         }
                         ?>
                         <div class="flex flex-col">
-                            <div class="text-right justify-center text-neutral-950 text-sm font-bold "><?php echo esc_html($author_name); ?></div>
+                            <div class="text-right justify-center text-neutral-950 text-sm font-bold ">
+                                <?php if ($author_url) : ?>
+                                    <a href="<?php echo esc_url($author_url); ?>" target="_blank" class="hover:underline text-black hover:text-primary transition-colors"><?php echo esc_html($author_name); ?></a>
+                                <?php else : ?>
+                                    <?php echo esc_html($author_name); ?>
+                                <?php endif; ?>
+                            </div>
                             <?php if ($author_title) : ?>
                                 <div class="text-right justify-start text-stone-500 text-xs font-normal "><?php echo esc_html($author_title); ?></div>
                             <?php else: ?>
@@ -179,44 +186,44 @@ get_header();
                 <div class="flex flex-wrap justify-center items-center gap-4 bg-gray-50 rounded-2xl shadow-sm p-4 pt-0">
 
                     <?php if (in_array('whatsapp', $share_providers)) : ?>
-                        <a href="https://wa.me/?text=<?php echo urlencode($title . ' ' . $link); ?>" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#25D366] hover:shadow-lg hover:-translate-y-1">
+                        <a href="https://wa.me/?text=<?php echo urlencode($title . ' ' . $link); ?>" target="_blank" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#25D366] hover:shadow-lg hover:-translate-y-1">
                             <i class="fab fa-whatsapp fa-xl"></i>
                         </a>
                     <?php endif; ?>
 
                     <?php if (in_array('telegram', $share_providers)) : ?>
-                        <a href="https://t.me/share/url?url=<?php echo urlencode($link); ?>&text=<?php echo urlencode($title); ?>" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#0088cc] hover:shadow-lg hover:-translate-y-1">
+                        <a href="https://t.me/share/url?url=<?php echo urlencode($link); ?>&text=<?php echo urlencode($title); ?>" target="_blank" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#0088cc] hover:shadow-lg hover:-translate-y-1">
                             <i class="fab fa-telegram fa-xl"></i>
                         </a>
                     <?php endif; ?>
 
                     <?php if (in_array('facebook', $share_providers)) : ?>
-                        <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($link); ?>" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#1877F2] hover:shadow-lg hover:-translate-y-1">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($link); ?>" target="_blank" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#1877F2] hover:shadow-lg hover:-translate-y-1">
                             <i class="fab fa-facebook-f fa-xl"></i>
                         </a>
                     <?php endif; ?>
 
                     <?php if (in_array('instagram', $share_providers)) : ?>
                         <!-- Instagram doesn't have a direct share link usually, just linking to profile or using a generic filler -->
-                        <a href="#" class="flex items-center justify-center w-12 h-12 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] hover:shadow-lg hover:-translate-y-1">
+                        <a href="#" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] hover:shadow-lg hover:-translate-y-1">
                             <i class="fab fa-instagram fa-xl"></i>
                         </a>
                     <?php endif; ?>
 
                     <?php if (in_array('youtube', $share_providers)) : ?>
-                        <a href="#" class="flex items-center justify-center w-12 h-12 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#FF0000] hover:shadow-lg hover:-translate-y-1">
+                        <a href="#" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#FF0000] hover:shadow-lg hover:-translate-y-1">
                             <i class="fab fa-youtube fa-xl"></i>
                         </a>
                     <?php endif; ?>
 
                     <?php if (in_array('rss', $share_providers)) : ?>
-                        <a href="<?php bloginfo('rss2_url'); ?>" class="flex items-center justify-center w-12 h-12 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#f26522] hover:shadow-lg hover:-translate-y-1">
+                        <a href="<?php bloginfo('rss2_url'); ?>" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#f26522] hover:shadow-lg hover:-translate-y-1">
                             <i class="fas fa-rss fa-xl"></i>
                         </a>
                     <?php endif; ?>
 
                     <?php if (in_array('copy', $share_providers)) : ?>
-                        <button onclick="navigator.clipboard.writeText('<?php echo $link; ?>'); alert('<?php echo __('Link Copied', 'greenergy'); ?>');" class="flex items-center justify-center w-12 h-12 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-primary hover:shadow-lg hover:-translate-y-1">
+                        <button onclick="navigator.clipboard.writeText('<?php echo $link; ?>'); alert('<?php echo __('Link Copied', 'greenergy'); ?>');" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-primary hover:shadow-lg hover:-translate-y-1">
                             <i class="fa-regular fa-copy fa-xl"></i>
                         </button>
                     <?php endif; ?>

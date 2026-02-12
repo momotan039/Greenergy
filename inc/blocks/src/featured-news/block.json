@@ -18,9 +18,25 @@
         ]
     },
     "attributes": {
-        "postId": {
+        "count": {
             "type": "number",
-            "default": 0
+            "default": 1
+        },
+        "selectionMode": {
+            "type": "string",
+            "default": "dynamic"
+        },
+        "selectedPosts": {
+            "type": "array",
+            "default": []
+        },
+        "queryCategories": {
+            "type": "array",
+            "default": []
+        },
+        "orderBy": {
+            "type": "string",
+            "default": "latest"
         }
     },
     "editorScript": "greenergy-blocks-editor",

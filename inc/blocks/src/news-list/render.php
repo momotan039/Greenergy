@@ -14,15 +14,25 @@ $attributes = wp_parse_args($attributes ?? [], [
     'queryCategories' => [],
 ]);
 
+// Pagination and Offset handling
+$current_page = max(1, get_query_var('paged'));
+$ppp = (int) $attributes['count'];
+$initial_offset = (int) $attributes['offset'];
+
 // Query arguments
 $args = [
     'post_type'      => 'news',
-    'posts_per_page' => (int) $attributes['count'],
-    'offset'         => (int) $attributes['offset'],
+    'posts_per_page' => $ppp,
     'post_status'    => 'publish',
     'order'          => 'DESC',
     'orderby'        => 'date',
 ];
+
+// Special handling for offset + pagination
+if ($current_page > 1 || $initial_offset > 0) {
+    $args['offset'] = $initial_offset + (($current_page - 1) * $ppp);
+}
+
 
 // Apply category filter
 $tax_query = [];
@@ -42,7 +52,7 @@ if (!empty($_GET['news_cat'])) {
     $tax_query = [[
         'taxonomy' => 'news_category',
         'field'    => 'slug',
-        'terms'    => sanitize_text_field($_GET['news_cat']),
+        'terms'    => rawurldecode(sanitize_text_field($_GET['news_cat'])),
     ]];
     $args['offset'] = 0;
 }
@@ -53,19 +63,32 @@ if (!empty($tax_query)) {
 
 // Apply sorting
 if (!empty($_GET['sort'])) {
-    switch ($_GET['sort']) {
+    switch (sanitize_text_field($_GET['sort'])) {
         case 'oldest':
-            $args['order'] = 'ASC';
+            $args['order']   = 'ASC';
+            $args['orderby'] = 'date';
             break;
         case 'popular':
-            $args['meta_key'] = 'views';
-            $args['orderby'] = 'meta_value_num';
-            unset($args['order']);
+            $args['meta_key'] = '_total_views_sort';
+            $args['orderby']  = 'meta_value_num';
+            $args['order']    = 'DESC';
+            break;
+        default: // latest
+            $args['order']   = 'DESC';
+            $args['orderby'] = 'date';
             break;
     }
 }
 
 $query = new WP_Query($args);
+
+// Fix max_num_pages when using offset
+if ($initial_offset > 0) {
+    $found_posts = $query->found_posts;
+    $effective_total = max(0, $found_posts - $initial_offset);
+    $query->max_num_pages = ceil($effective_total / $ppp);
+}
+
 
 // Prepare news items
 $news_items = [];
@@ -78,8 +101,8 @@ if ($query->have_posts()) {
             'title'     => get_the_title(),
             'excerpt'   => get_the_excerpt(),
             'date'      => get_the_date('d/m/Y'),
-            'views'     => get_post_meta(get_the_ID(), 'views', true) ?: '0',
-            'image'     => get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: get_template_directory_uri() . '/assets/images/placeholder.jpg',
+            'views'     => Greenergy_Post_Views::get_views(get_the_ID()),
+            'image'     => get_the_post_thumbnail_url(get_the_ID(), 'medium'),
             'permalink' => get_permalink(),
             'cat'       => $terms && !is_wp_error($terms) ? $terms[0]->name : '',
         ];
@@ -126,73 +149,16 @@ $wrapper_attributes = get_block_wrapper_attributes([
     'class' => 'self-stretch flex flex-col gap-6', // Increased gap
 ]);
 
-// Reusable news card function
-if (!function_exists('render_news_card')) {
-    function render_news_card($item)
-    {
+
+
 ?>
-        <div class="relative group  w-full rounded-2xl inline-flex justify-start items-center gap-6 overflow-hidden max-sm:flex-col bg-white border border-gray-100 hover:shadow-xl transition-all duration-300">
-            <a href="<?php echo esc_url($item['permalink']); ?>" class="absolute inset-0 z-10 w-full h-full" aria-label="<?php echo esc_attr($item['title']); ?>"></a>
-
-            <div class="h-44 w-44 max-sm:w-full max-sm:h-60 shrink-0 bg-cover bg-center"
-                style="background-image: url('<?php echo esc_url($item['image']); ?>');"
-                role="img"
-                aria-label="<?php echo esc_attr($item['title']); ?>">
-            </div>
-
-            <div class="flex-1 self-stretch pl-6 max-sm:px-4 py-4 inline-flex flex-col justify-between items-end">
-                <div class="self-stretch flex flex-col justify-start items-end gap-2">
-                    <div class="self-stretch inline-flex justify-between items-center flex-row-reverse">
-                        <time datetime="<?php echo esc_attr($item['date']); ?>" class="text-neutral-500 text-xs font-normal">
-                            <?php echo esc_html($item['date']); ?>
-                        </time>
-                        <?php if ($item['cat']) : ?>
-                            <span class="text-primary text-xs font-bold px-3 py-1 bg-primary/10 rounded-full">
-                                #<?php echo esc_html($item['cat']); ?>
-                            </span>
-                        <?php endif; ?>
-                    </div>
-
-                    <h3 class="text-right text-neutral-900 text-lg font-bold leading-tight line-clamp-2 transition-colors group-hover:text-primary">
-                        <?php echo esc_html($item['title']); ?>
-                    </h3>
-
-                    <p class="self-stretch text-right text-neutral-500 text-sm font-normal line-clamp-2">
-                        <?php echo esc_html($item['excerpt']); ?>
-                    </p>
-                </div>
-
-                <div class="self-stretch inline-flex justify-between items-center flex-row-reverse mt-4 pt-4 border-t border-gray-50">
-                    <span class="text-primary text-sm font-bold flex items-center gap-2">
-                        إقرأ المزيد
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </span>
-                    <div class="flex justify-start items-center gap-1.5 text-neutral-400 text-sm ">
-                        <i class="far fa-eye text-xs"></i>
-                        <span><?php echo esc_html($item['views']); ?></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-<?php
-    }
-}
-?>
-
 <div <?php echo $wrapper_attributes; ?>>
-    <?php if (!empty($attributes['title'])) : ?>
-        <div class="self-stretch inline-flex justify-between items-center flex-row-reverse mb-2">
-            <h2 class="text-right text-neutral-900 text-2xl font-bold"><?php echo esc_html($attributes['title']); ?></h2>
-            <div class="h-1 flex-1 bg-gray-100 rounded-full mr-6"></div>
-        </div>
-    <?php endif; ?>
 
     <?php if (!empty($news_items)) : ?>
         <div class="flex flex-col gap-4">
             <?php foreach ($news_items as $item) {
-                render_news_card($item);
+                // render_news_card($item); // Deprecated inline function
+                greenergy_get_template('templates/components/news-card', null, ['item' => $item]);
             } ?>
         </div>
     <?php else : ?>
@@ -201,7 +167,12 @@ if (!function_exists('render_news_card')) {
         </div>
     <?php endif; ?>
     <!-- Pagination for page -->
-    <?php
-    get_template_part('templates/components/pagination');
-    ?>
+    <div class="greenergy-block-pagination"
+        data-query-args="<?php echo esc_attr(json_encode($args)); ?>"
+        data-block-id="<?php echo esc_attr($attributes['blockId'] ?? uniqid('news-list-')); ?>">
+        <?php
+        $current_page = max(1, get_query_var('paged'));
+        echo greenergy_get_pagination_html($query, $current_page);
+        ?>
+    </div>
 </div>

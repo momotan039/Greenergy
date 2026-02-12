@@ -1,36 +1,52 @@
 <?php
 
 /**
- * News Grid Block Template.
+ * News Grid Block Template – Improved
  *
- * @param   array $attributes - Block attributes.
- * @param   array $content - Block content.
- * @param   array $block - Block instance.
- * @package Greenergy
+ * @param array $attributes
  */
 
 $attributes = wp_parse_args($attributes ?? [], [
-    'count'  => 3,
-    'offset' => 6,
-    'title'  => 'اخبار اخرى'
+    'count'           => 6,   // عدد الأخبار الافتراضي
+    'offset'          => 0,
+    'title'           => 'اخبار اخرى',
+    'selectionMode'   => 'dynamic',
+    'selectedPosts'   => [],
+    'queryCategories' => [],
 ]);
 
 $wrapper_attributes = get_block_wrapper_attributes([
     'class' => 'self-stretch flex flex-col justify-start items-center gap-3',
 ]);
 
-// Query logic
 $args = [
     'post_type'      => 'news',
-    'posts_per_page' => $attributes['count'],
-    'offset'         => $attributes['offset'],
+    'posts_per_page' => (int) $attributes['count'],
+    'offset'         => (int) $attributes['offset'],
     'post_status'    => 'publish',
+    'orderby'        => 'rand',
 ];
 
-// Apply Filters
 $tax_query = [];
 
-// Apply block attribute category filter
+// 1️⃣ استبعاد الخبر الحالي وتصنيفه في single-news
+if (is_singular('news')) {
+    $current_post_id = get_the_ID();
+    $args['post__not_in'] = [$current_post_id];
+
+    $terms = get_the_terms($current_post_id, 'news_category');
+    if ($terms && !is_wp_error($terms)) {
+        $term_slugs = wp_list_pluck($terms, 'slug');
+        $tax_query[] = [
+            'taxonomy' => 'news_category',
+            'field'    => 'slug',
+            'terms'    => $term_slugs,
+            'operator' => 'NOT IN',
+        ];
+    }
+}
+
+// 2️⃣ Apply block attribute category filter (اختياري)
 if (!empty($attributes['queryCategories'])) {
     $tax_query[] = [
         'taxonomy' => 'news_category',
@@ -40,41 +56,36 @@ if (!empty($attributes['queryCategories'])) {
     ];
 }
 
-// Apply URL parameter category filter (override if present)
-if (isset($_GET['news_cat']) && ! empty($_GET['news_cat'])) {
-    $tax_query = [
-        [
-            'taxonomy' => 'news_category',
-            'field'    => 'slug',
-            'terms'    => sanitize_text_field($_GET['news_cat']),
-        ],
+// 3️⃣ Apply URL parameter filter (استبعاد تصنيف محدد من GET)
+if (isset($_GET['news_cat']) && !empty($_GET['news_cat'])) {
+    $tax_query[] = [
+        'taxonomy' => 'news_category',
+        'field'    => 'slug',
+        'terms'    => [rawurldecode(sanitize_text_field($_GET['news_cat']))],
+        'operator' => 'NOT IN',
     ];
-    $args['offset'] = 0; // Reset offset on filter
+
+    // إعادة ضبط offset لأنه تم استبعاد بعض الأخبار
+    $args['offset'] = 0;
+}
+
+// 4️⃣ ضبط relation لو أكثر من شرط
+if (count($tax_query) > 1) {
+    $tax_query['relation'] = 'AND';
 }
 
 if (!empty($tax_query)) {
     $args['tax_query'] = $tax_query;
 }
 
-// Apply Sort
-if (isset($_GET['sort'])) {
-    switch ($_GET['sort']) {
-        case 'oldest':
-            $args['order'] = 'ASC';
-            $args['orderby'] = 'date';
-            break;
-        case 'popular':
-            $args['meta_key'] = 'views';
-            $args['orderby'] = 'meta_value_num';
-            break;
-        default: // latest
-            $args['order'] = 'DESC';
-            $args['orderby'] = 'date';
-            break;
-    }
+// 5️⃣ إذا وضع المستخدم اختيار يدوي
+if ($attributes['selectionMode'] === 'manual' && !empty($attributes['selectedPosts'])) {
+    $args['post__in'] = $attributes['selectedPosts'];
+    $args['orderby'] = 'post__in';
 }
 
 $query = new WP_Query($args);
+
 
 // Fix Pagination Calculation with Offset
 if (isset($attributes['offset']) && $attributes['offset'] > 0) {
@@ -153,8 +164,8 @@ if (isset($attributes['offset']) && $attributes['offset'] > 0) {
                                 <a href="#" class="self-stretch h-60 p-4 bg-cover bg-center block" style="background-image: url('<?php echo esc_url($item['image']); ?>');">
                                 </a>
                                 <a href="" class="absolute top-0 left-0 w-full h-full"></a>
-                                <div class="self-stretch p-2 flex flex-col justify-start items-end gap-2">
-                                    <div class="self-stretch flex flex-col justify-start items-end gap-4">
+                                <div class="self-stretch p-2 flex flex-col justify-start  gap-2">
+                                    <div class="self-stretch flex flex-col justify-start gap-4">
                                         <div class="self-stretch inline-flex justify-end items-start gap-4">
                                             <a href="#" class="group-hover:text-white flex-1 text-right justify-start text-neutral-800 text-sm leading-5 hover:text-green-700 transition-colors line-clamp-2">
                                                 <?php echo esc_html($item['title']); ?>
@@ -208,10 +219,7 @@ if (isset($attributes['offset']) && $attributes['offset'] > 0) {
                     slidesPerView: 1.2,
                     spaceBetween: 16,
                     centeredSlides: false,
-                    autoplay: {
-                        delay: 5000,
-                        disableOnInteraction: false,
-                    },
+                    autoplay: false,
                     pagination: {
                         el: paginationEl,
                         clickable: true,

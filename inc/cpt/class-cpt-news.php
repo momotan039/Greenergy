@@ -38,23 +38,24 @@ class Greenergy_CPT_News
     public function register()
     {
         $labels = [
-            'name'                  => _x('News', 'Post type general name', 'greenergy'),
-            'singular_name'         => _x('News', 'Post type singular name', 'greenergy'),
-            'menu_name'             => _x('News', 'Admin Menu text', 'greenergy'),
-            'add_new'               => __('Add New', 'greenergy'),
-            'add_new_item'          => __('Add New News', 'greenergy'),
-            'edit_item'             => __('Edit News', 'greenergy'),
-            'new_item'              => __('New News', 'greenergy'),
-            'view_item'             => __('View News', 'greenergy'),
-            'search_items'          => __('Search News', 'greenergy'),
-            'not_found'             => __('No news found', 'greenergy'),
-            'not_found_in_trash'    => __('No news found in Trash', 'greenergy'),
-            'all_items'             => __('All News', 'greenergy'),
-            'archives'              => __('News Archives', 'greenergy'),
-            'featured_image'        => __('Featured Image', 'greenergy'),
-            'set_featured_image'    => __('Set featured image', 'greenergy'),
-            'remove_featured_image' => __('Remove featured image', 'greenergy'),
+            'name'                  => _x('الأخبار', 'Post type general name', 'greenergy'),
+            'singular_name'         => _x('خبر', 'Post type singular name', 'greenergy'),
+            'menu_name'             => _x('الأخبار', 'Admin Menu text', 'greenergy'),
+            'add_new'               => __('إضافة جديد', 'greenergy'),
+            'add_new_item'          => __('إضافة خبر جديد', 'greenergy'),
+            'edit_item'             => __('تعديل الخبر', 'greenergy'),
+            'new_item'              => __('خبر جديد', 'greenergy'),
+            'view_item'             => __('عرض الخبر', 'greenergy'),
+            'search_items'          => __('البحث في الأخبار', 'greenergy'),
+            'not_found'             => __('لم يتم العثور على أخبار', 'greenergy'),
+            'not_found_in_trash'    => __('لا توجد أخبار في سلة المهملات', 'greenergy'),
+            'all_items'             => __('جميع الأخبار', 'greenergy'),
+            'archives'              => __('أرشيف الأخبار', 'greenergy'),
+            'featured_image'        => __('الصورة البارزة', 'greenergy'),
+            'set_featured_image'    => __('تعيين صورة بارزة', 'greenergy'),
+            'remove_featured_image' => __('إزالة الصورة البارزة', 'greenergy'),
         ];
+
 
         $args = [
             'labels'             => $labels,
@@ -84,18 +85,19 @@ class Greenergy_CPT_News
     {
         // News Category
         $labels_cat = [
-            'name'              => _x('News Categories', 'taxonomy general name', 'greenergy'),
-            'singular_name'     => _x('News Category', 'taxonomy singular name', 'greenergy'),
-            'search_items'      => __('Search Categories', 'greenergy'),
-            'all_items'         => __('All Categories', 'greenergy'),
-            'parent_item'       => __('Parent Category', 'greenergy'),
-            'parent_item_colon' => __('Parent Category:', 'greenergy'),
-            'edit_item'         => __('Edit Category', 'greenergy'),
-            'update_item'       => __('Update Category', 'greenergy'),
-            'add_new_item'      => __('Add New Category', 'greenergy'),
-            'new_item_name'     => __('New Category Name', 'greenergy'),
-            'menu_name'         => __('Categories', 'greenergy'),
+            'name'              => _x('تصنيفات الأخبار', 'taxonomy general name', 'greenergy'),
+            'singular_name'     => _x('تصنيف خبر', 'taxonomy singular name', 'greenergy'),
+            'search_items'      => __('البحث في التصنيفات', 'greenergy'),
+            'all_items'         => __('جميع التصنيفات', 'greenergy'),
+            'parent_item'       => __('التصنيف الأب', 'greenergy'),
+            'parent_item_colon' => __('التصنيف الأب:', 'greenergy'),
+            'edit_item'         => __('تعديل التصنيف', 'greenergy'),
+            'update_item'       => __('تحديث التصنيف', 'greenergy'),
+            'add_new_item'      => __('إضافة تصنيف جديد', 'greenergy'),
+            'new_item_name'     => __('اسم التصنيف الجديد', 'greenergy'),
+            'menu_name'         => __('التصنيفات', 'greenergy'),
         ];
+
 
         $args_cat = [
             'hierarchical'      => true,
@@ -111,22 +113,20 @@ class Greenergy_CPT_News
 
         // News Label (Urgent, Included, etc.)
         $labels_label = [
-            'name'                       => _x('News Labels', 'taxonomy general name', 'greenergy'),
-            'singular_name'              => _x('News Label', 'taxonomy singular name', 'greenergy'),
-            'search_items'               => __('Search Labels', 'greenergy'),
-            'popular_items'              => __('Popular Labels', 'greenergy'),
-            'all_items'                  => __('All Labels', 'greenergy'),
-            'parent_item'                => null,
-            'parent_item_colon'          => null,
-            'edit_item'                  => __('Edit Label', 'greenergy'),
-            'update_item'                => __('Update Label', 'greenergy'),
-            'add_new_item'               => __('Add New Label', 'greenergy'),
-            'new_item_name'              => __('New Label Name', 'greenergy'),
-            'separate_items_with_commas' => __('Separate labels with commas', 'greenergy'),
-            'add_or_remove_items'        => __('Add or remove labels', 'greenergy'),
-            'choose_from_most_used'      => __('Choose from the most used labels', 'greenergy'),
-            'not_found'                  => __('No labels found.', 'greenergy'),
-            'menu_name'                  => __('Labels', 'greenergy'),
+            'name'                       => _x('العلامات المميزة', 'taxonomy general name', 'greenergy'),
+            'singular_name'              => _x('علامة مميزة', 'taxonomy singular name', 'greenergy'),
+            'search_items'               => __('البحث في العلامات', 'greenergy'),
+            'popular_items'              => __('العلامات الأكثر استخدامًا', 'greenergy'),
+            'all_items'                  => __('جميع العلامات', 'greenergy'),
+            'edit_item'                  => __('تعديل العلامة', 'greenergy'),
+            'update_item'                => __('تحديث العلامة', 'greenergy'),
+            'add_new_item'               => __('إضافة علامة جديدة', 'greenergy'),
+            'new_item_name'              => __('اسم العلامة الجديدة', 'greenergy'),
+            'separate_items_with_commas' => __('افصل العلامات بفواصل', 'greenergy'),
+            'add_or_remove_items'        => __('إضافة أو إزالة علامات', 'greenergy'),
+            'choose_from_most_used'      => __('اختر من العلامات الأكثر استخدامًا', 'greenergy'),
+            'not_found'                  => __('لم يتم العثور على علامات.', 'greenergy'),
+            'menu_name'                  => __('العلامات المميزة', 'greenergy'),
         ];
 
         $args_label = [
@@ -156,6 +156,13 @@ class Greenergy_CPT_News
 
         // Source URL
         register_post_meta(self::POST_TYPE, '_news_source_url', [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+
+        // Author URL
+        register_post_meta(self::POST_TYPE, '_news_author_url', [
             'show_in_rest' => true,
             'single'       => true,
             'type'         => 'string',
@@ -202,6 +209,21 @@ class Greenergy_CPT_News
                         'label' => 'عدد المشاهدات (يدوي)',
                         'name' => '_news_view_count',
                         'type' => 'number',
+                        'default_value' => '',
+                        'min' => 0,
+                        'max' => 999999999,
+                        'step' => 1,
+                        'prepend' => 'مشاهدة',
+                        'append' => 'مرة',
+                        'placeholder' => 'أدخل عدد المشاهدات',
+                        'instructions' => 'أدخل عدد المشاهدات يدوياً',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
                     ],
 
                     // Tab: Author Data
@@ -215,7 +237,7 @@ class Greenergy_CPT_News
                         'label' => 'إظهار معلومات الكاتب',
                         'name' => '_news_show_author_box',
                         'type' => 'true_false',
-                        'default_value' => 1,
+                        'default_value' => 0,
                         'ui' => 1,
                         'ui_on_text' => 'نعم',
                         'ui_off_text' => 'لا',
@@ -256,6 +278,21 @@ class Greenergy_CPT_News
                         'name' => '_news_author_image_id',
                         'type' => 'image',
                         'return_format' => 'id',
+                        'conditional_logic' => [
+                            [
+                                [
+                                    'field' => 'field_news_show_author_box',
+                                    'operator' => '==',
+                                    'value' => '1',
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'key' => 'field_news_author_url',
+                        'label' => 'رابط الكاتب',
+                        'name' => '_news_author_url',
+                        'type' => 'url',
                         'conditional_logic' => [
                             [
                                 [

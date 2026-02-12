@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Generic AJAX Handler Class
  *
@@ -7,11 +8,12 @@
  * @package Greenergy
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-class Greenergy_Ajax {
+class Greenergy_Ajax
+{
 
     /**
      * Instance of the class.
@@ -25,8 +27,9 @@ class Greenergy_Ajax {
      *
      * @return Greenergy_Ajax
      */
-    public static function get_instance() {
-        if ( is_null( self::$instance ) ) {
+    public static function get_instance()
+    {
+        if (is_null(self::$instance)) {
             self::$instance = new self();
         }
         return self::$instance;
@@ -35,213 +38,216 @@ class Greenergy_Ajax {
     /**
      * Constructor.
      */
-    public function __construct() {
-        add_action( 'wp_ajax_greenergy_load_posts', [ $this, 'load_posts' ] );
-        add_action( 'wp_ajax_nopriv_greenergy_load_posts', [ $this, 'load_posts' ] );
+    public function __construct()
+    {
+        add_action('wp_ajax_greenergy_load_posts', [$this, 'load_posts']);
+        add_action('wp_ajax_nopriv_greenergy_load_posts', [$this, 'load_posts']);
+
+        add_action('wp_ajax_greenergy_filter_latest_news', [$this, 'filter_latest_news']);
+        add_action('wp_ajax_nopriv_greenergy_filter_latest_news', [$this, 'filter_latest_news']);
     }
 
     /**
      * Handle load posts request.
      */
-    public function load_posts() {
+    /**
+     * Handle load posts request.
+     */
+    public function load_posts()
+    {
         // Verify Nonce
-        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'greenergy_nonce' ) ) {
-            wp_send_json_error( [ 'message' => 'Invalid nonce' ] );
+        if (! isset($_POST['nonce']) || ! wp_verify_nonce($_POST['nonce'], 'greenergy_nonce')) {
+            wp_send_json_error(['message' => 'Invalid nonce']);
         }
 
         // Get Args
-        $args = isset( $_POST['query_args'] ) ? json_decode( stripslashes( $_POST['query_args'] ), true ) : [];
-        $page = isset( $_POST['page'] ) ? absint( $_POST['page'] ) : 1;
-        
-        if ( ! is_array( $args ) ) {
-            wp_send_json_error( [ 'message' => 'Invalid query args' ] );
+        $args = isset($_POST['query_args']) ? json_decode(stripslashes($_POST['query_args']), true) : [];
+        $page = isset($_POST['page']) ? absint($_POST['page']) : 1;
+
+        if (! is_array($args)) {
+            wp_send_json_error(['message' => 'Invalid query args']);
         }
 
-        // Update Args for Pagination
+        // Ensure status is publish
         $args['post_status'] = 'publish';
-        
+
         // Handle Offset with Pagination
-        // WP_Query with 'offset' breaks 'paged'. We must calculate offset manually.
-        if ( isset( $args['offset'] ) && $args['offset'] > 0 ) {
-            $ppp = isset( $args['posts_per_page'] ) ? (int) $args['posts_per_page'] : get_option( 'posts_per_page' );
-            $initial_offset = (int) $args['offset'];
-            $args['offset'] = $initial_offset + ( ( $page - 1 ) * $ppp );
-            
-            // We need to calculate max_pages manually because WP logic breaks with offset
-            // We'll do a separate count query or use found_posts after main query?
-            // Actually, if we run the query with offset, found_posts returns total ignoring offset/limit (typically).
-            // But max_num_pages will be 0 or inaccurate.
-            
-            // Let's run the query
-            $query = new WP_Query( $args );
-            
-            // Recalculate max pages
-            // Total available for this grid = Found - Initial Offset
+        // If an initial offset is set (from block settings), we need to account for it in subsequent pages.
+        // Page 1: Offset = Initial Offset
+        // Page 2: Offset = Initial Offset + (1 * PPP)
+        // ...
+        // Page N: Offset = Initial Offset + ((N-1) * PPP)
+
+        $initial_offset = isset($args['offset']) ? (int) $args['offset'] : 0;
+        $ppp = isset($args['posts_per_page']) ? (int) $args['posts_per_page'] : get_option('posts_per_page');
+
+        // Calculate new offset based on page
+        $args['offset'] = $initial_offset + (($page - 1) * $ppp);
+
+        // Query
+        $query = new WP_Query($args);
+
+        // Fix max_num_pages if using offset
+        if ($initial_offset > 0) {
+            // We need total posts to calculate max pages correctly when offset is involved
+            // found_posts includes the offset posts usually if SQL_CALC_FOUND_ROWS is used (default true)
+            // But we want to exclude the initial offset from the "paged" set availability
             $found_posts = $query->found_posts;
-            $effective_total = max( 0, $found_posts - $initial_offset );
-            $query->max_num_pages = ceil( $effective_total / $ppp );
-            
-        } else {
-            // Standard Pagination
-            $args['paged'] = $page;
-            $query = new WP_Query( $args );
+            $effective_total = max(0, $found_posts - $initial_offset);
+            $query->max_num_pages = ceil($effective_total / $ppp);
         }
 
         $content = '';
-        
-        if ( $query->have_posts() ) {
+
+        if ($query->have_posts()) {
             ob_start();
-            $idx = 0;
-            while ( $query->have_posts() ) {
+            while ($query->have_posts()) {
                 $query->the_post();
-                // Pass delay for AOS if needed, although generic AJAX content usually shouldn't delay too much 
-                // or we reset it.
-                $delay = ($idx % 4) * 100;
-                
-                // Use the template part
-                // We assume news card for now, but ideally we'd pass template name in args if we want to be fully generic.
-                // For now, let's look for a 'template_part' arg or default to 'content-news-card'.
-                $template_part = isset( $_POST['template_part'] ) ? sanitize_text_field( $_POST['template_part'] ) : 'template-parts/content-news-card';
-                
-                // Allow passing args to template
-                get_template_part( $template_part, null, [ 'delay' => $delay ] );
-                
-                $idx++;
+
+                // Prepare item data for the template
+                // Our news-card template expects an 'item' array, NOT just the global post.
+                // We need to reconstruct the item array as done in render.php
+
+                $terms = get_the_terms(get_the_ID(), 'news_category');
+                $item = [
+                    'title'     => get_the_title(),
+                    'excerpt'   => get_the_excerpt(),
+                    'date'      => get_the_date('d/m/Y'),
+                    'views'     => Greenergy_Post_Views::get_views(get_the_ID()),
+                    'image'     => get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: get_template_directory_uri() . '/assets/images/placeholder.jpg',
+                    'permalink' => get_permalink(),
+                    'cat'       => $terms && !is_wp_error($terms) ? $terms[0]->name : '',
+                ];
+
+                greenergy_get_template('templates/components/news-card', null, ['item' => $item]);
             }
             $content = ob_get_clean();
         } else {
-             // Optional: Return no posts message or empty
+            ob_start();
+?>
+            <div class="p-12 text-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                <p class="text-neutral-500"><?php _e('عذراً، لا توجد أخبار متاحة حالياً.', 'greenergy'); ?></p>
+            </div>
+            <?php
+            $content = ob_get_clean();
         }
 
-        // Generate Pagination HTML
-        $pagination_html = '';
-        $big = 999999999;
-        $pages = paginate_links( [
-            'base'      => '%_%',
-            'format'    => '?paged=%#%',
-            'current'   => $page,
-            'total'     => $query->max_num_pages,
-            'type'      => 'array',
-            'prev_text' => greenergy_icon( 'arrow-left', 20, 20 ), // Re-use helper if available or simple text
-            'next_text' => greenergy_icon( 'arrow-right', 20, 20 ),
-        ] );
+        // Generate Pagination HTML using helper
+        $pagination_html = greenergy_get_pagination_html($query, $page);
 
-        if ( $pages ) {
-            $pagination_html .= '<nav class="pagination mt-8 flex justify-center items-center gap-2" aria-label="Pagination">';
-            foreach ( $pages as $page_link ) {
-                // Add JS classes and data attributes
-                // logic: replace page numbers with data-page attributes
-                // We need to parse the link to get the page number
-                
-                // This is a bit tricky with simple string replacement. 
-                // Better approach: build the links manually or use a simple loop if we trust the output.
-                
-                // Alternative: Just return the max_pages and current_page and let JS build simple "Previous 1 2 3 ... Next". 
-                // But user wants "appealing pagination".
-                
-                // Let's try to adapt the HTML string.
-                // Standard WP paginate_links with type=array returns <a> tags.
-                
-                // Add Generic Class
-                $page_link = str_replace( 'page-numbers', 'pagination-link js-ajax-pagination-link w-10 h-10 flex justify-center items-center rounded-full text-sm font-medium transition-colors hover:bg-green-50 hover:text-green-700', $page_link );
-                
-                // Handle Active State
-                if ( strpos( $page_link, 'current' ) !== false ) {
-                    $page_link = str_replace( 'current', 'bg-green-700 text-white hover:bg-green-800 hover:text-white', $page_link );
-                    $page_link = str_replace( 'pagination-link', 'pagination-link active', $page_link );
-                } else {
-                    $page_link = str_replace( 'pagination-link', 'pagination-link text-gray-500', $page_link );
-                }
+        wp_reset_postdata();
 
-                // Extract page number for data attribute
-                if ( preg_match( '/paged=(\d+)/', $page_link, $matches ) ) {
-                    $pg = $matches[1];
-                } else {
-                    // Check if it's the first page link (might not have paged param)
-                    // or standard link.
-                    // For AJAX, let's inject data-page.
-                    // Actually, simpler to just inject `data-page="X"` via regex on the href?
-                }
+        wp_send_json_success([
+            'content'    => $content,
+            'pagination' => $pagination_html,
+        ]);
+    }
+
+    /**
+     * Filter latest news by category
+     */
+    public function filter_latest_news()
+    {
+        // Verify Nonce
+        if (! isset($_POST['nonce']) || ! wp_verify_nonce($_POST['nonce'], 'greenergy_nonce')) {
+            wp_send_json_error(['message' => 'Invalid nonce']);
+        }
+
+        $category = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : 'all';
+        $term_id  = isset($_POST['term_id']) ? absint($_POST['term_id']) : 0;
+
+        $args = [
+            'post_type'      => 'news',
+            'posts_per_page' => 8,
+            'post_status'    => 'publish',
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+        ];
+
+        if ($term_id > 0) {
+            $args['tax_query'] = [
+                [
+                    'taxonomy' => 'news_category',
+                    'field'    => 'term_id',
+                    'terms'    => $term_id,
+                ],
+            ];
+        } elseif ($category !== 'all') {
+            $args['tax_query'] = [
+                [
+                    'taxonomy' => 'news_category',
+                    'field'    => 'slug',
+                    'terms'    => rawurldecode($category),
+                ],
+            ];
+        }
+
+        $query = new WP_Query($args);
+        $content = '';
+
+        // Find news page robustly
+        $news_page = get_page_by_path('الاخبار') ?: get_page_by_title('الاخبار');
+        $view_all_url = $news_page ? get_permalink($news_page) : home_url('/news');
+
+        if ($category !== 'all') {
+            $view_all_url = add_query_arg('news_cat', get_term($term_id, 'news_category')->slug, $view_all_url);
+        }
+
+        if ($query->have_posts()) {
+            ob_start();
+            $index = 0;
+            while ($query->have_posts()) {
+                $query->the_post();
+                $post_id = get_the_ID();
+                $thumbnail = get_the_post_thumbnail_url($post_id, 'large') ?: get_template_directory_uri() . '/assets/images/placeholder.jpg';
+                $views = Greenergy_Post_Views::get_views($post_id);
+                $date = get_the_date('d/m/Y');
+                $excerpt = get_the_excerpt() ?: wp_trim_words(get_the_content(), 15);
+            ?>
+                <div class="swiper-slide h-auto group">
+                    <div class="bg-white rounded-2xl overflow-hidden cursor-pointer group hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-2 transition-all duration-500 h-full border border-gray-100 lg:border-none">
+                        <a href="<?php the_permalink(); ?>" class="absolute inset-0 z-10 w-full h-full"></a>
+                        <div class="relative aspect-square overflow-hidden">
+                            <img src="<?php echo esc_url($thumbnail); ?>" alt="<?php the_title_attribute(); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="px-2 py-4 text-right group-hover:bg-green-600 relative">
+                            <div class="self-stretch inline-flex justify-end items-start gap-4 w-full">
+                                <div class="group-hover:text-white flex-1 text-right justify-start text-neutral-800 text-sm leading-5 line-clamp-2">
+                                    <?php the_title(); ?>
+                                </div>
+                                <svg class="w-6 h-4 inline" aria-hidden="true">
+                                    <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/more.svg"></use>
+                                </svg>
+                            </div>
+                            <p class="group-hover:text-white text-gray-600 text-xs md:text-sm mb-3 line-clamp-2">
+                                <?php echo esc_html($excerpt); ?>
+                            </p>
+                            <div class="flex items-center justify-between text-[10px] md:text-xs font-bold text-gray-500 border-t border-gray-100 pt-3 group-hover:border-white/20">
+                                <div class="flex items-center gap-1">
+                                    <i class="far fa-eye group-hover:text-white"></i>
+                                    <span class="group-hover:text-white"><?php echo esc_html($views); ?></span>
+                                </div>
+                                <div dir="ltr" class="group-hover:text-white"><?php echo esc_html($date); ?></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<?php
+                $index++;
             }
-        }
-        
-        // Simpler: Custom Loop for AJAX Pagination to be robust
-        $pagination_html = '';
-        if ( $query->max_num_pages > 1 ) {
-             $pagination_html .= '<nav class="pagination mt-8 flex justify-center items-center gap-2">';
-             
-             // Prev
-             if ( $page > 1 ) {
-                 $pagination_html .= sprintf(
-                     '<button class="js-ajax-pagination-link w-10 h-10 flex justify-center items-center rounded-full bg-white border border-gray-200 text-gray-500 hover:bg-green-50 hover:text-green-700 hover:border-green-200 transition-all" data-page="%d">%s</button>',
-                     $page - 1,
-                     '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>'
-                 );
-             }
-             
-             // Numbers (Simplified: show all or small range)
-             // For simplicity in this task, let's show 1, ... current, ... max or just standard range
-             // Using paginate_links array is actually best, just need to sanitize it.
-             
-             $links = paginate_links( [
-                'base'      => '%_%',
-                'format'    => '?paged=%#%',
-                'current'   => $page,
-                'total'     => $query->max_num_pages,
-                'type'      => 'array',
-                'prev_next' => false, // Handled manually for better control or just style these
-             ] );
-             
-             if ( $links ) {
-                 foreach ( $links as $link ) {
-                     // Extract page number
-                     $link_page = 1; // Default
-                     if ( preg_match( '/paged=(\d+)/', $link, $m ) ) {
-                         $link_page = $m[1];
-                     } elseif ( strpos( $link, 'current' ) !== false ) {
-                         $link_page = $page;
-                     } elseif ( strpos( $link, 'href' ) === false ) {
-                         // Dots
-                         $link_page = null;
-                     }
-                     
-                     if ( $link_page ) {
-                         $is_active = $link_page == $page;
-                         $classes = $is_active 
-                             ? 'bg-green-700 text-white shadow-lg shadow-green-700/30 border-transparent' 
-                             : 'bg-white text-gray-500 border-gray-200 hover:bg-green-50 hover:text-green-700 hover:border-green-200';
-                             
-                         $pagination_html .= sprintf(
-                             '<button class="js-ajax-pagination-link w-10 h-10 flex justify-center items-center rounded-full border text-sm font-bold transition-all %s" data-page="%d">%s</button>',
-                             $classes,
-                             $link_page,
-                             $link_page
-                         );
-                     } else {
-                         // Dots
-                         $pagination_html .= '<span class="w-10 h-10 flex justify-center items-center text-gray-400">...</span>';
-                     }
-                 }
-             }
-
-             // Next
-             if ( $page < $query->max_num_pages ) {
-                 $pagination_html .= sprintf(
-                     '<button class="js-ajax-pagination-link w-10 h-10 flex justify-center items-center rounded-full bg-white border border-gray-200 text-gray-500 hover:bg-green-50 hover:text-green-700 hover:border-green-200 transition-all" data-page="%d">%s</button>',
-                     $page + 1,
-                     '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>'
-                 );
-             }
-
-             $pagination_html .= '</nav>';
+            $content = ob_get_clean();
+        } else {
+            $content = '<div class="p-12 text-center w-full bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                <p class="text-neutral-500">' . __('لا توجد أخبار متوفرة في هذا القسم.', 'greenergy') . '</p>
+            </div>';
         }
 
         wp_reset_postdata();
 
-        wp_send_json_success( [
-            'content'    => $content,
-            'pagination' => $pagination_html,
-        ] );
+        wp_send_json_success([
+            'content'     => $content,
+            'view_all_url' => $view_all_url,
+        ]);
     }
 }
 

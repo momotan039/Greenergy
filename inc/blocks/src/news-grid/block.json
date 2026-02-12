@@ -20,10 +20,6 @@
     "attributes": {
         "count": {
             "type": "number",
-            "default": 3
-        },
-        "offset": {
-            "type": "number",
             "default": 6
         },
         "title": {

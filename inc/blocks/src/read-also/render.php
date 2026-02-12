@@ -128,20 +128,20 @@ if (! $query->have_posts()) {
 }
 ?>
 
-<div class="greenergy-read-also flex flex-col gap-1">
+<div class="greenergy-read-also flex flex-col gap-2">
     <?php if (! empty($title)) : ?>
         <h2><?php echo esc_html($title); ?></h2>
     <?php endif; ?>
 
     <div class="flex flex-col gap-2">
         <?php while ($query->have_posts()) : $query->the_post(); ?>
-            <div class="relative group hover:bg-green-600 shadow-lg outline outline-1 outline-gray-200 w-full rounded-lg inline-flex justify-start items-center gap-4 overflow-hidden max-sm:flex-col hover:shadow-md transition-shadow duration-300">
+            <div class="relative group hover:bg-green-600 shadow-lg outline outline-1 outline-gray-200 w-full rounded-lg inline-flex justify-start items-center gap-4 max-sm:gap-0 overflow-hidden hover:shadow-md transition-shadow duration-300">
                 <!-- Link -->
                 <a href="<?php the_permalink(); ?>" class="absolute inset-0 z-10 w-full h-full" aria-label="<?php the_title_attribute(); ?>"></a>
 
                 <!-- Image -->
                 <?php if (has_post_thumbnail()) : ?>
-                    <div class="max-sm:h-60 max-sm:w-full w-18 h-18 shrink-0 bg-cover bg-center rounded"
+                    <div class="w-18 h-18 shrink-0 bg-cover bg-center rounded"
                         style="background-image: url('<?php echo get_the_post_thumbnail_url(get_the_ID(), 'thumbnail'); ?>');"
                         role="img"
                         aria-label="<?php the_title_attribute(); ?>">
@@ -150,11 +150,11 @@ if (! $query->have_posts()) {
 
                 <div class="flex-1 self-stretch pl-3 max-sm:pr-3 py-3 inline-flex flex-col justify-start items-end gap-1.5">
                     <div class="self-stretch flex flex-col justify-start items-end gap-4 max-sm:gap-2">
-                        <div class="self-stretch inline-flex justify-between">
-                            <h3 class="group-hover:text-white lg:w-[80%] text-right justify-start text-green-700 text-sm font-bold leading-5 hover:text-green-700 transition-colors">
+                        <div class="self-stretch inline-flex justify-between max-sm:flex-col">
+                            <p class="group-hover:text-white lg:w-[80%] text-right justify-start text-green-700 text-lg max-sm:line-clamp-2 max-sm:text-base  leading-5 hover:text-green-700 transition-colors">
                                 <?php the_title(); ?>
-                            </h3>
-                            <time datetime="<?php echo get_the_date('Y-m-d'); ?>" class="group-hover:text-white text-center justify-start text-neutral-800 text-xs font-normal leading-5">
+                            </p>
+                            <time datetime="<?php echo get_the_date('Y-m-d'); ?>" class="group-hover:text-white text-center max-sm:text-left justify-start text-neutral-800 text-xs font-normal leading-5">
                                 <?php echo get_the_date(); ?>
                             </time>
                         </div>

@@ -24,7 +24,35 @@
             "type": "string",
             "default": "auto"
         },
-        "selectedPosts": {
+        "leftCount": {
+            "type": "number",
+            "default": 3
+        },
+        "rightCount": {
+            "type": "number",
+            "default": 3
+        },
+        "centerTopCount": {
+            "type": "number",
+            "default": 2
+        },
+        "centerBottomCount": {
+            "type": "number",
+            "default": 2
+        },
+        "selectedPostsLeft": {
+            "type": "array",
+            "default": []
+        },
+        "selectedPostsRight": {
+            "type": "array",
+            "default": []
+        },
+        "selectedPostsCenterTop": {
+            "type": "array",
+            "default": []
+        },
+        "selectedPostsCenterBottom": {
             "type": "array",
             "default": []
         }

@@ -3,8 +3,8 @@
 /**
  * Post Views System
  *
- * Handles view counting and retrieval for posts.
- * Supports manual override via '_news_view_count' meta.
+ * Handles view counting, synchronization, and formatted retrieval for news and posts.
+ * Focuses on a unified sorting mechanism that prioritizes manual overrides.
  *
  * @package Greenergy
  * @since 1.0.0
@@ -16,22 +16,39 @@ if (! defined('ABSPATH')) {
 
 class Greenergy_Post_Views
 {
+    /**
+     * Singleton instance.
+     *
+     * @var Greenergy_Post_Views|null
+     */
+    private static ?Greenergy_Post_Views $instance = null;
 
     /**
-     * Instance
+     * Meta key for manual view overrides.
      */
-    private static $instance = null;
+    public const MANUAL_VIEWS_KEY = '_news_view_count';
 
     /**
-     * Meta Keys
+     * Meta key for real tracked views.
      */
-    const MANUAL_VIEWS_KEY = '_news_view_count';
-    const REAL_VIEWS_KEY   = '_real_views';
+    public const REAL_VIEWS_KEY = '_real_views';
 
     /**
-     * Get Instance
+     * Meta key used for unified sorting (consolidated value).
      */
-    public static function get_instance()
+    public const TOTAL_VIEWS_KEY = '_total_views_sort';
+
+    /**
+     * Cookie name for basic view tracking protection.
+     */
+    private const TRACKING_COOKIE_PREFIX = 'greenergy_viewed_';
+
+    /**
+     * Get the singleton instance.
+     *
+     * @return self
+     */
+    public static function get_instance(): self
     {
         if (null === self::$instance) {
             self::$instance = new self();
@@ -40,91 +57,176 @@ class Greenergy_Post_Views
     }
 
     /**
-     * Constructor
+     * Constructor: Register WordPress hooks.
      */
-    public function __construct()
+    private function __construct()
     {
-        add_action('template_redirect', [$this, 'track_views']);
+        // View tracking
+        add_action('template_redirect', [$this, 'track_view_action']);
+
+        // Data synchronization hooks
+        add_action('updated_post_meta', [$this, 'sync_views_on_meta_update'], 10, 4);
+        add_action('added_post_meta', [$this, 'sync_views_on_meta_update'], 10, 4);
+
+        // Ensure new posts have the sort key initialized
+        add_action('save_post_news', [$this, 'initialize_sort_key'], 10, 3);
+        add_action('save_post_post', [$this, 'initialize_sort_key'], 10, 3);
     }
 
     /**
-     * Track Views
+     * Track a post view if it's a single news or post page.
+     * Includes basic bot detection and cookie-based spam protection.
      *
-     * Increments the real view count on single post views.
+     * @return void
      */
-    public function track_views()
+    public function track_view_action(): void
     {
-        if (! is_singular(['news', 'post'])) { // Add other CPTs if needed
+        if (! is_singular(['news', 'post'])) {
             return;
         }
 
         $post_id = get_the_ID();
-
-        // Basic spam protection: check if cookie is set for this post
-        // Cookie name: greenergy_viewed_{post_id}
-        // Expires: 1 hour
-        $cookie_name = 'greenergy_viewed_' . $post_id;
-
-        if (self::is_bot()) {
+        if (! $post_id) {
             return;
         }
 
+        // Skip bots to keep stats clean
+        if ($this->is_bot()) {
+            return;
+        }
+
+        // Basic cookie protection
+        $cookie_name = self::TRACKING_COOKIE_PREFIX . $post_id;
         if (isset($_COOKIE[$cookie_name])) {
             return;
         }
 
-        // Increment Views
-        $current_views = (int) get_post_meta($post_id, self::REAL_VIEWS_KEY, true);
-        $current_views++;
-        update_post_meta($post_id, self::REAL_VIEWS_KEY, $current_views);
+        $this->increment_real_views($post_id);
 
-        // Set Cookie
-        // Note: setting cookie in wp_head might be too late if headers sent, but usually fine.
-        // Better hook might be 'template_redirect' or 'wp', checking is_singular there.
-        // However, generic WP themes often use wp_head or an early hook.
-        // Let's stick to wp_head but be aware of headers.
-        // Actually, PHP setcookie must be before output. wp_head is definitely after output started (html tag).
-        // I must change hook to 'wp' or 'template_redirect'.
+        // Set tracking cookie (valid for 1 hour)
+        setcookie($cookie_name, '1', time() + HOUR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN);
     }
 
     /**
-     * Get View Count
-     *
-     * Returns the formatted view count.
-     * Logic: Use manual count if set, otherwise real count.
+     * Increment the real view count for a specific post.
      *
      * @param int $post_id
-     * @return string
+     * @return void
      */
-    public static function get_views($post_id = 0)
+    private function increment_real_views(int $post_id): void
     {
-        if (! $post_id) {
+        $real_views = (int) get_post_meta($post_id, self::REAL_VIEWS_KEY, true);
+        $real_views++;
+
+        update_post_meta($post_id, self::REAL_VIEWS_KEY, $real_views);
+
+        // Sync to unified sort key immediately
+        $this->update_unified_sort_key($post_id);
+    }
+
+    /**
+     * Sync the unified sort key when manual or real meta keys are updated.
+     *
+     * @param int    $meta_id
+     * @param int    $post_id
+     * @param string $meta_key
+     * @param mixed  $meta_value
+     * @return void
+     */
+    public function sync_views_on_meta_update(int $meta_id, int $post_id, string $meta_key, $meta_value): void
+    {
+        if (self::MANUAL_VIEWS_KEY === $meta_key || self::REAL_VIEWS_KEY === $meta_key) {
+            $this->update_unified_sort_key($post_id);
+        }
+    }
+
+    /**
+     * Initialize the sort key for newly created posts.
+     *
+     * @param int     $post_id
+     * @param WP_Post $post
+     * @param bool    $update
+     * @return void
+     */
+    public function initialize_sort_key(int $post_id, $post, bool $update): void
+    {
+        if ($update) {
+            return; // Only for new posts
+        }
+
+        if (! in_array($post->post_type, ['news', 'post'], true)) {
+            return;
+        }
+
+        $this->update_unified_sort_key($post_id);
+    }
+
+    /**
+     * Update the unified sort key based on the hierarchy: Manual > Real.
+     *
+     * @param int $post_id
+     * @return void
+     */
+    private function update_unified_sort_key(int $post_id): void
+    {
+        $manual_raw = get_post_meta($post_id, self::MANUAL_VIEWS_KEY, true);
+        $real       = (int) get_post_meta($post_id, self::REAL_VIEWS_KEY, true);
+
+        // If manual value exists (even 0), treat it as override
+        if ($manual_raw !== '' && $manual_raw !== null) {
+            $total_sort_value = (int) $manual_raw;
+        } else {
+            $total_sort_value = $real;
+        }
+
+        update_post_meta($post_id, self::TOTAL_VIEWS_KEY, $total_sort_value);
+    }
+
+
+    /**
+     * Get the displayable view count for a post.
+     * Prioritizes manual count if available.
+     *
+     * @param int $post_id Optional. Defaults to current post ID.
+     * @return string Formatted view count (e.g., 1,500).
+     */
+    public static function get_views(int $post_id = 0): string
+    {
+        if ($post_id === 0) {
             $post_id = get_the_ID();
         }
 
-        $manual_views = get_post_meta($post_id, self::MANUAL_VIEWS_KEY, true);
-
-        if (! empty($manual_views) && $manual_views > 0) {
-            return number_format((int) $manual_views);
+        if (! $post_id) {
+            return '0';
         }
 
-        $real_views = (int) get_post_meta($post_id, self::REAL_VIEWS_KEY, true);
-        return number_format($real_views);
+        $manual_raw = get_post_meta($post_id, self::MANUAL_VIEWS_KEY, true);
+
+        // نحافظ على الرقم كما هو من ACF بدون تحويل int
+        if ($manual_raw !== '' && $manual_raw !== null && is_numeric($manual_raw)) {
+            return $manual_raw;
+        }
+
+        $real_raw = get_post_meta($post_id, self::REAL_VIEWS_KEY, true);
+        $real = is_numeric($real_raw) ? $real_raw : 0;
+
+        return $real;
     }
 
+
     /**
-     * Is Bot
-     * 
-     * Simple bot detection
+     * Identify common search engine bots.
+     *
+     * @return bool True if a bot is detected.
      */
-    private static function is_bot()
+    private function is_bot(): bool
     {
         if (! isset($_SERVER['HTTP_USER_AGENT'])) {
             return false;
         }
 
-        $user_agent = $_SERVER['HTTP_USER_AGENT'];
-        $bot_agents = [
+        $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        $bot_signatures = [
             'googlebot',
             'bingbot',
             'slurp',
@@ -134,11 +236,11 @@ class Greenergy_Post_Views
             'sogou',
             'exabot',
             'facebot',
-            'ia_archiver',
+            'ia_archiver'
         ];
 
-        foreach ($bot_agents as $bot) {
-            if (stripos($user_agent, $bot) !== false) {
+        foreach ($bot_signatures as $bot) {
+            if (str_contains($user_agent, $bot)) {
                 return true;
             }
         }
