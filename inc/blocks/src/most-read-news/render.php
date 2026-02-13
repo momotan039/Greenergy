@@ -186,10 +186,10 @@ if (!function_exists('render_swiper_slider')) {
     </div>
 
     <!-- Main Grid -->
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 text-right relative z-10">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 text-right relative z-10 lg:px-12">
 
         <!-- Right Column (Small Cards) -->
-        <div class="flex lg:col-span-3 flex-col gap-6 order-2 lg:order-1" data-aos="fade-left" data-aos-delay="200">
+        <div class="flex md:col-span-3 flex-col gap-6 order-2 md:order-1" data-aos="fade-left" data-aos-delay="200">
             <?php
             $delay = 400;
             foreach ($news_sections['other_small_cards'] as $news) {
@@ -200,13 +200,13 @@ if (!function_exists('render_swiper_slider')) {
         </div>
 
         <!-- Center Column (Sliders) -->
-        <div class="col-span-1 lg:col-span-6 flex flex-col gap-6 order-1 lg:order-2" data-aos="fade-up" data-aos-delay="200">
+        <div class="col-span-1 md:col-span-6 flex flex-col gap-6 order-1 md:order-2" data-aos="fade-up" data-aos-delay="200">
             <?php if (!empty($news_sections['large_cards_1'])) render_swiper_slider($news_sections['large_cards_1'], 'top', 5000); ?>
             <?php if (!empty($news_sections['large_cards_2'])) render_swiper_slider($news_sections['large_cards_2'], 'bottom', 6000); ?>
         </div>
 
         <!-- Left Column (Small Cards) -->
-        <div class="flex lg:col-span-3 flex-col gap-6 order-3" data-aos="fade-right" data-aos-delay="200">
+        <div class="flex md:col-span-3 flex-col gap-6 order-3" data-aos="fade-right" data-aos-delay="200">
             <?php
             $delay = 400;
             foreach ($news_sections['small_cards'] as $news) {

@@ -71,6 +71,12 @@ class Greenergy_Post_Views
         // Ensure new posts have the sort key initialized
         add_action('save_post_news', [$this, 'initialize_sort_key'], 10, 3);
         add_action('save_post_post', [$this, 'initialize_sort_key'], 10, 3);
+
+        // Admin columns for News
+        add_filter('manage_news_posts_columns', [$this, 'add_news_views_columns']);
+        add_action('manage_news_posts_custom_column', [$this, 'render_news_views_columns'], 10, 2);
+        add_filter('manage_edit-news_sortable_columns', [$this, 'make_news_views_columns_sortable']);
+        add_action('pre_get_posts', [$this, 'sort_news_views_columns']);
     }
 
     /**
@@ -117,7 +123,11 @@ class Greenergy_Post_Views
     {
         $real_views = (int) get_post_meta($post_id, self::REAL_VIEWS_KEY, true);
         $real_views++;
-
+        $manual_views = (int) get_post_meta($post_id, self::MANUAL_VIEWS_KEY, true);
+        if ($manual_views > 0) {
+            $manual_views++;
+            update_post_meta($post_id, self::MANUAL_VIEWS_KEY, $manual_views);
+        }
         update_post_meta($post_id, self::REAL_VIEWS_KEY, $real_views);
 
         // Sync to unified sort key immediately
@@ -172,15 +182,14 @@ class Greenergy_Post_Views
         $manual_raw = get_post_meta($post_id, self::MANUAL_VIEWS_KEY, true);
         $real       = (int) get_post_meta($post_id, self::REAL_VIEWS_KEY, true);
 
-        // If manual value exists (even 0), treat it as override
-        if ($manual_raw !== '' && $manual_raw !== null) {
-            $total_sort_value = (int) $manual_raw;
-        } else {
-            $total_sort_value = $real;
-        }
+        $manual = is_numeric($manual_raw) ? (int) $manual_raw : 0;
+
+        // total = manual base + real increments
+        $total_sort_value = $manual + $real;
 
         update_post_meta($post_id, self::TOTAL_VIEWS_KEY, $total_sort_value);
     }
+
 
 
     /**
@@ -201,16 +210,14 @@ class Greenergy_Post_Views
         }
 
         $manual_raw = get_post_meta($post_id, self::MANUAL_VIEWS_KEY, true);
+        $real_raw   = get_post_meta($post_id, self::REAL_VIEWS_KEY, true);
 
-        if ($manual_raw !== '' && $manual_raw !== null && is_numeric($manual_raw)) {
-            return self::format_number($manual_raw);
-        }
+        $manual = is_numeric($manual_raw) ? (int) $manual_raw : 0;
+        $real   = is_numeric($real_raw) ? (int) $real_raw : 0;
 
-        $real_raw = get_post_meta($post_id, self::REAL_VIEWS_KEY, true);
-        $real = is_numeric($real_raw) ? $real_raw : 0;
-
-        return self::format_number($real);
+        return $manual > 0 ? self::format_number($manual) : self::format_number($real);
     }
+
 
 
     private static function format_number($num): string
@@ -229,6 +236,73 @@ class Greenergy_Post_Views
     }
 
 
+
+    /**
+     * Add custom columns to the news list.
+     */
+    public function add_news_views_columns(array $columns): array
+    {
+        $new_columns = [];
+        foreach ($columns as $key => $title) {
+            $new_columns[$key] = $title;
+            if ($key === 'title') {
+                $new_columns['real_views'] = __('المشاهدات الحقيقية', 'greenergy');
+                $new_columns['manual_views'] = __('المشاهدات اليدوية', 'greenergy');
+            }
+        }
+        return $new_columns;
+    }
+
+    /**
+     * Render content for the custom news columns.
+     */
+    public function render_news_views_columns(string $column, int $post_id): void
+    {
+        switch ($column) {
+            case 'real_views':
+                $real = get_post_meta($post_id, self::REAL_VIEWS_KEY, true);
+                echo '<strong>' . esc_html(number_format_i18n((int) $real)) . '</strong>';
+                break;
+
+            case 'manual_views':
+                $manual = get_post_meta($post_id, self::MANUAL_VIEWS_KEY, true);
+                echo esc_html(is_numeric($manual) ? number_format_i18n((int) $manual) : '-');
+                break;
+        }
+    }
+
+    /**
+     * Make the news view columns sortable.
+     */
+    public function make_news_views_columns_sortable(array $columns): array
+    {
+        $columns['real_views']   = 'real_views';
+        $columns['manual_views'] = 'manual_views';
+        return $columns;
+    }
+
+    /**
+     * Handle sorting logic for news view columns.
+     */
+    public function sort_news_views_columns($query): void
+    {
+        if (! is_admin() || ! $query->is_main_query() || 'news' !== $query->get('post_type')) {
+            return;
+        }
+
+        $orderby = $query->get('orderby');
+
+        switch ($orderby) {
+            case 'real_views':
+                $query->set('meta_key', self::REAL_VIEWS_KEY);
+                $query->set('orderby', 'meta_value_num');
+                break;
+            case 'manual_views':
+                $query->set('meta_key', self::MANUAL_VIEWS_KEY);
+                $query->set('orderby', 'meta_value_num');
+                break;
+        }
+    }
 
     /**
      * Identify common search engine bots.
