@@ -13,6 +13,7 @@ const {
 
 
 const Edit = ({ attributes, setAttributes }) => {
+    const { MediaUpload } = wp.blockEditor;
     const { 
         bannerType, 
         bannerImage, 
@@ -47,9 +48,23 @@ const Edit = ({ attributes, setAttributes }) => {
         setAttributes({ shareProviders: newProviders });
     };
 
+    // Helper to open media frame manually if needed
+    const openMediaLibrary = (type, callback) => {
+        const frame = wp.media({
+            title: type === 'image' ? __('اختر صورة', 'greenergy') : __('اختر فيديو', 'greenergy'),
+            multiple: false,
+            library: { type: type }
+        });
+        frame.on('select', () => {
+            const attachment = frame.state().get('selection').first().toJSON();
+            callback(attachment);
+        });
+        frame.open();
+    };
+
     return (
         <div className="greenergy-news-settings-block" style={{ padding: '20px', background: '#fff', border: '1px solid #ccc' }}>
-            <h2 style={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '20px' }}>{__('إعدادات الأخبار', 'greenergy')}</h2>
+            <h2 style={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '20px' }}>{__('إعدادات صفحة الخبر', 'greenergy')}</h2>
             
             <PanelBody title={__('إعدادات اللافتة العامة', 'greenergy')} initialOpen={true}>
                 <SelectControl
@@ -64,21 +79,26 @@ const Edit = ({ attributes, setAttributes }) => {
 
                 {bannerType === 'image' && (
                     <BaseControl label={__('صورة الخلفية', 'greenergy')}>
-                        <MediaUploadCheck>
-                            <MediaUpload
-                                onSelect={onSelectImage}
-                                allowedTypes={['image']}
-                                value={bannerImage}
-                                render={({ open }) => (
-                                    <>
-                                        {bannerImage && <img src={bannerImage} style={{ maxWidth: '100%', marginBottom: '10px', display: 'block' }} alt="Banner" />}
-                                        <Button variant="secondary" onClick={open} style={{ marginBottom: '10px' }}>
-                                            {bannerImage ? __('تغيير الصورة', 'greenergy') : __('رفع صورة', 'greenergy')}
+                        <div style={{ marginBottom: '15px' }}>
+                            {bannerImage && <img src={bannerImage} style={{ maxWidth: '100%', maxHeight: '200px', marginBottom: '10px', display: 'block', border: '1px solid #ddd', borderRadius: '4px' }} alt="Banner" />}
+                            
+                            {MediaUpload ? (
+                                <MediaUpload
+                                    onSelect={onSelectImage}
+                                    allowedTypes={['image']}
+                                    value={bannerImage}
+                                    render={({ open }) => (
+                                        <Button isSecondary onClick={open}>
+                                            {bannerImage ? __('تغيير الصورة', 'greenergy') : __('اختيار من المكتبة', 'greenergy')}
                                         </Button>
-                                    </>
-                                )}
-                            />
-                        </MediaUploadCheck>
+                                    )}
+                                />
+                            ) : (
+                                <Button isSecondary onClick={() => openMediaLibrary('image', onSelectImage)}>
+                                    {bannerImage ? __('تغيير الصورة', 'greenergy') : __('اختيار من المكتبة (يدوي)', 'greenergy')}
+                                </Button>
+                            )}
+                        </div>
                         <TextControl
                             label={__('أو أدخل رابط الصورة', 'greenergy')}
                             value={bannerImage}
@@ -90,21 +110,26 @@ const Edit = ({ attributes, setAttributes }) => {
 
                 {bannerType === 'video' && (
                     <BaseControl label={__('فيديو الخلفية', 'greenergy')}>
-                        <MediaUploadCheck>
-                            <MediaUpload
-                                onSelect={onSelectVideo}
-                                allowedTypes={['video']}
-                                value={bannerVideo}
-                                render={({ open }) => (
-                                    <>
-                                        {bannerVideo && <video src={bannerVideo} style={{ maxWidth: '100%', marginBottom: '10px', display: 'block' }} controls />}
-                                        <Button variant="secondary" onClick={open} style={{ marginBottom: '10px' }}>
-                                            {bannerVideo ? __('تغيير الفيديو', 'greenergy') : __('رفع فيديو', 'greenergy')}
+                        <div style={{ marginBottom: '15px' }}>
+                            {bannerVideo && <video src={bannerVideo} style={{ maxWidth: '100%', marginBottom: '10px', display: 'block' }} controls />}
+                            
+                            {MediaUpload ? (
+                                <MediaUpload
+                                    onSelect={onSelectVideo}
+                                    allowedTypes={['video']}
+                                    value={bannerVideo}
+                                    render={({ open }) => (
+                                        <Button isSecondary onClick={open}>
+                                            {bannerVideo ? __('تغيير الفيديو', 'greenergy') : __('اختيار من المكتبة', 'greenergy')}
                                         </Button>
-                                    </>
-                                )}
-                            />
-                        </MediaUploadCheck>
+                                    )}
+                                />
+                            ) : (
+                                <Button isSecondary onClick={() => openMediaLibrary('video', onSelectVideo)}>
+                                    {bannerVideo ? __('تغيير الفيديو', 'greenergy') : __('اختيار من المكتبة (يدوي)', 'greenergy')}
+                                </Button>
+                            )}
+                        </div>
                          <TextControl
                             label={__('أو أدخل رابط الفيديو', 'greenergy')}
                             value={bannerVideo}

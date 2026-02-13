@@ -202,16 +202,32 @@ class Greenergy_Post_Views
 
         $manual_raw = get_post_meta($post_id, self::MANUAL_VIEWS_KEY, true);
 
-        // نحافظ على الرقم كما هو من ACF بدون تحويل int
         if ($manual_raw !== '' && $manual_raw !== null && is_numeric($manual_raw)) {
-            return $manual_raw;
+            return self::format_number($manual_raw);
         }
 
         $real_raw = get_post_meta($post_id, self::REAL_VIEWS_KEY, true);
         $real = is_numeric($real_raw) ? $real_raw : 0;
 
-        return $real;
+        return self::format_number($real);
     }
+
+
+    private static function format_number($num): string
+    {
+        $num = (float) $num;
+
+        if ($num >= 1_000_000) {
+            return round($num / 1_000_000, 1) . 'M';
+        }
+
+        if ($num >= 1_000) {
+            return round($num / 1_000, 1) . 'K';
+        }
+
+        return (string) $num;
+    }
+
 
 
     /**

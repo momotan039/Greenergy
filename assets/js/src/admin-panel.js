@@ -140,6 +140,7 @@ const GreenergyAdmin = () => {
     const editorSettings = {
         mediaUpload: wp.blockEditor.MediaUpload,
         hasFixedToolbar: true,
+        hasUploadPermissions: true, // Crucial for MediaUploadCheck to work
     };
 
     return (

@@ -146,7 +146,14 @@ if (! $query->have_posts()) {
                         role="img"
                         aria-label="<?php the_title_attribute(); ?>">
                     </div>
+                <?php else : ?>
+                    <div class="w-18 h-18 shrink-0 bg-cover bg-center rounded"
+                        style="background-image: url('https://placehold.co/80X80');"
+                        role="img"
+                        aria-label="<?php the_title_attribute(); ?>">
+                    </div>
                 <?php endif; ?>
+
 
                 <div class="flex-1 self-stretch pl-3 max-sm:pr-3 py-3 inline-flex flex-col justify-start items-end gap-1.5">
                     <div class="self-stretch flex flex-col justify-start items-end gap-4 max-sm:gap-2">

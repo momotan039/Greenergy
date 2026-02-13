@@ -114,7 +114,7 @@ class Greenergy_Ajax
                     'excerpt'   => get_the_excerpt(),
                     'date'      => get_the_date('d/m/Y'),
                     'views'     => Greenergy_Post_Views::get_views(get_the_ID()),
-                    'image'     => get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: get_template_directory_uri() . '/assets/images/placeholder.jpg',
+                    'image'     => get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: 'https://placehold.co/800X800',
                     'permalink' => get_permalink(),
                     'cat'       => $terms && !is_wp_error($terms) ? $terms[0]->name : '',
                 ];
@@ -199,7 +199,7 @@ class Greenergy_Ajax
             while ($query->have_posts()) {
                 $query->the_post();
                 $post_id = get_the_ID();
-                $thumbnail = get_the_post_thumbnail_url($post_id, 'large') ?: get_template_directory_uri() . '/assets/images/placeholder.jpg';
+                $thumbnail = get_the_post_thumbnail_url($post_id, 'large') ?: 'https://placehold.co/800X800';
                 $views = Greenergy_Post_Views::get_views($post_id);
                 $date = get_the_date('d/m/Y');
                 $excerpt = get_the_excerpt() ?: wp_trim_words(get_the_content(), 15);

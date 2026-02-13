@@ -102,7 +102,7 @@ if ($query->have_posts()) {
             'excerpt'   => get_the_excerpt(),
             'date'      => get_the_date('d/m/Y'),
             'views'     => Greenergy_Post_Views::get_views(get_the_ID()),
-            'image'     => get_the_post_thumbnail_url(get_the_ID(), 'medium'),
+            'image'     => get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: 'https://placehold.co/800X800',
             'permalink' => get_permalink(),
             'cat'       => $terms && !is_wp_error($terms) ? $terms[0]->name : '',
         ];

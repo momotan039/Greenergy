@@ -1,4 +1,5 @@
 <?php
+
 /**
  * News Page Pattern
  *
@@ -6,8 +7,8 @@
  */
 
 return [
-    'title'      => __( 'الاخبار', 'greenergy' ),
-    'categories' => [ 'greenergy' ],
+    'title'      => __('الاخبار', 'greenergy'),
+    'categories' => ['greenergy'],
     'content'    => '
         <div class="container mx-auto bg-white mb-8">
         <!-- wp:greenergy/scroll-progress /-->
@@ -16,7 +17,7 @@ return [
         <!-- wp:greenergy/main-banner /-->
         </div>
         </div>
-        <!-- wp:greenergy/stories/-->
+        <!-- wp:greenergy/stories /-->
         <div class="container mx-auto mt-8">
         <!-- wp:greenergy/news-filter /-->
         </div>

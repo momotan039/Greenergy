@@ -92,87 +92,93 @@ get_header();
             </div>
 
             <!-- source -->
-            <?php
-            $source_name = get_post_meta(get_the_ID(), '_news_source_name', true);
-            $source_url = get_post_meta(get_the_ID(), '_news_source_url', true);
-            if ($source_name) :
-            ?>
-                <div class="flex">
-                    <h3 class="text-black text-2xl font-medium max-md:text-lg">
-                        المصدر :
-                        <?php if ($source_url) : ?>
-                            <a href="<?php echo esc_url($source_url); ?>" target="_blank" class="text-primary hover:underline"><?php echo esc_html($source_name); ?></a>
-                        <?php else : ?>
-                            <?php echo esc_html($source_name); ?>
-                        <?php endif; ?>
-                    </h3>
-                </div>
-            <?php endif; ?>
+            <div>
+                <?php
+                $source_name = get_post_meta(get_the_ID(), '_news_source_name', true);
+                $source_url = get_post_meta(get_the_ID(), '_news_source_url', true);
+                if ($source_name) :
+                ?>
+                    <div class="flex">
+                        <h3 class="text-black text-2xl font-medium max-md:text-lg">
+                            المصدر :
+                            <?php if ($source_url) : ?>
+                                <a href="<?php echo esc_url($source_url); ?>" target="_blank" class="text-primary hover:underline"><?php echo esc_html($source_name); ?></a>
+                            <?php else : ?>
+                                <?php echo esc_html($source_name); ?>
+                            <?php endif; ?>
+                        </h3>
+                    </div>
+                <?php endif; ?>
+            </div>
 
 
             <!-- tags -->
-            <?php
-            $tags = get_the_tags();
-            if ($tags) {
-                echo '<div class="flex flex-wrap gap-[12px]">';
-                foreach ($tags as $tag) {
-                    echo '<a href="' . esc_url(get_tag_link($tag->term_id)) . '" class="text-sm text-black px-4 bg-green-700/20 rounded-[100px] py-1     hover:bg-green-700 hover:text-white transition-colors duration-300">#' . esc_html($tag->name) . '</a>';
+            <div>
+                <?php
+                $tags = get_the_tags();
+                if ($tags) {
+                    echo '<div class="flex flex-wrap gap-[12px]">';
+                    foreach ($tags as $tag) {
+                        echo '<a href="' . esc_url(get_tag_link($tag->term_id)) . '" class="text-sm text-black px-4 bg-green-700/20 rounded-[100px] py-1     hover:bg-green-700 hover:text-white transition-colors duration-300">#' . esc_html($tag->name) . '</a>';
+                    }
+                    echo '</div>';
                 }
-                echo '</div>';
-            }
-            ?>
+                ?>
+            </div>
 
             <!-- expert/author box -->
-            <?php
-            // Use CPT meta field toggle
-            $show_author_box = get_post_meta(get_the_ID(), '_news_show_author_box', true);
+            <div class="max-sm:pr-3">
+                <?php
+                // Use CPT meta field toggle
+                $show_author_box = get_post_meta(get_the_ID(), '_news_show_author_box', true);
 
-            // Fallback to global setting if meta is not set (optional, or just stick to meta as per user request "via same cpt")
-            // User said "let user hide and show it via same cpt", implying the control is ON the CPT.
+                // Fallback to global setting if meta is not set (optional, or just stick to meta as per user request "via same cpt")
+                // User said "let user hide and show it via same cpt", implying the control is ON the CPT.
 
-            if ($show_author_box) :
-                $author_name = get_post_meta(get_the_ID(), '_news_author_name', true);
-                if (empty($author_name)) $author_name = get_the_author(); // Fallback to WP Author Name
+                if ($show_author_box) :
+                    $author_name = get_post_meta(get_the_ID(), '_news_author_name', true);
+                    if (empty($author_name)) $author_name = get_the_author(); // Fallback to WP Author Name
 
-                $author_title = get_post_meta(get_the_ID(), '_news_author_title', true);
-                $author_img_id = get_post_meta(get_the_ID(), '_news_author_image_id', true);
-                $author_url = get_post_meta(get_the_ID(), '_news_author_url', true);
-            ?>
-                <div class="inline-flex gap-6">
-                    <div class="bg-stone-50 rounded-lg flex justify-center items-center gap-2">
-                        <div class="text-right justify-start text-neutral-950 text-sm font-bold ">بواسطة:</div>
-                    </div>
-                    <div class="flex justify-start items-center gap-2">
-                        <?php
-                        if ($author_img_id) {
-                            echo wp_get_attachment_image($author_img_id, 'thumbnail', false, ['class' => 'w-10 h-10 rounded-full object-cover']);
-                        } else {
-                            echo get_avatar(get_the_author_meta('ID'), 40, '', '', ['class' => 'w-10 h-10 rounded-full']);
-                        }
-                        ?>
-                        <div class="flex flex-col">
-                            <div class="text-right justify-center text-neutral-950 text-sm font-bold ">
-                                <?php if ($author_url) : ?>
-                                    <a href="<?php echo esc_url($author_url); ?>" target="_blank" class="hover:underline text-black hover:text-primary transition-colors"><?php echo esc_html($author_name); ?></a>
-                                <?php else : ?>
-                                    <?php echo esc_html($author_name); ?>
+                    $author_title = get_post_meta(get_the_ID(), '_news_author_title', true);
+                    $author_img_id = get_post_meta(get_the_ID(), '_news_author_image_id', true);
+                    $author_url = get_post_meta(get_the_ID(), '_news_author_url', true);
+                ?>
+                    <div class="inline-flex gap-6">
+                        <div class="bg-stone-50 rounded-lg flex justify-center items-center gap-2">
+                            <div class="text-right justify-start text-neutral-950 text-sm font-bold ">بواسطة:</div>
+                        </div>
+                        <div class="flex justify-start items-center gap-2">
+                            <?php
+                            if ($author_img_id) {
+                                echo wp_get_attachment_image($author_img_id, 'thumbnail', false, ['class' => 'w-10 h-10 rounded-full object-cover']);
+                            } else {
+                                echo get_avatar(get_the_author_meta('ID'), 40, '', '', ['class' => 'w-10 h-10 rounded-full']);
+                            }
+                            ?>
+                            <div class="flex flex-col">
+                                <div class="text-right justify-center text-neutral-950 text-sm font-bold ">
+                                    <?php if ($author_url) : ?>
+                                        <a href="<?php echo esc_url($author_url); ?>" target="_blank" class="hover:underline text-black hover:text-primary transition-colors"><?php echo esc_html($author_name); ?></a>
+                                    <?php else : ?>
+                                        <?php echo esc_html($author_name); ?>
+                                    <?php endif; ?>
+                                </div>
+                                <?php if ($author_title) : ?>
+                                    <div class="text-right justify-start text-stone-500 text-xs font-normal "><?php echo esc_html($author_title); ?></div>
+                                <?php else: ?>
+                                    <?php
+                                    // Fallback to description if no title field, to match original "job" slot
+                                    $description = get_the_author_meta('description');
+                                    if ($description) {
+                                        echo '<div class="text-right justify-start text-stone-500 text-xs font-normal ">' . wp_trim_words($description, 5) . '</div>';
+                                    }
+                                    ?>
                                 <?php endif; ?>
                             </div>
-                            <?php if ($author_title) : ?>
-                                <div class="text-right justify-start text-stone-500 text-xs font-normal "><?php echo esc_html($author_title); ?></div>
-                            <?php else: ?>
-                                <?php
-                                // Fallback to description if no title field, to match original "job" slot
-                                $description = get_the_author_meta('description');
-                                if ($description) {
-                                    echo '<div class="text-right justify-start text-stone-500 text-xs font-normal ">' . wp_trim_words($description, 5) . '</div>';
-                                }
-                                ?>
-                            <?php endif; ?>
                         </div>
                     </div>
-                </div>
-            <?php endif; ?>
+                <?php endif; ?>
+            </div>
 
             <!-- share buttons -->
             <?php

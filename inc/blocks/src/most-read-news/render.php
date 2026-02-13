@@ -73,7 +73,7 @@ if (!function_exists('greenergy_get_most_read_items')) {
                 'tag'   => 'الطاقة الشمسية',
                 'date'  => '16/08/2025',
                 'views' => '9,870',
-                'image' => get_template_directory_uri() . '/assets/images/placeholder.jpg',
+                'image' => 'https://placehold.co/800X800',
                 'link'  => '#'
             ]);
         }

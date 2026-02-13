@@ -91,7 +91,7 @@ $query = new WP_Query($args);
                     while ($query->have_posts()) : $query->the_post();
                         $post_id = get_the_ID();
                         $views   = Greenergy_Post_Views::get_views($post_id);
-                        $thumbnail_url = get_the_post_thumbnail_url($post_id, 'full') ?: get_template_directory_uri() . '/assets/images/placeholder.jpg';
+                        $thumbnail_url = get_the_post_thumbnail_url($post_id, 'full') ?: 'https://placehold.co/800X800';
                 ?>
                         <div class="swiper-slide">
                             <div class="w-full h-64 sm:h-80 md:h-96 p-3 md:p-4 bg-center bg-cover flex flex-col justify-between items-center relative overflow-hidden group rounded-lg" style="background-image: url('<?php echo esc_url($thumbnail_url); ?>');">

@@ -4,10 +4,11 @@
   "description": "Enterprise Hybrid WordPress Theme for Greenergy Media Platform",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev:css\" \"npm run dev:js\" \"npm run dev:blocks\"",
+    "dev": "concurrently \"npm run dev:css\" \"npm run dev:js\" \"npm run dev:blocks\" \"npm run dev:admin-js\"",
     "dev:css": "npx tailwindcss -i ./assets/css/src/main.css -o ./assets/css/dist/main.min.css --watch",
     "dev:js": "npx esbuild assets/js/src/main.js --bundle --outfile=assets/js/dist/main.min.js --watch",
     "dev:blocks": "npx esbuild assets/js/src/blocks.js --bundle --outfile=assets/js/dist/blocks.min.js --watch",
+    "dev:admin-js": "npx esbuild assets/js/src/admin-panel.js --bundle --outfile=assets/js/dist/admin-panel.js --external:@wordpress/* --external:react --external:react-dom --loader:.js=jsx --jsx-factory=wp.element.createElement --jsx-fragment=wp.element.Fragment --watch",
     "build": "npm run build:css && npm run build:js && npm run build:blocks && npm run build:admin-js",
     "build:css": "npx tailwindcss -i ./assets/css/src/main.css -o ./assets/css/dist/main.min.css --minify",
     "build:rtl": "npx rtlcss ./assets/css/dist/main.min.css ./assets/css/dist/main-rtl.min.css",

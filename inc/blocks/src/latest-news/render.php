@@ -93,39 +93,17 @@ $query = new WP_Query($args);
                 if ($query->have_posts()) :
                     $index = 0;
                     while ($query->have_posts()) : $query->the_post();
-                        $post_id = get_the_ID();
-                        $thumbnail = get_the_post_thumbnail_url($post_id, 'large') ?: get_template_directory_uri() . '/assets/images/placeholder.jpg';
-                        $views = Greenergy_Post_Views::get_views($post_id);
-                        $date = get_the_date('d/m/Y');
-                        $excerpt = get_the_excerpt() ?: wp_trim_words(get_the_content(), 15);
+                        $item = [
+                            'title'     => get_the_title(),
+                            'excerpt'   => get_the_excerpt() ?: wp_trim_words(get_the_content(), 15),
+                            'date'      => get_the_date('d/m/Y'),
+                            'views'     => Greenergy_Post_Views::get_views(get_the_ID()),
+                            'image'     => get_the_post_thumbnail_url(get_the_ID(), 'large') ?: 'https://placehold.co/800X800',
+                            'permalink' => get_permalink(),
+                        ];
                 ?>
                         <div class="swiper-slide h-auto group" data-aos="fade-up" data-aos-delay="<?php echo esc_attr(300 + ($index * 100)); ?>">
-                            <div class="bg-white rounded-2xl overflow-hidden cursor-pointer group hover:shadow-2xl hover:shadow-green-600/10 hover:-translate-y-2 transition-all duration-500 h-full border border-gray-100 lg:border-none">
-                                <a href="<?php the_permalink(); ?>" class="absolute inset-0 z-10 w-full h-full"></a>
-                                <div class="relative aspect-square overflow-hidden">
-                                    <img src="<?php echo esc_url($thumbnail); ?>" alt="<?php the_title_attribute(); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                                </div>
-                                <div class="px-2 py-4 text-right group-hover:bg-green-600 relative">
-                                    <div class="self-stretch inline-flex justify-end items-start gap-4 w-full">
-                                        <div class="group-hover:text-white flex-1 text-right justify-start text-neutral-800 text-sm leading-5 line-clamp-2">
-                                            <?php the_title(); ?>
-                                        </div>
-                                        <svg class="w-6 h-4 inline" aria-hidden="true">
-                                            <use href="<?php echo get_template_directory_uri(); ?>/assets/images/vuesax/outline/more.svg"></use>
-                                        </svg>
-                                    </div>
-                                    <p class="group-hover:text-white text-gray-600 text-xs md:text-sm mb-3 line-clamp-2">
-                                        <?php echo esc_html($excerpt); ?>
-                                    </p>
-                                    <div class="flex items-center justify-between text-[10px] md:text-xs font-bold text-gray-500 border-t border-gray-100 pt-3 group-hover:border-white/20">
-                                        <div class="flex items-center gap-1">
-                                            <i class="far fa-eye group-hover:text-white"></i>
-                                            <span class="group-hover:text-white"><?php echo esc_html($views); ?></span>
-                                        </div>
-                                        <div dir="ltr" class="group-hover:text-white"><?php echo esc_html($date); ?></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php get_template_part('templates/components/news-card-grid', null, ['item' => $item]); ?>
                         </div>
                     <?php
                         $index++;
