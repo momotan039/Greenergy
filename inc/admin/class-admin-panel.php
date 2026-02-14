@@ -81,18 +81,9 @@ class Greenergy_Admin_Panel
                 'schema' => [
                     'type'       => 'object',
                     'properties' => [
-                        'social_media' => [
-                            'type'  => 'array',
-                            'items' => [
-                                'type'       => 'object',
-                                'properties' => [
-                                    'platform' => ['type' => 'string'],
-                                    'url'      => ['type' => 'string'],
-                                    'icon'     => ['type' => 'string'], // URL or Class
-                                    'iconId'   => ['type' => 'integer']
-                                ],
-                            ],
-                        ],
+                        'news_settings' => [
+                            'type' => 'object'
+                        ]
                     ],
                 ],
             ],

@@ -19,6 +19,14 @@
         "imageId": {
             "type": "number",
             "default": 0
+        },
+        "selectionMode": {
+            "type": "string",
+            "default": "dynamic"
+        },
+        "selectedCategories": {
+            "type": "array",
+            "default": []
         }
     },
     "supports": {

@@ -15,6 +15,62 @@
         "description": {
             "type": "string",
             "default": "تعرف على أبرز إنجازات ومؤشرات قطاع الطاقة المتجددة حول العالم، في لمحة سريعة."
+        },
+        "viewMode": {
+            "type": "string",
+            "default": "static"
+        },
+        "stats": {
+            "type": "array",
+            "default": [{
+                    "title": "إجمالي إنتاج الطاقة الشمسية",
+                    "value": "120+ جيجاوات",
+                    "desc": "تم إنتاجها عالميًا في آخر 12 شهر",
+                    "icon": "wind-power.png",
+                    "iconType": "system",
+                    "iconImage": ""
+                },
+                {
+                    "title": "إجمالي إنتاج طاقة الرياح",
+                    "value": "95+ جيجاوات",
+                    "desc": "عبر مزارع الرياح البرية والبحرية",
+                    "icon": "energy.png",
+                    "iconType": "system",
+                    "iconImage": ""
+                },
+                {
+                    "title": "انخفاض انبعاثات الكربون",
+                    "value": "2.5+ مليون طن",
+                    "desc": "تم تجنبها باستخدام مصادر الطاقة النظيفة",
+                    "icon": "cardano-(ada).svg",
+                    "iconType": "system",
+                    "iconImage": ""
+                },
+                {
+                    "title": "عدد المشاريع الجديدة",
+                    "value": "3,200+ مشروع",
+                    "desc": "في مجال الطاقة المتجددة خلال العام الحالي",
+                    "icon": "note-favorite.svg",
+                    "iconType": "system",
+                    "iconImage": ""
+                },
+                {
+                    "title": "الاستثمارات العالمية",
+                    "value": "500+ مليار دولار",
+                    "desc": "تم ضخها في قطاع الطاقة النظيفة",
+                    "icon": "status-up.svg",
+                    "iconType": "system",
+                    "iconImage": ""
+                },
+                {
+                    "title": "عدد الدول المشاركة",
+                    "value": "180+ دولة",
+                    "desc": "تتبنى سياسات للطاقة المستدامة",
+                    "icon": "global.svg",
+                    "iconType": "system",
+                    "iconImage": ""
+                }
+            ]
         }
     },
     "supports": {

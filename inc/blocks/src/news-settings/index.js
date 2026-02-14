@@ -192,7 +192,6 @@ const Edit = ({ attributes, setAttributes }) => {
 };
 
 const registerNewsBlock = () => {
-    // Hardcoded to match social-media-settings pattern
     const blockName = 'greenergy/news-settings'; 
     console.log('Greenergy Admin: Attempting to register block:', blockName);
 

@@ -1,0 +1,58 @@
+{
+    "apiVersion": 3,
+    "name": "greenergy/footer-widgets",
+    "title": "Footer Widgets",
+    "category": "greenergy-blocks",
+    "icon": "layout",
+    "description": "Main footer area containing widget columns and logo.",
+    "keywords": ["footer", "widgets", "columns"],
+    "version": "1.0.0",
+    "textdomain": "greenergy",
+    "render": "file:./render.php",
+    "supports": {
+        "html": false,
+        "anchor": true
+    },
+    "attributes": {
+        "logoUrl": {
+            "type": "string",
+            "default": ""
+        },
+        "description": {
+            "type": "string",
+            "default": ""
+        },
+        "col1Title": {
+            "type": "string",
+            "default": ""
+        },
+        "col1Links": {
+            "type": "array",
+            "default": []
+        },
+        "col2Title": {
+            "type": "string",
+            "default": ""
+        },
+        "col2Links": {
+            "type": "array",
+            "default": []
+        },
+        "col3Title": {
+            "type": "string",
+            "default": ""
+        },
+        "col3Links": {
+            "type": "array",
+            "default": []
+        },
+        "col4Title": {
+            "type": "string",
+            "default": ""
+        },
+        "col4Links": {
+            "type": "array",
+            "default": []
+        }
+    }
+}

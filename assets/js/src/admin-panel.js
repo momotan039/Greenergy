@@ -5,7 +5,6 @@ const { registerBlockType } = wp.blocks;
 const apiFetch = wp.apiFetch;
 
 // Import our custom blocks code
-import '../../../inc/blocks/src/social-media-settings';
 import '../../../inc/blocks/src/news-settings';
 
 const GreenergyAdmin = () => {
@@ -52,16 +51,8 @@ const GreenergyAdmin = () => {
             } catch (e) {
                 console.error('Greenergy Admin: Error parsing saved blocks:', e);
             }
-        } else {
-            console.log('Greenergy Admin: No saved blocks or empty. Attempting default init.');
-            const socialBlockName = 'greenergy/social-media-settings';
-            const newsBlockName = 'greenergy/news-settings';
-            
             const initialBlocks = [];
             
-            if (wp.blocks.getBlockType(socialBlockName)) {
-                initialBlocks.push(wp.blocks.createBlock(socialBlockName));
-            }
             if (wp.blocks.getBlockType(newsBlockName)) {
                 initialBlocks.push(wp.blocks.createBlock(newsBlockName));
             }
@@ -90,21 +81,16 @@ const GreenergyAdmin = () => {
         // Serialize blocks for editor state restoration
         const serializedBlocks = wp.blocks.serialize(blocks);
 
-        // Extracting Social Media Data
-        let socialData = [];
+        // Extraction Logic
         let newsSettingsData = {};
 
         blocks.forEach(block => {
-            if (block.name === 'greenergy/social-media-settings' && block.attributes && block.attributes.items) {
-                socialData = [...socialData, ...block.attributes.items];
-            }
             if (block.name === 'greenergy/news-settings') {
                 newsSettingsData = block.attributes;
             }
         });
 
         const settingsData = {
-            social_media: socialData,
             news_settings: newsSettingsData
         };
 

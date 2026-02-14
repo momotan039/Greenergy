@@ -94,13 +94,5 @@ class Greenergy_Blocks_Loader
     {
         // Enqueue Editor Script (handle was registered in register_blocks)
         wp_enqueue_script('greenergy-blocks-editor');
-
-        // Enqueue Editor Styles (Tailwind)
-        wp_enqueue_style(
-            'greenergy-blocks-editor-style',
-            GREENERGY_ASSETS_URI . '/css/dist/editor.min.css',
-            [],
-            GREENERGY_VERSION
-        );
     }
 }

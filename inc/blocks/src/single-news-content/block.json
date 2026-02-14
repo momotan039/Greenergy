@@ -1,0 +1,15 @@
+{
+    "apiVersion": 3,
+    "name": "greenergy/single-news-content",
+    "title": "Single News Content",
+    "category": "greenergy-blocks",
+    "icon": "text",
+    "description": "Displays the full content of a news post.",
+    "version": "1.0.0",
+    "textdomain": "greenergy",
+    "render": "file:./render.php",
+    "supports": {
+        "html": false,
+        "anchor": true
+    }
+}

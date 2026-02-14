@@ -168,7 +168,7 @@ $wrapper_attributes = get_block_wrapper_attributes([
     <?php endif; ?>
     <!-- Pagination for page -->
     <div class="greenergy-block-pagination"
-        data-query-args="<?php echo esc_attr(json_encode($args)); ?>"
+        data-query-args="<?php echo esc_attr(json_encode(array_merge($args, ['posts_per_page' => $ppp]))); ?>"
         data-block-id="<?php echo esc_attr($attributes['blockId'] ?? uniqid('news-list-')); ?>">
         <?php
         $current_page = max(1, get_query_var('paged'));

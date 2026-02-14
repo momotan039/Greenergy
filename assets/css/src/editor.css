@@ -55,4 +55,10 @@
     .editor-styles-wrapper p {
         @apply text-base leading-relaxed mb-4;
     }
+
+    /* Disable links in editor for specific patterns */
+    .block-editor-block-list__block a {
+        pointer-events: none !important;
+        cursor: default !important;
+    }
 }

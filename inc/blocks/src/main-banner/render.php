@@ -6,72 +6,91 @@
  * @package Greenergy
  */
 
-$attributes = isset($attributes) ? $attributes : [];
-$title      = isset($attributes['title']) ? $attributes['title'] : 'اكتشف مستقبل الطاقة المتجددة';
-$subtitle   = isset($attributes['subtitle']) ? $attributes['subtitle'] : 'الاخبار';
-$bg_image   = isset($attributes['backgroundImage']) ? $attributes['backgroundImage'] : 'https://images.unsplash.com/photo-1506744038136-46273834b3fb';
+$attributes = wp_parse_args($attributes ?? [], [
+    'title'             => 'اكتشف مستقبل الطاقة المتجددة',
+    'subtitle'          => 'الاخبار',
+    'backgroundImage'   => 'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
+    'backgroundImageId' => 0,
+    'bannerType'        => 'image',
+    'videoUrl'          => '',
+    'showTitle'         => true,
+    'showSubtitle'      => true,
+]);
 
-// Custom Logic for Single News or News Archive
-if (is_singular('news') || is_post_type_archive('news') || is_page('news')) {
-    // Get Global Theme Settings
-    $news_settings = get_option('greenergy_news_settings', []);
+$title         = $attributes['title'];
+$subtitle      = $attributes['subtitle'];
+$banner_type   = $attributes['bannerType'];
+$show_title    = $attributes['showTitle'];
+$show_subtitle = $attributes['showSubtitle'];
+$bg_image      = $attributes['backgroundImage'];
+$bg_video      = $attributes['videoUrl'];
 
-    // Map settings to variables with defaults
-    $banner_type     = isset($news_settings['bannerType']) ? $news_settings['bannerType'] : 'image';
-    $global_image    = isset($news_settings['bannerImage']) ? $news_settings['bannerImage'] : '';
-    $global_video    = isset($news_settings['bannerVideo']) ? $news_settings['bannerVideo'] : '';
-    $global_title    = isset($news_settings['bannerTitle']) ? $news_settings['bannerTitle'] : '';
-    $global_subtitle = isset($news_settings['bannerSubtitle']) ? $news_settings['bannerSubtitle'] : 'الأخبار';
+// Check for background image from ID
+if (!empty($attributes['backgroundImageId'])) {
+    $img_url = wp_get_attachment_image_url($attributes['backgroundImageId'], 'full');
+    if ($img_url) {
+        $bg_image = $img_url;
+    }
+}
 
-    // Set Subtitle
-    $subtitle = !empty($global_subtitle) ? $global_subtitle : $subtitle;
-
-    $title = $global_title;
-
-    // Visibility Settings
-    $show_title    = isset($news_settings['showBannerTitle']) ? $news_settings['showBannerTitle'] : true;
-    $show_subtitle = isset($news_settings['showBannerSubtitle']) ? $news_settings['showBannerSubtitle'] : true;
-
-    // Set Background based on Banner Type
-    if ($banner_type === 'video' && !empty($global_video)) {
-        $bg_video = $global_video;
-        $bg_image = ''; // Reset image if video is selected
-    } elseif (!empty($global_image)) {
-        $bg_image = $global_image;
-    } else {
-        // Fallback to Featured Image if available and no global image set
-        if (has_post_thumbnail()) {
-            $bg_image = get_the_post_thumbnail_url(get_the_ID(), 'full');
+// Dynamic Logic for Archives/Single/Special Pages
+if (is_singular() || is_archive() || is_search()) {
+    // If used on a page and title is default, try to get current title
+    if ($title === 'اكتشف مستقبل الطاقة المتجددة') {
+        if (is_singular()) {
+            $title = get_the_title();
+        } elseif (is_archive()) {
+            $title = get_the_archive_title();
+        } elseif (is_search()) {
+            $title = sprintf(__('نتائج البحث عن: %s', 'greenergy'), get_search_query());
         }
     }
-} else {
-    // Default visibility for other pages (or if we were using attributes directly)
-    $show_title = true;
-    $show_subtitle = true;
+
+    // Fallback to post thumbnail if no custom image set
+    if ($banner_type === 'image' && empty($bg_image) && has_post_thumbnail()) {
+        $bg_image = get_the_post_thumbnail_url(get_the_ID(), 'full');
+    }
+}
+
+// Global Theme Settings override (optional, keep for backward compatibility if needed)
+$news_settings = get_option('greenergy_news_settings', []);
+if (!empty($news_settings) && (is_singular('news') || is_post_type_archive('news') || is_page('news'))) {
+    // Only override if specified in global settings
+    if (!empty($news_settings['bannerTitle'])) $title = $news_settings['bannerTitle'];
+    if (!empty($news_settings['bannerSubtitle'])) $subtitle = $news_settings['bannerSubtitle'];
+    if (!empty($news_settings['bannerImage'])) $bg_image = $news_settings['bannerImage'];
+    if (isset($news_settings['bannerType']) && $news_settings['bannerType'] === 'video') {
+        $banner_type = 'video';
+        $bg_video = $news_settings['bannerVideo'] ?? '';
+    }
 }
 
 $wrapper_style = '';
-if (!empty($bg_image)) {
+if ($banner_type === 'image' && !empty($bg_image)) {
     $wrapper_style = 'background-image: url(' . esc_url($bg_image) . ');';
 } else {
-    // If video, ensuring relative positioning is crucial
+    // For video or if no image, ensure relative positioning
     $wrapper_style = 'position: relative; overflow: hidden;';
 }
 
 $wrapper_attributes = get_block_wrapper_attributes([
-    'class' => 'bg-cover bg-center rounded-3xl inline-flex justify-between items-center relative overflow-hidden min-h-[500px] max-md:min-h-[324px]', // Added min-height to ensure visibility
+    'class' => 'bg-cover bg-center rounded-3xl inline-flex justify-between items-center relative overflow-hidden min-h-[500px] max-md:min-h-[324px]',
     'style' => $wrapper_style,
 ]);
 ?>
 <div <?php echo $wrapper_attributes; ?>>
-    <?php if (isset($bg_video) && !empty($bg_video)) : ?>
-        <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover -z-10">
+    <?php if ($banner_type === 'video' && !empty($bg_video)) : ?>
+        <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover">
             <source src="<?php echo esc_url($bg_video); ?>" type="video/mp4">
         </video>
-        <!-- Overlay for legibility if needed -->
-        <div class="absolute top-0 left-0 w-full h-full bg-black/30 -z-10"></div>
+        <!-- Overlay for legibility -->
+        <div class="absolute top-0 left-0 w-full h-full bg-black/40"></div>
+    <?php elseif ($banner_type === 'video' && !empty($bg_image)) : ?>
+        <!-- Fallback image if video is selected but URL is empty -->
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url(<?php echo esc_url($bg_image); ?>);"></div>
+        <div class="absolute inset-0 bg-black/30"></div>
     <?php endif; ?>
-    <div class="flex justify-center overflow-hidden pt-28 px-28 w-full">
+    <div class="relative z-10 flex justify-center overflow-hidden pt-28 px-4 md:px-28 w-full">
         <div class="flex-1 h-44 inline-flex flex-col justify-start items-center gap-4">
             <?php if ($show_subtitle) : ?>
                 <div class="w-64 h-8 p-2.5 bg-white/20 rounded-[44px] backdrop-blur-[2px] inline-flex justify-center items-center gap-2.5">

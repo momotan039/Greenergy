@@ -4,8 +4,7 @@
     "settings": {
         "color": {
             "custom": true,
-            "palette": [
-                {
+            "palette": [{
                     "name": "Primary",
                     "slug": "primary",
                     "color": "#10B981"
@@ -38,8 +37,7 @@
             ]
         },
         "typography": {
-            "fontFamilies": [
-                {
+            "fontFamilies": [{
                     "fontFamily": "Inter, system-ui, sans-serif",
                     "name": "Inter",
                     "slug": "inter"
@@ -50,8 +48,7 @@
                     "slug": "arabic"
                 }
             ],
-            "fontSizes": [
-                {
+            "fontSizes": [{
                     "name": "Small",
                     "slug": "small",
                     "size": "0.875rem"
@@ -92,9 +89,48 @@
                 "vh"
             ]
         },
+        "custom": {
+            "swiper": {
+                "autoplay": {
+                    "delay": 5000,
+                    "disableOnInteraction": false
+                },
+                "loop": true,
+                "navigation": {
+                    "nextEl": ".swiper-button-next",
+                    "prevEl": ".swiper-button-prev"
+                },
+                "pagination": {
+                    "el": ".swiper-pagination",
+                    "clickable": true
+                }
+            }
+        },
         "appearanceTools": true,
         "useRootPaddingAwareAlignments": true
     },
+    "templateParts": [{
+            "name": "header",
+            "title": "Header",
+            "area": "header"
+        },
+        {
+            "name": "footer",
+            "title": "Footer",
+            "area": "footer"
+        }
+    ],
+    "customTemplates": [{
+            "name": "page-news",
+            "title": "قالب الأخبار",
+            "postTypes": ["page"]
+        },
+        {
+            "name": "homepage",
+            "title": "قالب الرئيسية",
+            "postTypes": ["page"]
+        }
+    ],
     "styles": {
         "spacing": {
             "blockGap": "1.5rem"

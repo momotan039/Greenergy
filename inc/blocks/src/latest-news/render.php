@@ -11,10 +11,12 @@
  */
 
 $attributes = wp_parse_args($attributes ?? [], [
-    'badgeText'   => 'أحدث الأخبار',
-    'description' => 'كن على اطلاع دائم على آخر التطورات في عالم الطاقة المتجددة، مع لمحة سريعة عن أكثر المواضيع التي يتحدث عنها الجميع.',
-    'imageId'     => 0,
-    'imageUrl'    => '',
+    'badgeText'          => 'أحدث الأخبار',
+    'description'        => 'كن على اطلاع دائم على آخر التطورات في عالم الطاقة المتجددة، مع لمحة سريعة عن أكثر المواضيع التي يتحدث عنها الجميع.',
+    'imageId'            => 0,
+    'imageUrl'           => '',
+    'selectionMode'      => 'dynamic',
+    'selectedCategories' => [],
 ]);
 
 $bg_image_url = $attributes['imageUrl'];
@@ -30,11 +32,18 @@ $wrapper_attributes = get_block_wrapper_attributes([
 ]);
 
 // Categories for filter
-$categories = get_terms([
+$category_args = [
     'taxonomy'   => 'news_category',
     'hide_empty' => true,
-    'number'     => 5,
-]);
+    'number'     => 10,
+];
+
+if ($attributes['selectionMode'] === 'manual' && !empty($attributes['selectedCategories'])) {
+    $category_args['include'] = $attributes['selectedCategories'];
+    $category_args['orderby'] = 'include';
+}
+
+$categories = get_terms($category_args);
 
 // Initial Query
 $args = [
@@ -135,27 +144,42 @@ $query = new WP_Query($args);
 </section>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        if (typeof Swiper !== 'undefined') {
-            new Swiper('.swiper-container-latest', {
-                slidesPerView: 2,
-                spaceBetween: 16,
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-
-                },
-                breakpoints: {
-                    640: {
+    (function() {
+        const initSwiper = () => {
+            if (typeof Swiper !== 'undefined') {
+                document.querySelectorAll('.swiper-container-latest').forEach(el => {
+                    if (el.swiper) return; // already initialized
+                    new Swiper(el, {
                         slidesPerView: 2,
-                        spaceBetween: 20
-                    },
-                    1024: {
-                        slidesPerView: 4,
-                        spaceBetween: 24
-                    }
-                }
-            });
+                        spaceBetween: 16,
+                        pagination: {
+                            el: '.swiper-pagination',
+                            clickable: true,
+
+                        },
+                        breakpoints: {
+                            640: {
+                                slidesPerView: 2,
+                                spaceBetween: 20
+                            },
+                            1024: {
+                                slidesPerView: 4,
+                                spaceBetween: 24
+                            }
+                        }
+                    });
+                });
+            }
+        };
+
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            initSwiper();
+        } else {
+            document.addEventListener('DOMContentLoaded', initSwiper);
         }
-    });
+
+        // Try again after a short delay to catch dynamic updates in editor
+        setTimeout(initSwiper, 500);
+        setTimeout(initSwiper, 2000);
+    })();
 </script>

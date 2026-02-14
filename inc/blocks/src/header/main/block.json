@@ -1,0 +1,101 @@
+{
+    "apiVersion": 3,
+    "name": "greenergy/header",
+    "title": "Header (Unified)",
+    "category": "greenergy-blocks",
+    "icon": "layout",
+    "description": "Master header block controlling both Desktop and Mobile views.",
+    "keywords": ["header", "menu", "navigation", "mobile", "desktop"],
+    "version": "1.0.0",
+    "textdomain": "greenergy",
+    "render": "file:./render.php",
+    "attributes": {
+        "logoUrl": {
+            "type": "string",
+            "default": ""
+        },
+        "logoId": {
+            "type": "number",
+            "default": 0
+        },
+        "adLeft": {
+            "type": "object",
+            "default": {
+                "imageUrl": "",
+                "adLink": "#",
+                "adType": "image",
+                "adCode": ""
+            }
+        },
+        "adRight": {
+            "type": "object",
+            "default": {
+                "imageUrl": "",
+                "adLink": "#",
+                "adType": "image",
+                "adCode": ""
+            }
+        },
+        "menuId": {
+            "type": "number",
+            "default": 0
+        },
+        "homeLabel": {
+            "type": "string",
+            "default": "الرئيسية"
+        },
+        "searchLabel": {
+            "type": "string",
+            "default": "ابحث هنا..."
+        },
+        "searchPlaceholder": {
+            "type": "string",
+            "default": "بحث عن..."
+        },
+        "followUsText": {
+            "type": "string",
+            "default": "تابعنا"
+        },
+        "langLabel": {
+            "type": "string",
+            "default": "العربية - AR"
+        },
+        "navLinks": {
+            "type": "array",
+            "default": []
+        },
+        "socialLinks": {
+            "type": "array",
+            "default": [{
+                    "platform": "Facebook",
+                    "url": "#",
+                    "icon": "facebook.svg",
+                    "iconType": "system"
+                },
+                {
+                    "platform": "Youtube",
+                    "url": "#",
+                    "icon": "youtube.svg",
+                    "iconType": "system"
+                },
+                {
+                    "platform": "LinkedIn",
+                    "url": "#",
+                    "icon": "ic16-linkedin.svg",
+                    "iconType": "system"
+                },
+                {
+                    "platform": "Twitter",
+                    "url": "#",
+                    "icon": "twitter_icon.svg",
+                    "iconType": "system"
+                }
+            ]
+        }
+    },
+    "supports": {
+        "html": false,
+        "anchor": true,
+        "align": ["full", "wide"]
+    }
+}

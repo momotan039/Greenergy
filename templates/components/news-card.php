@@ -39,7 +39,7 @@ if (empty($item)) {
                 <?php echo esc_html($item['title']); ?>
             </h3>
 
-            <p class="group-hover:text-white text-right text-neutral-500 text-sm font-normal line-clamp-2">
+            <p class="group-hover:text-white text-right text-neutral-500 text-sm font-normal line-clamp-1">
                 <?php echo esc_html($item['excerpt']); ?>
             </p>
         </div>

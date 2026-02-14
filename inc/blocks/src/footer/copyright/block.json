@@ -1,0 +1,62 @@
+{
+    "apiVersion": 3,
+    "name": "greenergy/footer-copyright",
+    "title": "Footer Copyright",
+    "category": "greenergy-blocks",
+    "icon": "text",
+    "description": "Footer bottom bar with copyright and social links.",
+    "keywords": ["footer", "copyright", "social"],
+    "version": "1.0.0",
+    "textdomain": "greenergy",
+    "render": "file:./render.php",
+    "supports": {
+        "html": false,
+        "anchor": true
+    },
+    "attributes": {
+        "copyrightText": {
+            "type": "string",
+            "default": ""
+        },
+        "followUsText": {
+            "type": "string",
+            "default": ""
+        },
+        "socialLinks": {
+            "type": "array",
+            "default": [{
+                    "platform": "Facebook",
+                    "url": "#",
+                    "icon": "facebook.svg",
+                    "iconType": "system"
+                },
+                {
+                    "platform": "Youtube",
+                    "url": "#",
+                    "icon": "youtube.svg",
+                    "iconType": "system"
+                },
+                {
+                    "platform": "LinkedIn",
+                    "url": "#",
+                    "icon": "ic16-linkedin.svg",
+                    "iconType": "system"
+                },
+                {
+                    "platform": "Twitter",
+                    "url": "#",
+                    "icon": "twitter_icon.svg",
+                    "iconType": "system"
+                }
+            ]
+        },
+        "iconSize": {
+            "type": "number",
+            "default": 40
+        },
+        "iconGap": {
+            "type": "number",
+            "default": 20
+        }
+    }
+}

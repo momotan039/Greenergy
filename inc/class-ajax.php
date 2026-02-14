@@ -81,6 +81,11 @@ class Greenergy_Ajax
         $initial_offset = isset($args['offset']) ? (int) $args['offset'] : 0;
         $ppp = isset($args['posts_per_page']) ? (int) $args['posts_per_page'] : get_option('posts_per_page');
 
+        // Handle posts_per_page override from block attributes specifically for pagination consistency
+        if (isset($args['posts_per_page'])) {
+            $ppp = (int) $args['posts_per_page'];
+        }
+
         // Calculate new offset based on page
         $args['offset'] = $initial_offset + (($page - 1) * $ppp);
 
