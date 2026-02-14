@@ -158,7 +158,7 @@ if (! $query->have_posts()) {
                 <div class="flex-1 self-stretch pl-3 max-sm:pr-3 py-3 inline-flex flex-col justify-start items-end gap-1.5">
                     <div class="self-stretch flex flex-col justify-start items-end gap-4 max-sm:gap-2">
                         <div class="self-stretch inline-flex justify-between max-sm:flex-col">
-                            <p class="group-hover:text-white lg:w-[80%] text-right justify-start text-green-700 text-lg max-sm:line-clamp-2 max-sm:text-base  leading-5 hover:text-green-700 transition-colors">
+                            <p class="group-hover:text-white lg:w-[80%] text-right justify-start text-green-700 text-lg line-clamp-1 md:pb-1 max-sm:text-base  leading-5 hover:text-green-700 transition-colors">
                                 <?php the_title(); ?>
                             </p>
                             <time datetime="<?php echo get_the_date('Y-m-d'); ?>" class="group-hover:text-white text-center max-sm:text-left justify-start text-neutral-800 text-xs font-normal leading-5">
