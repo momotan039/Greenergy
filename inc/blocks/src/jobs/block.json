@@ -23,6 +23,22 @@
         "imageId": {
             "type": "number",
             "default": 0
+        },
+        "selectionMode": {
+            "type": "string",
+            "default": "dynamic"
+        },
+        "selectedPosts": {
+            "type": "array",
+            "default": []
+        },
+        "viewAllUrl": {
+            "type": "string",
+            "default": ""
+        },
+        "goldenAllUrl": {
+            "type": "string",
+            "default": ""
         }
     },
     "supports": {

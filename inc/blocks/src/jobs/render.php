@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Jobs Block Template.
  *
@@ -7,46 +8,68 @@
  * @since 1.0.0
  */
 
-$attributes = wp_parse_args( $attributes ?? [], [
-    'badgeText'   => 'الوظائف',
-    'description' => 'كن على اطلاع دائم على آخر التطورات في عالم الطاقة المتجددة، مع لمحة سريعة عن أكثر المواضيع التي يتحدث عنها الجميع.',
-    'buttonText'  => 'عرض جميع الوظائف',
-    'imageId'     => 0,
-    'imageUrl'    => '',
-] );
+$attributes = wp_parse_args($attributes ?? [], [
+    'badgeText'     => 'الوظائف',
+    'description'   => 'كن على اطلاع دائم على آخر التطورات في عالم الطاقة المتجددة، مع لمحة سريعة عن أكثر المواضيع التي يتحدث عنها الجميع.',
+    'buttonText'    => 'عرض جميع الوظائف',
+    'imageId'       => 0,
+    'imageUrl'      => '',
+    'selectionMode' => 'dynamic',
+    'selectedPosts' => [],
+    'viewAllUrl'    => '',
+    'goldenAllUrl'  => '',
+]);
 
 // Background image
 $bg_image_url = $attributes['imageUrl'];
-if ( !empty($attributes['imageId']) ) {
-    $bg_image_url = wp_get_attachment_image_url( $attributes['imageId'], 'full' ) ?: $bg_image_url;
+if (!empty($attributes['imageId'])) {
+    $bg_image_url = wp_get_attachment_image_url($attributes['imageId'], 'full') ?: $bg_image_url;
 }
 
 // Fetch jobs
-$query = new WP_Query([
+$query_args = [
     'post_type'      => 'jobs',
     'posts_per_page' => 10,
     'post_status'    => 'publish',
-]);
+];
+
+if ($attributes['selectionMode'] === 'manual' && !empty($attributes['selectedPosts'])) {
+    $query_args['post__in'] = $attributes['selectedPosts'];
+    $query_args['orderby']  = 'post__in';
+}
+
+$query = new WP_Query($query_args);
 
 $all_jobs = [];
-if ( $query->have_posts() ) {
-    while ( $query->have_posts() ) {
+if ($query->have_posts()) {
+    while ($query->have_posts()) {
         $query->the_post();
+        $type_val = get_post_meta(get_the_ID(), '_job_type', true) ?: (function_exists('get_field') ? get_field('job_type_acf', get_the_ID()) : 'full-time');
+        $type_map = [
+            'full-time' => 'دوام كامل',
+            'part-time' => 'دوام جزئي',
+            'contract'  => 'عقد',
+            'remote'    => 'عمل عن بعد',
+        ];
+        $type = isset($type_map[$type_val]) ? $type_map[$type_val] : ($type_val ?: 'دوام كامل');
+
         $all_jobs[] = [
             'title'    => get_the_title(),
-            'company'  => get_post_meta( get_the_ID(), 'company', true ) ?: 'Greenergy Corperation',
-            'location' => get_post_meta( get_the_ID(), 'location', true ) ?: 'الرياض',
-            'users'    => get_post_meta( get_the_ID(), 'users', true ) ?: '0',
-            'date'     => get_the_date('d/m'),
-            'tags'     => get_the_terms( get_the_ID(), 'job_category' ) ? wp_list_pluck( get_the_terms( get_the_ID(), 'job_category' ), 'name' ) : ['دوام كامل'],
-            'image'    => get_the_post_thumbnail_url( get_the_ID(), 'thumbnail' ) ?: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=100&h=100&auto=format&fit=crop',
+            'company'  => get_post_meta(get_the_ID(), '_job_company', true) ?: 'Greenergy Corperation',
+            'location' => get_post_meta(get_the_ID(), '_job_location', true) ?: 'الرياض',
+            'users'    => class_exists('Greenergy_Post_Views') ? Greenergy_Post_Views::get_views(get_the_ID()) : '0',
+            'type'     => $type,
+            'date'     => get_the_date('Y-m-d'),
+            'tags'     => get_the_terms(get_the_ID(), 'category') ? wp_list_pluck(get_the_terms(get_the_ID(), 'category'), 'name') : [],
+            'image'    => get_the_post_thumbnail_url(get_the_ID(), 'thumbnail') ?: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=100&h=100&auto=format&fit=crop',
+            'link'     => get_permalink(),
         ];
     }
     wp_reset_postdata();
 }
 
 // Fallback jobs
-if ( empty($all_jobs) ) {
+if (empty($all_jobs)) {
     $all_jobs = array_fill(0, 8, [
         'title'    => 'مطور مشاريع رياح',
         'company'  => 'مجموعة الطاقة النظيفة للابتكار',
@@ -70,48 +93,49 @@ $wrapper_attributes = get_block_wrapper_attributes([
 ]);
 
 // Reusable job card function
-function render_job_card($job, $size = 'main', $delay = 0) {
+function render_job_card($job, $size = 'main', $delay = 0)
+{
     $sizes = [
-    'main' => [
-        'card_padding' => 'p-4 md:p-8',
-        'logo_size'    => 'w-[57px] h-[57px] md:w-[105px] md:h-[105px]',
-        'title_size'   => 'text-sm md:text-base',
-        'company_size' => 'text-[10px] md:text-sm',
-        'info_size'    => 'text-[9px] md:text-sm',
-        'icon_size'    => 'text-[10px] md:text-xs',
-        'tag_padding'  => 'px-2 py-0.5 md:px-4 md:py-1.5',
-        'tag_size'     => 'text-[8px] md:text-xs',
-        'btn_padding'  => 'py-1.5 md:py-3 px-4 md:px-10',
-        'btn_size'     => 'text-[10px] md:text-base',
-        'btn_rounded'  => 'rounded-xl md:rounded-2xl',
-        'gap'          => 'gap-4 md:gap-8',
-    ],
-    'sidebar' => [
-        // تم توحيد الجزء الأول مع main وتخصيص md: للـ sidebar
-        'card_padding' => 'p-4 md:p-5', 
-        'logo_size'    => 'w-[57px] h-[57px] md:w-16 md:h-16',
-        'title_size'   => 'text-sm md:text-sm', // لاحظ text-sm من الماين
-        'company_size' => 'text-[10px] md:text-[10px]',
-        'info_size'    => 'text-[9px] md:text-[9px]',
-        'icon_size'    => 'text-[10px] md:text-[9px]',
-        'tag_padding'  => 'px-2 py-0.5 md:px-1.5 md:py-0.5',
-        'tag_size'     => 'text-[8px] md:text-[7px]',
-        'btn_padding'  => 'py-1.5 px-4 md:px-3 md:py-1.5',
-        'btn_size'     => 'text-[10px] md:text-[10px]',
-        'btn_rounded'  => 'rounded-xl md:rounded-lg',
-        'gap'          => 'gap-4 md:gap-4',
-    ],
-];
-    
+        'main' => [
+            'card_padding' => 'p-4 md:p-8',
+            'logo_size'    => 'w-[57px] h-[57px] md:w-[105px] md:h-[105px]',
+            'title_size'   => 'text-sm md:text-base',
+            'company_size' => 'text-[10px] md:text-sm',
+            'info_size'    => 'text-[9px] md:text-sm gap-8 max-sm:gap-2',
+            'icon_size'    => 'text-[10px] md:text-xs',
+            'tag_padding'  => 'px-2 py-0.5 md:px-4 md:py-1.5',
+            'tag_size'     => 'text-[8px] md:text-xs',
+            'btn_padding'  => 'py-1.5 md:py-3 px-4 md:px-10',
+            'btn_size'     => 'text-[10px] md:text-base',
+            'btn_rounded'  => 'rounded-xl md:rounded-2xl',
+            'gap'          => 'gap-4 md:gap-8',
+        ],
+        'sidebar' => [
+            // تم توحيد الجزء الأول مع main وتخصيص md: للـ sidebar
+            'card_padding' => 'p-4 md:p-5',
+            'logo_size'    => 'w-[57px] h-[57px] md:w-16 md:h-16',
+            'title_size'   => 'text-sm md:text-sm', // لاحظ text-sm من الماين
+            'company_size' => 'text-[10px] md:text-[10px]',
+            'info_size'    => 'text-[9px] md:text-[9px] gap-2',
+            'icon_size'    => 'text-[10px] md:text-[9px]',
+            'tag_padding'  => 'px-2 py-0.5 md:px-1.5 md:py-0.5',
+            'tag_size'     => 'text-[8px] md:text-[7px]',
+            'btn_padding'  => 'py-1.5 px-4 md:px-3 md:py-1.5',
+            'btn_size'     => 'text-[10px] md:text-[10px]',
+            'btn_rounded'  => 'rounded-xl md:rounded-lg',
+            'gap'          => 'gap-4 md:gap-4',
+        ],
+    ];
+
     $s = $sizes[$size];
-    ?>
-    <div class="bg-white rounded-3xl <?php echo $s['card_padding']; ?> shadow-lg outline outline-1 outline-gray-200 hover:-translate-y-1 transition-all duration-500 flex items-center <?php echo $s['gap']; ?> border border-transparent hover:border-[#D9A520]/20 group" 
-         data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
-        
+?>
+    <div class="bg-white rounded-3xl relative <?php echo $s['card_padding']; ?> shadow-lg outline outline-1 outline-gray-200 hover:-translate-y-1 transition-all duration-500 flex items-center <?php echo $s['gap']; ?> border border-transparent hover:border-[#D9A520]/20 group"
+        data-aos="fade-up" data-aos-delay="<?php echo esc_attr($delay); ?>">
+        <a href="<?php echo esc_url($job['link']); ?>" class="absolute top-0 left-0 w-full h-full z-10"></a>
         <div class="<?php echo $s['logo_size']; ?>   flex-shrink-0 bg-white shadow-sm overflow-hidden group-hover:scale-110 transition-transform duration-500 rounded-xl">
             <img src="<?php echo esc_url($job['image']); ?>" class="w-full h-full object-cover" alt="<?php echo esc_attr($job['company']); ?>">
         </div>
-        
+
         <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between <?php echo $size === 'main' ? 'mb-1' : 'mb-0.5'; ?>">
                 <h3 class="font-black <?php echo $s['title_size']; ?> text-gray-900 truncate">
@@ -122,30 +146,27 @@ function render_job_card($job, $size = 'main', $delay = 0) {
                     <i class="far fa-clock"></i>
                 </div>
             </div>
-            
+
             <p class="text-gray-500 <?php echo $s['company_size']; ?> <?php echo $size === 'main' ? 'mb-4 md:mb-6' : 'mb-2'; ?> truncate">
                 <?php echo esc_html($job['company']); ?>
             </p>
-            
+
             <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center gap-2 <?php echo $s['info_size']; ?> max-md:flex-wrap">
+                <div class="flex items-center <?php echo $s['info_size']; ?> flex-wrap">
                     <span class="flex items-center gap-0.5 whitespace-nowrap">
                         <i class="fas fa-map-marker-alt"></i> <?php echo esc_html($job['location']); ?>
                     </span>
                     <span class="flex items-center gap-0.5 whitespace-nowrap">
                         <i class="fas fa-users"></i> <?php echo esc_html($job['users']); ?>
                     </span>
-                    <?php if ($size === 'main') : ?>
-                        <div class="flex gap-1 md:gap-2">
-                    <?php endif; ?>
+                    <span class="flex items-center gap-0.5 whitespace-nowrap">
+                        <i class="fas fa-briefcase"></i> <?php echo esc_html($job['type']); ?>
+                    </span>
                     <?php foreach ($job['tags'] as $tag) : ?>
-                        <span class="rounded-[123px] outline outline-1 outline-offset-[-1px] outline-zinc-200 bg-[#F9FAFB] <?php echo $s['tag_padding']; ?> <?php echo $s['tag_size']; ?> text-gray-500 border border-gray-100 whitespace-nowrap font-black">
-                            <?php echo esc_html($tag); ?>
+                        <span class="flex items-center gap-0.5 whitespace-nowrap">
+                            <i class="fas fa-tag"></i> <?php echo esc_html($tag); ?>
                         </span>
                     <?php endforeach; ?>
-                    <?php if ($size === 'main') : ?>
-                        </div>
-                    <?php endif; ?>
                 </div>
                 <button class="bg-[#D9A520] text-white <?php echo $s['btn_padding']; ?> <?php echo $s['btn_rounded']; ?> <?php echo $s['btn_size']; ?> hover:bg-[#B78B17] hover:scale-105 transition-all flex-shrink-0 shadow-md <?php echo $size === 'main' ? 'mr-auto' : ''; ?>">
                     <span>تقدم الآن</span>
@@ -154,23 +175,25 @@ function render_job_card($job, $size = 'main', $delay = 0) {
             </div>
         </div>
     </div>
-    <?php
+<?php
 }
 
 // Golden card function
-function render_golden_card($jobs) {
+function render_golden_card($jobs, $all_url = '')
+{
     $all_golden = array_merge($jobs, $jobs); // Duplicate for seamless scroll
-    ?>
+    $all_url = !empty($all_url) ? $all_url : get_post_type_archive_link('jobs');
+?>
     <div class="rounded-3xl p-6 shadow-lg relative overflow-hidden group h-[320px] md:h-[380px]">
         <div class="absolute w-full h-full bg-gradient-to-l from-yellow-50/25 via-yellow-500/50 to-amber-50/25"></div>
         <div class="absolute inset-0 z-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        
+
         <div class="relative z-10 flex flex-col items-center justify-center h-full text-center">
             <h3 class="text-2xl md:text-3xl font-black text-black mb-2 drop-shadow-sm px-6 pb-2 bg-gradient-to-l from-yellow-500/80 to-amber-300/80 rounded-3xl">
                 وظيفة ذهبية
             </h3>
             <p class="text-gray-700 text-sm md:text-base mb-6">اكتشف احدث الوضائف المميزة</p>
-            
+
             <div class="scroll-mask w-full h-full absolute">
                 <div class="scroll-container px-2">
                     <?php foreach ($all_golden as $job) : ?>
@@ -193,45 +216,56 @@ function render_golden_card($jobs) {
                     <?php endforeach; ?>
                 </div>
             </div>
-            
-            <button class="bg-gradient-to-br from-amber-400 to-amber-400 text-white py-3 md:py-4 px-10 rounded-2xl shadow-xl hover:shadow-2xl hover:shadow-amber-500/30 transition-all transform hover:scale-110 flex items-center gap-3 text-sm md:text-base group-hover:from-amber-500 group-hover:to-amber-500">
+
+            <a href="<?php echo esc_url($all_url); ?>" class="bg-gradient-to-br from-amber-400 to-amber-400 text-white py-3 md:py-4 px-10 rounded-2xl shadow-xl hover:shadow-2xl hover:shadow-amber-500/30 transition-all transform hover:scale-110 flex items-center gap-3 text-sm md:text-base group-hover:from-amber-500 group-hover:to-amber-500">
                 <span>اكتشف الكل</span>
                 <i class="fas fa-arrow-left text-xs md:text-sm group-hover:-translate-x-1 transition-transform"></i>
-            </button>
+            </a>
         </div>
     </div>
-    <?php
+<?php
 }
 ?>
 
 <style>
-.scroll-mask {
-    filter: blur(3px);
-    mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
-    -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
-    overflow: hidden;
-}
-.scroll-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    animation: scroll-vertical 12s linear infinite;
-}
-.scroll-container:hover { animation-play-state: paused; }
-@keyframes scroll-vertical {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-50%); }
-}
-.glass-job-card {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 1.25rem;
-    padding: 0.75rem;
-    transition: all 0.3s;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-}
+    .scroll-mask {
+        filter: blur(3px);
+        mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+        -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+        overflow: hidden;
+    }
+
+    .scroll-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        animation: scroll-vertical 12s linear infinite;
+    }
+
+    .scroll-container:hover {
+        animation-play-state: paused;
+    }
+
+    @keyframes scroll-vertical {
+        0% {
+            transform: translateY(0);
+        }
+
+        100% {
+            transform: translateY(-50%);
+        }
+    }
+
+    .glass-job-card {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 1.25rem;
+        padding: 0.75rem;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
 </style>
 
 <section <?php echo $wrapper_attributes; ?>>
@@ -240,7 +274,7 @@ function render_golden_card($jobs) {
             <img src="<?php echo esc_url($bg_image_url); ?>" alt="" class="w-full h-full object-cover">
         </div>
     <?php endif; ?>
-    
+
     <div class="max-w-7xl mx-auto relative z-10">
         <!-- Header -->
         <div class="text-center mb-8 md:mb-12" data-aos="fade-down" data-aos-duration="1000">
@@ -254,22 +288,22 @@ function render_golden_card($jobs) {
 
         <!-- Main Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
-            
+
             <!-- Sidebar -->
             <div class="lg:col-span-4 flex flex-col gap-4 md:gap-6 order-2 lg:order-2" data-aos="fade-left" data-aos-delay="200">
-                <?php 
+                <?php
                 $delay = 400;
                 foreach ($jobs_sections['sidebar'] as $job) {
                     render_job_card($job, 'sidebar', $delay);
                     $delay += 100;
                 }
-                render_golden_card($jobs_sections['golden']);
+                render_golden_card($jobs_sections['golden'], $attributes['goldenAllUrl']);
                 ?>
             </div>
 
             <!-- Main Content -->
             <div class="lg:col-span-8 flex flex-col gap-4 md:gap-5 order-1 lg:order-1" data-aos="fade-right" data-aos-delay="200">
-                <?php 
+                <?php
                 $delay = 400;
                 foreach ($jobs_sections['main'] as $job) {
                     render_job_card($job, 'main', $delay);
@@ -281,7 +315,8 @@ function render_golden_card($jobs) {
 
         <!-- Footer Button -->
         <div class="text-center mt-12 pb-12">
-            <a href="#" class="inline-flex items-center gap-4 bg-white border border-gray-200 text-gray-800 px-8 md:px-10 py-3 md:py-4 rounded-2xl font-black hover:shadow-xl hover:text-green-600 transition-all hover:border-[#D9A520]/40 group text-sm md:text-base">
+            <?php $view_all_url = !empty($attributes['viewAllUrl']) ? $attributes['viewAllUrl'] : get_post_type_archive_link('jobs'); ?>
+            <a href="<?php echo esc_url($view_all_url); ?>" class="inline-flex items-center gap-4 bg-white border border-gray-200 text-gray-800 px-8 md:px-10 py-3 md:py-4 rounded-2xl font-black hover:shadow-xl hover:text-green-600 transition-all hover:border-[#D9A520]/40 group text-sm md:text-base">
                 <span><?php echo esc_html($attributes['buttonText']); ?></span>
                 <i class="fas fa-arrow-left text-xs md:text-sm group-hover:translate-x-[-4px] transition-transform"></i>
             </a>

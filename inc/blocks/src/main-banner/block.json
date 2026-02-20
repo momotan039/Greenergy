@@ -8,6 +8,10 @@
     "editorScript": "greenergy-blocks-editor",
     "description": "A large banner with a background image, title, and subtitle.",
     "attributes": {
+        "overlayOpacity": {
+            "type": "number",
+            "default": 40
+        },
         "title": {
             "type": "string",
             "default": "اكتشف مستقبل الطاقة المتجددة"
@@ -39,6 +43,56 @@
         "showSubtitle": {
             "type": "boolean",
             "default": true
+        },
+        "isJobsPage": {
+            "type": "boolean",
+            "default": false
+        },
+        "showDesc": {
+            "type": "boolean",
+            "default": false
+        },
+        "desc": {
+            "type": "string",
+            "default": ""
+        },
+        "showStats": {
+            "type": "boolean",
+            "default": false
+        },
+        "stats": {
+            "type": "array",
+            "default": [{
+                    "value": "250",
+                    "label": "وظيفة متاحة",
+                    "icon": "clipboard-text.svg",
+                    "iconType": "platform",
+                    "faIcon": "fas fa-briefcase",
+                    "faIconSize": 12,
+                    "mode": "dynamic",
+                    "dataSource": "jobs_count"
+                },
+                {
+                    "value": "300",
+                    "label": "فرصة ذهبية",
+                    "icon": "profile-2user.svg",
+                    "iconType": "platform",
+                    "faIcon": "fas fa-star",
+                    "faIconSize": 12,
+                    "mode": "dynamic",
+                    "dataSource": "gold_jobs_count"
+                },
+                {
+                    "value": "+150",
+                    "label": "شريك موثوق",
+                    "icon": "medal.svg",
+                    "iconType": "platform",
+                    "faIcon": "fas fa-handshake",
+                    "faIconSize": 12,
+                    "mode": "manual",
+                    "dataSource": "news_count"
+                }
+            ]
         }
     },
     "supports": {

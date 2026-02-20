@@ -1,0 +1,13 @@
+{
+    "name": "greenergy/related-jobs",
+    "title": "الوظائف ذات الصلة",
+    "category": "greenergy-blocks",
+    "icon": "dashicons-admin-post",
+    "attributes": {
+        "badgeText": {
+            "type": "string",
+            "default": "الوظائف ذات الصلة"
+        }
+    },
+    "render": "file:./render.php"
+}

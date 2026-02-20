@@ -68,6 +68,7 @@ spl_autoload_register('greenergy_autoloader');
  * Load helper functions
  */
 require_once GREENERGY_INC_DIR . '/helpers.php';
+require_once GREENERGY_INC_DIR . '/stats-functions.php';
 
 /**
  * Initialize theme classes
@@ -89,7 +90,7 @@ function greenergy_init()
     // Custom Post Types
     new Greenergy_CPT_News();
     // new Greenergy_CPT_Articles();
-    // new Greenergy_CPT_Jobs();
+    new Greenergy_CPT_Jobs();
     // new Greenergy_CPT_Courses();
     // new Greenergy_CPT_Directory();
     // new Greenergy_CPT_Stories();
@@ -109,11 +110,14 @@ function greenergy_init()
     // AJAX functionality
     Greenergy_Ajax::get_instance();
 
-    // Theme Settings
-    // Greenergy_Theme_Settings::get_instance(); // Deprecated in favor of React Admin Panel
+    // ACF Fields for Jobs
+    require_once GREENERGY_INC_DIR . '/class-acf-jobs.php';
 
     // Post Views System
     Greenergy_Post_Views::get_instance();
+
+    // Flush rewrite rules on theme activation or when requested (temp fix for 404)
+    flush_rewrite_rules();
 }
 add_action('after_setup_theme', 'greenergy_init', 5);
 

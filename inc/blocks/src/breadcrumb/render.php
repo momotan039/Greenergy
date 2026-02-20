@@ -25,8 +25,7 @@
         // Single News
         if (is_singular('news')) : ?>
 
-            <li class="text-stone-500">></li>
-
+            <i class="fa fa-angle-left text-stone-500"></i>
             <!-- صفحة الأخبار (الأرشيف) -->
             <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
                 <a itemprop="item" href="<?php echo esc_url(home_url('/الاخبار')); ?>"
@@ -36,17 +35,8 @@
                 <meta itemprop="position" content="<?php echo $position++; ?>" />
             </li>
 
-            <li class="text-stone-500">></li>
 
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <a itemprop="item" href="#"
-                    class="text-stone-500 text-base hover:text-green-700">
-                    <span itemprop="name">الخبر</span>
-                </a>
-                <meta itemprop="position" content="<?php echo $position++; ?>" />
-            </li>
-
-            <li class="text-stone-500">></li>
+            <i class="fa fa-angle-left text-stone-500"></i>
 
             <!-- عنوان الخبر -->
             <li class="line-clamp-1" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
@@ -57,21 +47,35 @@
             </li>
 
         <?php
+        // Single News
+        elseif (is_singular('jobs')) : ?>
 
-        // Archive News
-        elseif (is_post_type_archive('news')) : ?>
+            <i class="fa fa-angle-left text-stone-500"></i>
+            <!-- صفحة الوظائف (الأرشيف) -->
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a itemprop="item" href="<?php echo esc_url(home_url('/الوظائف')); ?>"
+                    class="text-stone-500 text-base hover:text-green-700">
+                    <span itemprop="name"><?php esc_html_e('الوظائف', 'greenergy'); ?></span>
+                </a>
+                <meta itemprop="position" content="<?php echo $position++; ?>" />
+            </li>
 
-            <li class="text-stone-500">></li>
-            <li class="text-neutral-950 text-base font-medium">
-                <?php esc_html_e('الأخبار', 'greenergy'); ?>
+
+            <i class="fa fa-angle-left text-stone-500"></i>
+
+            <!-- عنوان الخبر -->
+            <li class="line-clamp-1" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <span itemprop="name" class="text-neutral-950 text-base font-medium">
+                    <?php echo esc_html(get_the_title()); ?>
+                </span>
+                <meta itemprop="position" content="<?php echo $position++; ?>" />
             </li>
 
         <?php
-
         // Default (pages / others)
         elseif (is_singular()) : ?>
 
-            <li class="text-stone-500">></li>
+            <i class="fa fa-angle-left text-stone-500"></i>
             <li class="text-neutral-950 text-base font-medium">
                 <?php echo esc_html(get_the_title()); ?>
             </li>

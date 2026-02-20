@@ -63,6 +63,7 @@ class Greenergy_Ajax
         // Get Args
         $args = isset($_POST['query_args']) ? json_decode(stripslashes($_POST['query_args']), true) : [];
         $page = isset($_POST['page']) ? absint($_POST['page']) : 1;
+        $template_part = isset($_POST['template_part']) ? sanitize_text_field($_POST['template_part']) : 'templates/components/news-card';
 
         if (! is_array($args)) {
             wp_send_json_error(['message' => 'Invalid query args']);
@@ -70,37 +71,10 @@ class Greenergy_Ajax
 
         // Ensure status is publish
         $args['post_status'] = 'publish';
-
-        // Handle Offset with Pagination
-        // If an initial offset is set (from block settings), we need to account for it in subsequent pages.
-        // Page 1: Offset = Initial Offset
-        // Page 2: Offset = Initial Offset + (1 * PPP)
-        // ...
-        // Page N: Offset = Initial Offset + ((N-1) * PPP)
-
-        $initial_offset = isset($args['offset']) ? (int) $args['offset'] : 0;
-        $ppp = isset($args['posts_per_page']) ? (int) $args['posts_per_page'] : get_option('posts_per_page');
-
-        // Handle posts_per_page override from block attributes specifically for pagination consistency
-        if (isset($args['posts_per_page'])) {
-            $ppp = (int) $args['posts_per_page'];
-        }
-
-        // Calculate new offset based on page
-        $args['offset'] = $initial_offset + (($page - 1) * $ppp);
+        $args['paged'] = $page;
 
         // Query
         $query = new WP_Query($args);
-
-        // Fix max_num_pages if using offset
-        if ($initial_offset > 0) {
-            // We need total posts to calculate max pages correctly when offset is involved
-            // found_posts includes the offset posts usually if SQL_CALC_FOUND_ROWS is used (default true)
-            // But we want to exclude the initial offset from the "paged" set availability
-            $found_posts = $query->found_posts;
-            $effective_total = max(0, $found_posts - $initial_offset);
-            $query->max_num_pages = ceil($effective_total / $ppp);
-        }
 
         $content = '';
 
@@ -109,29 +83,30 @@ class Greenergy_Ajax
             while ($query->have_posts()) {
                 $query->the_post();
 
-                // Prepare item data for the template
-                // Our news-card template expects an 'item' array, NOT just the global post.
-                // We need to reconstruct the item array as done in render.php
-
-                $terms = get_the_terms(get_the_ID(), 'news_category');
-                $item = [
-                    'title'     => get_the_title(),
-                    'excerpt'   => get_the_excerpt(),
-                    'date'      => get_the_date('d/m/Y'),
-                    'views'     => Greenergy_Post_Views::get_views(get_the_ID()),
-                    'image'     => get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: 'https://placehold.co/800X800',
-                    'permalink' => get_permalink(),
-                    'cat'       => $terms && !is_wp_error($terms) ? $terms[0]->name : '',
-                ];
-
-                greenergy_get_template('templates/components/news-card', null, ['item' => $item]);
+                if (strpos($template_part, 'job-card') !== false) {
+                    $is_gold = ($args['meta_key'] ?? '') === '_is_gold' || (get_post_meta(get_the_ID(), '_is_gold', true) === 'yes');
+                    get_template_part($template_part, null, ['post' => get_post(), 'is_gold' => $is_gold]);
+                } else {
+                    // For news cards, we want to maintain the item array structure for compatibility
+                    $terms = get_the_terms(get_the_ID(), 'news_category');
+                    $item = [
+                        'title'     => get_the_title(),
+                        'excerpt'   => get_the_excerpt(),
+                        'date'      => get_the_date('d/m/Y'),
+                        'views'     => Greenergy_Post_Views::get_views(get_the_ID()),
+                        'image'     => get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: 'https://placehold.co/800X800',
+                        'permalink' => get_permalink(),
+                        'cat'       => $terms && !is_wp_error($terms) ? $terms[0]->name : '',
+                    ];
+                    greenergy_get_template($template_part, null, ['item' => $item]);
+                }
             }
             $content = ob_get_clean();
         } else {
             ob_start();
 ?>
-            <div class="p-12 text-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-                <p class="text-neutral-500"><?php _e('عذراً، لا توجد أخبار متاحة حالياً.', 'greenergy'); ?></p>
+            <div class="p-12 text-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 w-full">
+                <p class="text-neutral-500"><?php _e('عذراً، لا توجد نتائج متاحة حالياً.', 'greenergy'); ?></p>
             </div>
             <?php
             $content = ob_get_clean();

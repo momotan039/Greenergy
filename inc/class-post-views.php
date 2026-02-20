@@ -71,11 +71,18 @@ class Greenergy_Post_Views
         // Ensure new posts have the sort key initialized
         add_action('save_post_news', [$this, 'initialize_sort_key'], 10, 3);
         add_action('save_post_post', [$this, 'initialize_sort_key'], 10, 3);
+        add_action('save_post_jobs', [$this, 'initialize_sort_key'], 10, 3);
 
         // Admin columns for News
         add_filter('manage_news_posts_columns', [$this, 'add_news_views_columns']);
         add_action('manage_news_posts_custom_column', [$this, 'render_news_views_columns'], 10, 2);
         add_filter('manage_edit-news_sortable_columns', [$this, 'make_news_views_columns_sortable']);
+
+        // Admin columns for Jobs
+        add_filter('manage_jobs_posts_columns', [$this, 'add_news_views_columns']);
+        add_action('manage_jobs_posts_custom_column', [$this, 'render_news_views_columns'], 10, 2);
+        add_filter('manage_edit-jobs_sortable_columns', [$this, 'make_news_views_columns_sortable']);
+
         add_action('pre_get_posts', [$this, 'sort_news_views_columns']);
     }
 
@@ -87,7 +94,7 @@ class Greenergy_Post_Views
      */
     public function track_view_action(): void
     {
-        if (! is_singular(['news', 'post'])) {
+        if (! is_singular(['news', 'post', 'jobs'])) {
             return;
         }
 
@@ -164,7 +171,7 @@ class Greenergy_Post_Views
             return; // Only for new posts
         }
 
-        if (! in_array($post->post_type, ['news', 'post'], true)) {
+        if (! in_array($post->post_type, ['news', 'post', 'jobs'], true)) {
             return;
         }
 
@@ -286,7 +293,7 @@ class Greenergy_Post_Views
      */
     public function sort_news_views_columns($query): void
     {
-        if (! is_admin() || ! $query->is_main_query() || 'news' !== $query->get('post_type')) {
+        if (! is_admin() || ! $query->is_main_query() || ! in_array($query->get('post_type'), ['news', 'jobs'])) {
             return;
         }
 

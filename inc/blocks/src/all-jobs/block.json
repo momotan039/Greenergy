@@ -1,0 +1,20 @@
+{
+    "name": "greenergy/all-jobs",
+    "title": "كل الوظائف",
+    "category": "greenergy",
+    "attributes": {
+        "showGoldOnly": {
+            "type": "boolean",
+            "default": false
+        },
+        "postsPerPage": {
+            "type": "number",
+            "default": 6
+        },
+        "goldAllUrl": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "render": "./render.php"
+}

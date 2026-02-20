@@ -1,0 +1,14 @@
+{
+    "name": "greenergy/job-tags-apply",
+    "title": "وسوم الوظيفة والتقديم",
+    "category": "greenergy-blocks",
+    "icon": "tag",
+    "apiVersion": 3,
+    "attributes": {
+        "applyUrl": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "render": "file:./render.php"
+}

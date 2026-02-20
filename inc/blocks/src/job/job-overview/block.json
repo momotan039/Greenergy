@@ -1,0 +1,8 @@
+{
+  "name": "greenergy/job-overview",
+  "title": "Greenergy Job Overview",
+  "render": "file:./render.php",
+  "supports": {
+    "inserter": false
+  }
+}

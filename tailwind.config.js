@@ -7,7 +7,7 @@ module.exports = {
   darkMode: false,
   content: [
     './*.php',
-    './templates/**/*.php',
+    './templates/**/*.{php,html}',
     './page-templates/**/*.php',
     './template-parts/**/*.php',
     './patterns/**/*.php',

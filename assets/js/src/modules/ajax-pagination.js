@@ -49,15 +49,20 @@ export function initAjaxPagination() {
                     }
 
                     // Update Pagination
-                    // We need to replace the entire pagination nav
-                    // The PHP returns the <nav ...> HTML.
-                    // We should find the existing nav and replace it.
-                    const existingNav = container.querySelector('.pagination');
-                    if (existingNav) {
-                        existingNav.outerHTML = data.data.pagination;
+                    // Use a dedicated wrapper to replace content, avoiding duplication
+                    const paginationWrapper = container.querySelector('.js-ajax-pagination-wrapper') || 
+                                              container.querySelector('.pagination') || 
+                                              container.querySelector('.greenergy-pagination');
+                                              
+                    if (paginationWrapper) {
+                        // If it's a wrapper div, update innerHTML. If it's the nav itself, update outerHTML.
+                        if (paginationWrapper.classList.contains('js-ajax-pagination-wrapper')) {
+                            paginationWrapper.innerHTML = data.data.pagination;
+                        } else {
+                            paginationWrapper.outerHTML = data.data.pagination;
+                        }
                     } else {
-                        // If no pagination existed (e.g. single page before), append it?
-                        // Typically it sits inside the container.
+                        // Fallback: append if not found (should be avoided by proper markup)
                         container.insertAdjacentHTML('beforeend', data.data.pagination);
                     }
 

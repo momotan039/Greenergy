@@ -120,17 +120,6 @@
             "area": "footer"
         }
     ],
-    "customTemplates": [{
-            "name": "page-news",
-            "title": "قالب الأخبار",
-            "postTypes": ["page"]
-        },
-        {
-            "name": "homepage",
-            "title": "قالب الرئيسية",
-            "postTypes": ["page"]
-        }
-    ],
     "styles": {
         "spacing": {
             "blockGap": "1.5rem"

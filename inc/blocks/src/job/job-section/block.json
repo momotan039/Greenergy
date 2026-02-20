@@ -1,0 +1,30 @@
+{
+    "apiVersion": 3,
+    "name": "greenergy/job-section",
+    "title": "Greenergy Job Section",
+    "category": "layout",
+    "attributes": {
+        "sectionType": {
+            "type": "string",
+            "default": "paragraph"
+        },
+        "listStyle": {
+            "type": "string",
+            "default": "bullets"
+        },
+
+        "iconStrategy": {
+            "type": "string",
+            "default": "uniform"
+        },
+        "iconType": {
+            "type": "string",
+            "default": "certificate"
+        }
+    },
+    "render": "file:./render.php",
+    "supports": {
+        "html": false,
+        "anchor": true
+    }
+}

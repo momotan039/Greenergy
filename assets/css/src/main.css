@@ -157,7 +157,121 @@
         @apply list-disc pr-8;
     }
 
+
     .new-content ol {
         @apply list-decimal pr-8;
+    }
+
+    /* Job Section Styles */
+    .job-section-container {
+        @apply mb-8 bg-white;
+        border: 1px solid #f1f5f9; /* slate-100 */
+    }
+
+    .job-section-container h1,
+    .job-section-container h2,
+    .job-section-container h3 {
+        @apply text-2xl font-bold mb-6 text-neutral-900 relative pr-0 !important;
+        line-height: 1.4;
+    }
+
+    /* Green accent line under the title */
+    .job-section-container h3::after {
+        content: "";
+        @apply block w-12 h-1 bg-primary-500 mt-2 rounded-full;
+    }
+
+    .job-section-content {
+        @apply text-stone-600 leading-relaxed;
+    }
+
+    .job-section-content p {
+        @apply mb-4 text-base;
+    }
+
+    /* List Systems */
+    /* List Styles - Ultra-Bold Fix */
+    [class*="list-style-"] ul,
+    [class*="list-style-"] ol,
+    .job-section-content ul,
+    .job-section-content ol {
+        list-style: none !important;
+        padding-right: 0 !important;
+        margin-right: 0 !important;
+        counter-reset: job-item !important;
+        overflow: visible !important;
+    }
+
+    [class*="list-style-"] li,
+    .job-list-item-edit li,
+    .job-section-content li {
+        position: relative !important;
+        padding-right: 2rem !important; /* Increased for safety */
+        margin-bottom: 1.25rem !important;
+        list-style-type: none !important;
+        display: block !important;
+        min-height: 1.5rem;
+        overflow: visible !important;
+    }
+
+    /* Markers Base - Absolute Visibility */
+    [class*="list-style-"] li::before,
+    .job-list-item-edit li::before,
+    .job-section-content li::before,
+    li[class*="icon-type-"]::before {
+        content: "•" !important; /* Fallback character always present */
+        position: absolute !important;
+        right: 0 !important;
+        top: 0 !important;
+        width: 2rem !important;
+        height: 1.5rem !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        color: #16a34a !important; /* green-600 */
+        font-family: inherit;
+        pointer-events: none;
+    }
+
+    /* Numbers - Using a scoped counter */
+    .list-style-numbers li::before {
+        content: counter(job-item) "." !important;
+        counter-increment: job-item !important;
+        font-weight: 800 !important;
+        font-size: 1.1rem !important;
+    }
+
+    /* Bullets */
+    .list-style-bullets li::before {
+        content: "\2022" !important;
+        font-size: 2.5rem !important;
+    }
+
+    /* Icon Logic - Overriding with FontAwesome if available */
+    .list-style-icons li::before,
+    [class*="icon-type-"] li::before,
+    li[class*="icon-type-"]::before {
+        font-family: "Font Awesome 5 Free", "Font Awesome 5 Pro", sans-serif !important;
+        font-weight: 900 !important;
+        font-size: 1.25rem !important;
+        content: "\f058" !important; /* Check circle fallback icon */
+    }
+
+    /* Individual Icon Glyph Mappings */
+    .icon-type-certificate li::before, li.icon-type-certificate::before, .icon-type-certificate.job-section-edit li::before, .icon-type-certificate.job-list-item-edit .item-icon-preview::before { content: "\f5a0" !important; }
+    .icon-type-design li::before, li.icon-type-design::before, .icon-type-design.job-section-edit li::before, .icon-type-design.job-list-item-edit .item-icon-preview::before { content: "\f53f" !important; }
+    .icon-type-development li::before, li.icon-type-development::before, .icon-type-development.job-section-edit li::before, .icon-type-development.job-list-item-edit .item-icon-preview::before { content: "\f121" !important; }
+    .icon-type-car li::before, li.icon-type-car::before, .icon-type-car.job-section-edit li::before, .icon-type-car.job-list-item-edit .item-icon-preview::before { content: "\f1b9" !important; }
+    .icon-type-insurance li::before, li.icon-type-insurance::before, .icon-type-insurance.job-section-edit li::before, .icon-type-insurance.job-list-item-edit .item-icon-preview::before { content: "\f3ed" !important; }
+    .icon-type-gift li::before, li.icon-type-gift::before, .icon-type-gift.job-section-edit li::before, .icon-type-gift.job-list-item-edit .item-icon-preview::before { content: "\f06b" !important; }
+    .icon-type-check li::before, li.icon-type-check::before, .icon-type-check.job-section-edit li::before, .icon-type-check.job-list-item-edit .item-icon-preview::before { content: "\f00c" !important; }
+    .icon-type-star li::before, li.icon-type-star::before, .icon-type-star.job-section-edit li::before, .icon-type-star.job-list-item-edit .item-icon-preview::before { content: "\f005" !important; }
+
+    /* Editor Preview Helper */
+    .job-list-item-edit .item-icon-preview::before {
+        font-family: "Font Awesome 5 Free" !important;
+        font-weight: 900 !important;
+        font-size: 1rem;
+        color: #16a34a;
     }
 }

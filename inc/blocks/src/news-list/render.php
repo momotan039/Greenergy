@@ -167,12 +167,14 @@ $wrapper_attributes = get_block_wrapper_attributes([
         </div>
     <?php endif; ?>
     <!-- Pagination for page -->
-    <div class="greenergy-block-pagination"
-        data-query-args="<?php echo esc_attr(json_encode(array_merge($args, ['posts_per_page' => $ppp]))); ?>"
-        data-block-id="<?php echo esc_attr($attributes['blockId'] ?? uniqid('news-list-')); ?>">
-        <?php
-        $current_page = max(1, get_query_var('paged'));
-        echo greenergy_get_pagination_html($query, $current_page);
-        ?>
+    <div class="js-ajax-pagination-wrapper">
+        <div class="greenergy-block-pagination"
+            data-query-args="<?php echo esc_attr(json_encode(array_merge($args, ['posts_per_page' => $ppp]))); ?>"
+            data-block-id="<?php echo esc_attr($attributes['blockId'] ?? uniqid('news-list-')); ?>">
+            <?php
+            $current_page = max(1, get_query_var('paged'));
+            echo greenergy_get_pagination_html($query, $current_page);
+            ?>
+        </div>
     </div>
 </div>
