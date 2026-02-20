@@ -146,18 +146,17 @@ if (empty($news_items) && defined('WP_DEBUG') && WP_DEBUG) {
 }
 
 $wrapper_attributes = get_block_wrapper_attributes([
-    'class' => 'self-stretch flex flex-col gap-6', // Increased gap
+    'class'            => 'self-stretch flex flex-col gap-6 js-ajax-grid',
+    'data-query-args'  => json_encode($args),
+    'data-template-part' => 'templates/components/news-card',
+    'data-loader-text' => 'جاري جلب الأخبار',
 ]);
-
-
-
 ?>
 <div <?php echo $wrapper_attributes; ?>>
 
     <?php if (!empty($news_items)) : ?>
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4 js-ajax-grid-content">
             <?php foreach ($news_items as $item) {
-                // render_news_card($item); // Deprecated inline function
                 greenergy_get_template('templates/components/news-card', null, ['item' => $item]);
             } ?>
         </div>

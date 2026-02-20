@@ -23,7 +23,30 @@ export function initAjaxPagination() {
         if (!page || !queryArgs) return;
 
         // Add Loading State
-        container.classList.add('opacity-50', 'pointer-events-none');
+        const loaderText = container.dataset.loaderText || 'جاري جلب البيانات';
+        container.classList.add('is-loading', 'pointer-events-none');
+        if (!container.querySelector('.ajax-loader')) {
+            container.insertAdjacentHTML('afterbegin', `
+                <div class="ajax-loader">
+                    <div class="ajax-loader-container">
+                        <div class="ajax-loader-spinner-wrapper">
+                            <div class="ajax-loader-spinner"></div>
+                            <div class="ajax-loader-logo">
+                                <i class="fas fa-leaf text-2xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="ajax-loader-text">${loaderText}</div>
+                            <div class="ajax-loader-dots">
+                                <div class="ajax-loader-dot"></div>
+                                <div class="ajax-loader-dot"></div>
+                                <div class="ajax-loader-dot"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+        }
 
         // Prepare Data
         const formData = new FormData();
@@ -85,7 +108,10 @@ export function initAjaxPagination() {
                 console.error('Fetch Error:', error);
             })
             .finally(() => {
-                container.classList.remove('opacity-50', 'pointer-events-none');
+                // Artificial delay to allow user to appreciate the premium loader
+                setTimeout(() => {
+                    container.classList.remove('is-loading', 'pointer-events-none');
+                }, 800);
             });
     });
 }

@@ -94,7 +94,10 @@ $gold_args = [
 $gold_query = new WP_Query($gold_args);
 ?>
 
-<div class="container mx-auto js-ajax-grid" data-query-args='<?php echo json_encode($args); ?>' data-template-part="templates/components/job-card">
+<div class="container mx-auto js-ajax-grid"
+    data-query-args='<?php echo json_encode($args); ?>'
+    data-template-part="templates/components/job-card"
+    data-loader-text="جاري جلب الوظائف">
     <!-- sort and search -->
     <div class="my-8 p-3 bg-white rounded-2xl">
         <form method="GET" action="<?php echo esc_url(get_permalink()); ?>" class="flex justify-between items-center gap-2">

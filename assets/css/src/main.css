@@ -274,4 +274,55 @@
         font-size: 1rem;
         color: #16a34a;
     }
+
+    /* Premium AJAX Loader */
+    .js-ajax-grid {
+        @apply relative transition-all duration-500;
+    }
+
+    .ajax-loader {
+        @apply absolute inset-0 flex flex-col items-center justify-center bg-white/40 backdrop-blur-md z-50 rounded-3xl transition-all duration-500 opacity-0 pointer-events-none;
+        background-image: radial-gradient(circle at center, rgba(22, 163, 74, 0.05) 0%, transparent 70%);
+    }
+
+    .js-ajax-grid.is-loading .ajax-loader {
+        @apply opacity-100 pointer-events-auto;
+    }
+
+    .ajax-loader-container {
+        @apply relative flex flex-col items-center gap-6 p-10 bg-white/80 rounded-[40px] shadow-2xl border border-white/50 scale-90 transition-transform duration-500;
+    }
+
+    .js-ajax-grid.is-loading .ajax-loader-container {
+        @apply scale-100;
+    }
+
+    .ajax-loader-spinner-wrapper {
+        @apply relative w-20 h-20;
+    }
+
+    .ajax-loader-spinner {
+        @apply absolute inset-0 border-[3px] border-primary-100 border-t-primary-600 rounded-full animate-spin;
+        animation-duration: 0.8s;
+    }
+
+    .ajax-loader-logo {
+        @apply absolute inset-4 bg-gradient-to-br from-primary-500 to-green-700 rounded-2xl flex items-center justify-center text-white shadow-lg animate-pulse shadow-primary-500/20;
+    }
+
+    .ajax-loader-text {
+        @apply text-secondary-900 font-black text-xl tracking-tight;
+        font-family: 'DIN Next LT Arabic Medium', sans-serif;
+    }
+
+    .ajax-loader-dots {
+        @apply flex gap-1.5 mt-2;
+    }
+
+    .ajax-loader-dot {
+        @apply w-2 h-2 bg-primary-500 rounded-full animate-bounce;
+    }
+
+    .ajax-loader-dot:nth-child(2) { animation-delay: 0.2s; }
+    .ajax-loader-dot:nth-child(3) { animation-delay: 0.4s; }
 }
