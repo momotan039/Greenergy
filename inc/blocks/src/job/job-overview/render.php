@@ -10,7 +10,7 @@ $company = get_field('company_name', $post_id) ?: 'شركة غير محددة';
 $location = get_field('location', $post_id) ?: 'غير محدد';
 $job_type_val = get_field('job_type_acf', $post_id);
 $post_date = get_the_date('d/m/Y', $post_id);
-$thumbnail_url = get_the_post_thumbnail_url($post_id, 'medium') ?: 'https://placehold.co/211x211';
+$thumbnail_url = get_the_post_thumbnail_url($post_id, 'medium') ?: get_template_directory_uri() . '/assets/images/new-1.jpg';
 
 // Map job type value to label (ACF field)
 $job_types = array(
