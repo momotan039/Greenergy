@@ -6,7 +6,7 @@ if ($categories) {
     $cat_ids = wp_list_pluck($categories, 'term_id');
     $args = [
         'post_type'      => 'jobs',
-        'posts_per_page' => 4,
+        'posts_per_page' => 2,
         'post__not_in'   => [$post_id],
         'category__in'   => $cat_ids,
         'post_status'    => 'publish',
@@ -14,7 +14,7 @@ if ($categories) {
 } else {
     $args = [
         'post_type'      => 'jobs',
-        'posts_per_page' => 4,
+        'posts_per_page' => 2,
         'post__not_in'   => [$post_id],
         'post_status'    => 'publish',
     ];
