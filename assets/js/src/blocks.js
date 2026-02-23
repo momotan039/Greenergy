@@ -627,18 +627,238 @@ const GreenergyBlockEdit = (props) => {
                     )
                 );
             case 'greenergy/courses':
-                return createElement(PanelBody, { title: __('إعدادات القسم', 'greenergy') },
-                    createElement(TextControl, { label: __('نص الشارة', 'greenergy'), value: attributes.badgeText, onChange: (val) => updateAttribute('badgeText', val) }),
-                    createElement(TextControl, { label: __('العنوان', 'greenergy'), value: attributes.title, onChange: (val) => updateAttribute('title', val) }),
-                    createElement(TextareaControl, { label: __('الوصف', 'greenergy'), value: attributes.description, onChange: (val) => updateAttribute('description', val) }),
-                    createElement(TextControl, { label: __('نص الزر', 'greenergy'), value: attributes.buttonText, onChange: (val) => updateAttribute('buttonText', val) }),
-                    createElement(GreenergyImageControl, {
-                        label: __('صورة الخلفية (اختياري)', 'greenergy'),
-                        imageUrl: attributes.imageUrl,
-                        imageId: attributes.imageId,
-                        onSelect: (media) => setAttributes({ imageId: media.id, imageUrl: media.url }),
-                        onSelectURL: (val) => updateAttribute('imageUrl', val)
+                return createElement(Fragment, null,
+                    createElement(PanelBody, { title: __('نصوص القسم', 'greenergy') },
+                        createElement(TextControl, { label: __('نص الشارة', 'greenergy'), value: attributes.badgeText, onChange: (val) => updateAttribute('badgeText', val) }),
+                        createElement(TextControl, { label: __('العنوان', 'greenergy'), value: attributes.title, onChange: (val) => updateAttribute('title', val) }),
+                        createElement(TextareaControl, { label: __('الوصف', 'greenergy'), value: attributes.description, onChange: (val) => updateAttribute('description', val) }),
+                        createElement(TextControl, { label: __('نص الزر', 'greenergy'), value: attributes.buttonText, onChange: (val) => updateAttribute('buttonText', val) }),
+                        createElement('div', { style: { marginBottom: '15px' } },
+                            createElement('label', { style: { display: 'block', marginBottom: '5px', fontWeight: 'bold' } }, __('رابط الزر', 'greenergy')),
+                            createElement(URLInput, {
+                                value: attributes.buttonUrl || '',
+                                onChange: (val) => updateAttribute('buttonUrl', val),
+                                placeholder: __('اتركه فارغاً للافتراضي...', 'greenergy'),
+                            })
+                        )
+                    ),
+                    createElement(PanelBody, { title: __('إعدادات الدورات', 'greenergy') },
+                        createElement(SelectControl, {
+                            label: __('طريقة اختيار الدورات', 'greenergy'),
+                            value: attributes.selectionMode || 'dynamic',
+                            options: [
+                                { label: __('تلقائي (أحدث الدورات)', 'greenergy'), value: 'dynamic' },
+                                { label: __('يدوي (اختيار مخصص)', 'greenergy'), value: 'manual' },
+                            ],
+                            onChange: (val) => updateAttribute('selectionMode', val)
+                        }),
+                        (attributes.selectionMode || 'dynamic') === 'dynamic' && createElement(RangeControl, {
+                            label: __('عدد الدورات المعروضة', 'greenergy'),
+                            value: attributes.postsCount || 6,
+                            onChange: (val) => updateAttribute('postsCount', val),
+                            min: 1,
+                            max: 12
+                        }),
+                        (attributes.selectionMode || 'dynamic') === 'manual' && createElement(Fragment, null,
+                            createElement('p', { className: 'components-base-control__help', style: { marginBottom: '8px' } },
+                                __('ابحث عن دورات وأضفها بالترتيب المطلوب.', 'greenergy')
+                            ),
+                            createElement(GreenergyPostSelection, {
+                                postType: 'courses',
+                                selectedPosts: attributes.selectedCourses || [],
+                                onChange: (val) => updateAttribute('selectedCourses', val)
+                            })
+                        )
+                    ),
+                    createElement(PanelBody, { title: __('صورة الخلفية', 'greenergy'), initialOpen: false },
+                        createElement(GreenergyImageControl, {
+                            label: __('صورة الخلفية (اختياري)', 'greenergy'),
+                            imageUrl: attributes.imageUrl,
+                            imageId: attributes.imageId,
+                            onSelect: (media) => setAttributes({ imageId: media.id, imageUrl: media.url }),
+                            onSelectURL: (val) => updateAttribute('imageUrl', val)
+                        })
+                    )
+                );
+            case 'greenergy/course-related-courses':
+                return createElement(PanelBody, { title: __('إعدادات الدورات المماثلة', 'greenergy') },
+                    createElement('p', { className: 'components-base-control__help', style: { marginBottom: '12px' } },
+                        __('تُعرض الدورات المرتبطة بنفس التصنيف تلقائياً مع استبعاد الدورة الحالية.', 'greenergy')
+                    ),
+                    createElement(RangeControl, {
+                        label: __('عدد الدورات المعروضة', 'greenergy'),
+                        value: attributes.postsCount || 3,
+                        onChange: (val) => updateAttribute('postsCount', val),
+                        min: 1,
+                        max: 12
                     })
+                );
+            case 'greenergy/course-section':
+                return createElement(PanelBody, { title: __('إعدادات القسم', 'greenergy') },
+                    createElement(SelectControl, {
+                        label: __('نوع القسم', 'greenergy'),
+                        value: attributes.type,
+                        options: [
+                            { label: __('فقرة', 'greenergy'), value: 'paragraph' },
+                            { label: __('نقاط', 'greenergy'), value: 'list' },
+                            { label: __('فئة مستهدفة', 'greenergy'), value: 'target-audience' },
+                        ],
+                        onChange: (val) => updateAttribute('type', val)
+                    }),
+                    createElement(TextControl, {
+                        label: __('العنوان', 'greenergy'),
+                        value: attributes.title,
+                        onChange: (val) => updateAttribute('title', val)
+                    }),
+                    attributes.type === 'paragraph' && createElement(TextareaControl, {
+                        label: __('المحتوى', 'greenergy'),
+                        value: attributes.content,
+                        onChange: (val) => updateAttribute('content', val)
+                    }),
+                    attributes.type === 'list' && createElement(Fragment, null,
+                        createElement('div', { style: { fontWeight: 'bold', marginBottom: '10px' } }, __('عناصر القائمة', 'greenergy')),
+                        (attributes.listItems || []).map((item, index) => (
+                            createElement('div', { key: index, style: { display: 'flex', gap: '5px', marginBottom: '5px' } },
+                                createElement(TextControl, {
+                                    value: item,
+                                    onChange: (val) => {
+                                        const newItems = [...attributes.listItems];
+                                        newItems[index] = val;
+                                        updateAttribute('listItems', newItems);
+                                    },
+                                    style: { flex: 1, marginBottom: 0 }
+                                }),
+                                createElement(Button, {
+                                    isDestructive: true, icon: 'no-alt', onClick: () => {
+                                        const newItems = attributes.listItems.filter((_, i) => i !== index);
+                                        updateAttribute('listItems', newItems);
+                                    }
+                                })
+                            )
+                        )),
+                        createElement(Button, {
+                            isPrimary: true, style: { width: '100%', justifyContent: 'center', marginTop: '10px' }, onClick: () => {
+                                updateAttribute('listItems', [...(attributes.listItems || []), '']);
+                            }
+                        }, __('إضافة عنصر', 'greenergy'))
+                    ),
+                    attributes.type === 'target-audience' && createElement(Fragment, null,
+                        createElement('div', { style: { fontWeight: 'bold', marginBottom: '10px' } }, __('عناصر الفئة المستهدفة', 'greenergy')),
+                        (attributes.audienceItems || []).map((item, index) => (
+                            createElement(PanelBody, { key: index, title: item.title || `عنصر #${index + 1}`, initialOpen: false },
+                                createElement(SelectControl, {
+                                    label: __('نوع الأيقونة', 'greenergy'),
+                                    value: item.iconType || 'system',
+                                    options: [
+                                        { label: __('أيقونة النظام (SVG)', 'greenergy'), value: 'system' },
+                                        { label: __('رفع صورة', 'greenergy'), value: 'image' },
+                                        { label: __('Font Awesome', 'greenergy'), value: 'font-awesome' },
+                                    ],
+                                    onChange: (val) => {
+                                        const newItems = [...attributes.audienceItems];
+                                        newItems[index] = { ...newItems[index], iconType: val };
+                                        updateAttribute('audienceItems', newItems);
+                                    }
+                                }),
+                                (item.iconType === 'system' || !item.iconType) && createElement(SelectControl, {
+                                    label: __('أيقونة النظام', 'greenergy'),
+                                    value: item.icon,
+                                    options: [
+                                        { label: __('قبعة تخرج', 'greenergy'), value: 'Square Academic Cap.svg' },
+                                        { label: __('حقيبة عمل رقم 1', 'greenergy'), value: 'Case Minimalistic.svg' },
+                                        { label: __('مجموعة مستخدمين', 'greenergy'), value: 'Users Group Rounded.svg' },
+                                        { label: __('كتاب', 'greenergy'), value: 'book.svg' },
+                                        { label: __('حقيبة عمل رقم 2', 'greenergy'), value: 'briefcase.svg' },
+                                        { label: __('مباني', 'greenergy'), value: 'buildings-2.svg' },
+                                        { label: __('وسام / نجمة', 'greenergy'), value: 'medal-star.svg' },
+                                    ],
+                                    onChange: (val) => {
+                                        const newItems = [...attributes.audienceItems];
+                                        newItems[index] = { ...newItems[index], icon: val };
+                                        updateAttribute('audienceItems', newItems);
+                                    }
+                                }),
+                                item.iconType === 'image' && createElement(GreenergyImageControl, {
+                                    label: __('اختر صورة', 'greenergy'),
+                                    imageUrl: item.iconImage,
+                                    imageId: item.iconImageId,
+                                    onSelect: (media) => {
+                                        const newItems = [...attributes.audienceItems];
+                                        newItems[index] = { ...newItems[index], iconImageId: media.id, iconImage: media.url };
+                                        updateAttribute('audienceItems', newItems);
+                                    },
+                                    onSelectURL: (val) => {
+                                        const newItems = [...attributes.audienceItems];
+                                        newItems[index] = { ...newItems[index], iconImage: val };
+                                        updateAttribute('audienceItems', newItems);
+                                    }
+                                }),
+                                item.iconType === 'font-awesome' && createElement(Fragment, null,
+                                    createElement(TextControl, {
+                                        label: __('كلاس Font Awesome', 'greenergy'),
+                                        value: item.faIcon,
+                                        placeholder: 'fas fa-graduation-cap',
+                                        onChange: (val) => {
+                                            const newItems = [...attributes.audienceItems];
+                                            newItems[index] = { ...newItems[index], faIcon: val };
+                                            updateAttribute('audienceItems', newItems);
+                                        }
+                                    }),
+                                    createElement('div', { style: { marginBottom: '10px' } },
+                                        createElement('label', { style: { display: 'block', marginBottom: '5px' } }, __('لون الأيقونة', 'greenergy')),
+                                        createElement(wp.components.ColorPalette, {
+                                            value: item.iconColor || '#0ea5e9',
+                                            onChange: (val) => {
+                                                const newItems = [...attributes.audienceItems];
+                                                newItems[index] = { ...newItems[index], iconColor: val };
+                                                updateAttribute('audienceItems', newItems);
+                                            }
+                                        })
+                                    )
+                                ),
+                                createElement(RangeControl, {
+                                    label: __('حجم الأيقونة (px)', 'greenergy'),
+                                    value: item.iconSize || 24,
+                                    min: 16,
+                                    max: 80,
+                                    onChange: (val) => {
+                                        const newItems = [...attributes.audienceItems];
+                                        newItems[index] = { ...newItems[index], iconSize: val };
+                                        updateAttribute('audienceItems', newItems);
+                                    }
+                                }),
+                                createElement(TextControl, {
+                                    label: __('العنوان', 'greenergy'),
+                                    value: item.title,
+                                    onChange: (val) => {
+                                        const newItems = [...attributes.audienceItems];
+                                        newItems[index] = { ...newItems[index], title: val };
+                                        updateAttribute('audienceItems', newItems);
+                                    }
+                                }),
+                                createElement(TextControl, {
+                                    label: __('الوصف', 'greenergy'),
+                                    value: item.desc,
+                                    onChange: (val) => {
+                                        const newItems = [...attributes.audienceItems];
+                                        newItems[index] = { ...newItems[index], desc: val };
+                                        updateAttribute('audienceItems', newItems);
+                                    }
+                                }),
+                                createElement(Button, {
+                                    isDestructive: true, isLink: true, onClick: () => {
+                                        const newItems = attributes.audienceItems.filter((_, i) => i !== index);
+                                        updateAttribute('audienceItems', newItems);
+                                    }
+                                }, __('حذف العنصر', 'greenergy'))
+                            )
+                        )),
+                        createElement(Button, {
+                            isPrimary: true, style: { width: '100%', justifyContent: 'center', marginTop: '10px' }, onClick: () => {
+                                updateAttribute('audienceItems', [...(attributes.audienceItems || []), { icon: 'Square Academic Cap.svg', title: '', desc: '' }]);
+                            }
+                        }, __('إضافة عنصر فئة', 'greenergy'))
+                    )
                 );
             case 'greenergy/stats':
                 return createElement(PanelBody, { title: __('إعدادات الإحصائيات', 'greenergy') },
@@ -1145,6 +1365,37 @@ const GreenergyBlockEdit = (props) => {
                         createElement(GreenergyNavLinksControl, { label: __('الروابط', 'greenergy'), links: attributes.col4Links, onChange: (val) => updateAttribute('col4Links', val) })
                     )
                 );
+            case 'greenergy/all-courses':
+                return createElement(Fragment, null,
+                    createElement(PanelBody, { title: __('إعدادات "الدورات المميزة"', 'greenergy') },
+                        createElement(GreenergyPostSelection, {
+                            label: __('اختر الدورات المميزة', 'greenergy'),
+                            postType: 'courses',
+                            selectedPosts: attributes.featuredSelectedPosts,
+                            onChange: (val) => updateAttribute('featuredSelectedPosts', val)
+                        }),
+                        createElement(RangeControl, {
+                            label: __('أقصى عدد للعرض', 'greenergy'),
+                            value: attributes.featuredCount,
+                            onChange: (val) => updateAttribute('featuredCount', val),
+                            min: 1, max: 8
+                        })
+                    ),
+                    createElement(PanelBody, { title: __('إعدادات "جميع الدورات"', 'greenergy'), initialOpen: false },
+                        createElement(RangeControl, {
+                            label: __('عدد الدورات في الصفحة', 'greenergy'),
+                            value: attributes.postsPerPage,
+                            onChange: (val) => updateAttribute('postsPerPage', val),
+                            min: 1, max: 24
+                        }),
+                        createElement(GreenergyTermSelect, {
+                            label: __('إظهار تصنيفات محددة', 'greenergy'),
+                            taxonomy: 'course_category',
+                            selectedTerms: attributes.selectedCategories,
+                            onChange: (val) => updateAttribute('selectedCategories', val)
+                        })
+                    )
+                );
             case 'greenergy/footer-copyright':
                 return createElement(Fragment, null,
                     createElement(PanelBody, { title: __('نصوص الحقوق', 'greenergy') },
@@ -1214,6 +1465,7 @@ const blocks = [
     { name: 'hero-block', title: __('قسم الهيرو', 'greenergy'), icon: 'cover-image' },
     { name: 'stories', title: __('قصص جرينرجي', 'greenergy'), icon: 'groups' },
     { name: 'courses', title: __('دورات جرينرجي', 'greenergy'), icon: 'welcome-learn-more' },
+    { name: 'course-section', title: __('قسم الكورس', 'greenergy'), icon: 'welcome-learn-more' },
     { name: 'jobs', title: __('وظائف جرينرجي', 'greenergy'), icon: 'businessman' },
     { name: 'latest-news', title: __('آخر أخبار جرينرجي', 'greenergy'), icon: 'admin-post' },
     { 
@@ -1236,6 +1488,11 @@ const blocks = [
         }
     },
     { name: 'stats', title: __('إحصائيات عالمية', 'greenergy'), icon: 'chart-area' },
+    // course blocks
+    { name: 'all-courses', title: __('جميع الدورات', 'greenergy'), icon: 'grid-view' },
+    { name: 'trainer', title: __('مدرب الكورس', 'greenergy'), icon: 'admin-users' },
+    { name: 'course-tags', title: __('وسوم الكورس', 'greenergy'), icon: 'tag' },
+    { name: 'course-overview', title: __('نظرة عامة على الكورس', 'greenergy'), icon: 'info' },
     // news page blocks
     { name: 'news-filter', title: __('تصفية الأخبار', 'greenergy'), icon: 'filter' },
     { 
@@ -1291,6 +1548,7 @@ const blocks = [
             queryTags: { type: 'array', default: [], items: { type: 'number' } }
         }
     },
+    { name: 'all-jobs', title: __('كل الوظائف', 'greenergy'), icon: 'businessman' },
     // theme blocks
     { name: 'scroll-progress', title: __('مؤشر التمرير', 'greenergy'), icon: 'upload' },
     // header blocks
@@ -1766,7 +2024,4 @@ registerBlockType('greenergy/job-section', {
     save: () => createElement(InnerBlocks.Content),
 });
 
-registerBlockType('greenergy/all-jobs', {
-    edit: GreenergyBlockEdit,
-    save: () => null,
-});
+

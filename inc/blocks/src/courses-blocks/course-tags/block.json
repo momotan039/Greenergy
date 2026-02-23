@@ -1,0 +1,9 @@
+{
+    "name": "greenergy/course-tags",
+    "title": "Course Tags",
+    "category": "greenergy-blocks",
+    "icon": "dashicons-tag",
+    "attributes": {},
+    "editorScript": "file:./index.js",
+    "render": "file:./render.php"
+}

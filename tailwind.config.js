@@ -242,6 +242,8 @@ module.exports = {
     // Responsive visibility
     'hidden',
     'block',
+    'md:hidden',
+    'md:block',
     'lg:hidden',
     'lg:block',
     // Animation states

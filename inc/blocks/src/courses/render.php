@@ -11,14 +11,19 @@
  */
 
 $attributes = wp_parse_args($attributes ?? [], [
-    'badgeText'   => 'التدريبات',
-    'title'       => 'الدورات التدريبية',
-    'description' => 'كن على اطلاع دائم على آخر التطورات في عالم الطاقة المتجددة، مع لمحة سريعة عن أكثر المواضيع التي يتحدث عنها الجميع.',
-    'buttonText'  => 'عرض كل الدورات',
-    'imageId'     => 0,
-    'imageUrl'    => '',
+    'badgeText'       => 'التدريبات',
+    'title'           => 'الدورات التدريبية',
+    'description'     => 'كن على اطلاع دائم على آخر التطورات في عالم الطاقة المتجددة، مع لمحة سريعة عن أكثر المواضيع التي يتحدث عنها الجميع.',
+    'buttonText'      => 'عرض كل الدورات',
+    'buttonUrl'       => '',
+    'imageId'         => 0,
+    'imageUrl'        => '',
+    'postsCount'      => 6,
+    'selectionMode'   => 'dynamic',
+    'selectedCourses' => [],
 ]);
 
+// Resolve background image
 $bg_image_url = $attributes['imageUrl'];
 if (! empty($attributes['imageId'])) {
     $lib_url = wp_get_attachment_image_url($attributes['imageId'], 'full');
@@ -31,12 +36,39 @@ $wrapper_attributes = get_block_wrapper_attributes([
     'class' => 'bg-[#013214] py-16 px-4 relative',
 ]);
 
-// Dynamic Data Fetching: Get courses from CPT
-$args = [
-    'post_type'      => 'courses',
-    'posts_per_page' => 6,
-    'status'         => 'publish',
-];
+// ─── Build WP_Query based on selectionMode ───────────────────────────────────
+$selection_mode   = $attributes['selectionMode'] ?? 'dynamic';
+$posts_count      = max(1, intval($attributes['postsCount'] ?? 6));
+$selected_courses = $attributes['selectedCourses'] ?? [];
+
+if ($selection_mode === 'manual' && ! empty($selected_courses)) {
+    // Selected courses are stored as [{id, title}, ...] objects
+    $selected_ids = array_filter(array_map(function ($item) {
+        if (is_array($item) && isset($item['id'])) {
+            return intval($item['id']);
+        }
+        if (is_numeric($item)) {
+            return intval($item);
+        }
+        return null;
+    }, $selected_courses));
+
+    $args = [
+        'post_type'      => 'courses',
+        'post__in'       => $selected_ids,
+        'orderby'        => 'post__in',
+        'posts_per_page' => count($selected_ids),
+        'post_status'    => 'publish',
+    ];
+} else {
+    // Dynamic: fetch the latest courses
+    $args = [
+        'post_type'      => 'courses',
+        'posts_per_page' => $posts_count,
+        'post_status'    => 'publish',
+    ];
+}
+
 $query = new WP_Query($args);
 
 if ($query->have_posts()) {
@@ -45,6 +77,7 @@ if ($query->have_posts()) {
         $query->the_post();
         $courses[] = [
             'title'    => get_the_title(),
+            'permalink' => get_permalink(),
             'duration' => get_post_meta(get_the_ID(), 'duration', true) ?: '8 أسابيع',
             'users'    => get_post_meta(get_the_ID(), 'users', true) ?: '450',
             'image'    => get_the_post_thumbnail_url(get_the_ID(), 'large') ?: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&auto=format&fit=crop',
@@ -52,34 +85,41 @@ if ($query->have_posts()) {
     }
     wp_reset_postdata();
 } else {
-    // For now using static courses
+    // Fallback: static placeholder data
     $courses = [
         [
-            'title' => 'أساسيات الطاقة المتجددة: من النظرية إلى التطبيق',
-            'duration' => '8 أسابيع',
-            'users' => '450',
-            'image' => 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&auto=format&fit=crop',
+            'title'     => 'أساسيات الطاقة المتجددة: من النظرية إلى التطبيق',
+            'permalink' => '#',
+            'duration'  => '8 أسابيع',
+            'users'     => '450',
+            'image'     => 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&auto=format&fit=crop',
         ],
         [
-            'title' => 'تقنيات الألواح الشمسية المتقدمة لعام 2025',
-            'duration' => '6 أسابيع',
-            'users' => '320',
-            'image' => 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop',
+            'title'     => 'تقنيات الألواح الشمسية المتقدمة لعام 2025',
+            'permalink' => '#',
+            'duration'  => '6 أسابيع',
+            'users'     => '320',
+            'image'     => 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop',
         ],
         [
-            'title' => 'هندسة الرياح وتوليد الطاقة المستدامة',
-            'duration' => '10 أسابيع',
-            'users' => '180',
-            'image' => 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop',
+            'title'     => 'هندسة الرياح وتوليد الطاقة المستدامة',
+            'permalink' => '#',
+            'duration'  => '10 أسابيع',
+            'users'     => '180',
+            'image'     => 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&auto=format&fit=crop',
         ],
         [
-            'title' => 'مستقبل النقل الكهربائي وتحديات الشبكة',
-            'duration' => '4 أسابيع',
-            'users' => '540',
-            'image' => 'https://images.unsplash.com/photo-1548337138-e87d889cc988?w=800&auto=format&fit=crop',
+            'title'     => 'مستقبل النقل الكهربائي وتحديات الشبكة',
+            'permalink' => '#',
+            'duration'  => '4 أسابيع',
+            'users'     => '540',
+            'image'     => 'https://images.unsplash.com/photo-1548337138-e87d889cc988?w=800&auto=format&fit=crop',
         ],
     ];
 }
+
+// Button URL
+$button_url = ! empty($attributes['buttonUrl']) ? $attributes['buttonUrl'] : '#';
 ?>
 <style>
     .cutted-edge {
@@ -144,7 +184,7 @@ if ($query->have_posts()) {
             <div class="swiper-wrapper">
                 <?php foreach ($courses as $index => $course) : ?>
                     <div class="swiper-slide" data-aos="fade-up" data-aos-delay="<?php echo esc_attr(300 + ($index * 100)); ?>">
-                        <div class="h-64 rounded-2xl relative overflow-hidden bg-cover bg-center group transition-all duration-500 hover:shadow-2xl hover:shadow-lime-400/20"
+                        <a href="<?php echo esc_url($course['permalink']); ?>" class="block h-64 rounded-2xl relative overflow-hidden bg-cover bg-center group transition-all duration-500 hover:shadow-2xl hover:shadow-lime-400/20"
                             style="background-image: url('<?php echo esc_url($course['image']); ?>');">
 
                             <!-- Play Button -->
@@ -176,7 +216,7 @@ if ($query->have_posts()) {
                             <div class="absolute bottom-[.5rem] left-[1rem] w-14 h-14 bg-[#bef264] rounded-full flex items-center justify-center text-[#013214] shadow-[0_4px_12px_rgba(163,230,53,0.4)] z-10 hover:scale-110 hover:rotate-[45deg] transition-all duration-300">
                                 <i class="fas fa-arrow-up text-lg rotate-[-45deg]"></i>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -186,14 +226,10 @@ if ($query->have_posts()) {
 
         <!-- Footer Button -->
         <div class="text-center mt-12" data-aos="fade-up" data-aos-delay="500">
-            <a href="#" class="bg-white text-[#013214] hover:bg-[#bef264] hover:text-[#013214] hover:scale-105 hover:shadow-xl transition-all duration-300 px-12 py-4 rounded-xl font-black text-lg inline-flex items-center gap-4 group">
+            <a href="<?php echo esc_url($button_url); ?>" class="bg-white text-[#013214] hover:bg-[#bef264] hover:text-[#013214] hover:scale-105 hover:shadow-xl transition-all duration-300 px-12 py-4 rounded-xl font-black text-lg inline-flex items-center gap-4 group">
                 <span><?php echo esc_html($attributes['buttonText']); ?></span>
                 <i class="fas fa-arrow-left transition-transform group-hover:-translate-x-2"></i>
             </a>
         </div>
     </div>
 </section>
-
-<?php if (! is_admin()) : ?>
-
-<?php endif; ?>

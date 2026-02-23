@@ -24,9 +24,29 @@
             "type": "string",
             "default": "عرض كل الدورات"
         },
+        "buttonUrl": {
+            "type": "string",
+            "default": ""
+        },
         "imageId": {
             "type": "number",
             "default": 0
+        },
+        "imageUrl": {
+            "type": "string",
+            "default": ""
+        },
+        "postsCount": {
+            "type": "number",
+            "default": 6
+        },
+        "selectionMode": {
+            "type": "string",
+            "default": "dynamic"
+        },
+        "selectedCourses": {
+            "type": "array",
+            "default": []
         }
     },
     "supports": {

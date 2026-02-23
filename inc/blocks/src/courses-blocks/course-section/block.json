@@ -1,0 +1,53 @@
+{
+    "name": "greenergy/course-section",
+    "title": "Course Section",
+    "category": "greenergy-blocks",
+    "icon": "dashicons-welcome-learn-more",
+    "apiVersion": 3,
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php",
+    "attributes": {
+        "type": {
+            "type": "string",
+            "default": "paragraph"
+        },
+        "title": {
+            "type": "string",
+            "default": "عنوان القسم"
+        },
+        "content": {
+            "type": "string",
+            "default": ""
+        },
+        "listItems": {
+            "type": "array",
+            "default": []
+        },
+        "audienceItems": {
+            "type": "array",
+            "default": [{
+                    "iconType": "system",
+                    "icon": "Square Academic Cap.svg",
+                    "title": "الطلاب",
+                    "desc": "طلاب الهندسة والعلوم",
+                    "iconSize": 24,
+                    "iconColor": "#0ea5e9"
+                },
+                {
+                    "iconType": "system",
+                    "icon": "Case Minimalistic.svg",
+                    "title": "المهندسون",
+                    "desc": "مهندسون حديثو التخرج",
+                    "iconSize": 24,
+                    "iconColor": "#0ea5e9"
+                },
+                {
+                    "iconType": "system",
+                    "icon": "Users Group Rounded.svg",
+                    "title": "الفنيون",
+                    "desc": "فنيو الكهرباء والطاقة"
+                }
+            ]
+        }
+    }
+}

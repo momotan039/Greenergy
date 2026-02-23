@@ -1,0 +1,17 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/course-related-courses",
+    "title": "Course Related Courses",
+    "category": "greenergy-blocks",
+    "icon": "welcome-learn-more",
+    "editorScript": "greenergy-blocks-editor",
+    "description": "Displays related courses in a slider on desktop and stacked on mobile.",
+    "attributes": {
+        "postsCount": {
+            "type": "number",
+            "default": 3
+        }
+    },
+    "render": "file:./render.php"
+}

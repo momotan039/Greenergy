@@ -91,7 +91,7 @@ function greenergy_init()
     new Greenergy_CPT_News();
     // new Greenergy_CPT_Articles();
     new Greenergy_CPT_Jobs();
-    // new Greenergy_CPT_Courses();
+    new Greenergy_CPT_Courses();
     // new Greenergy_CPT_Directory();
     // new Greenergy_CPT_Stories();
     // new Greenergy_CPT_Stats();
@@ -110,8 +110,9 @@ function greenergy_init()
     // AJAX functionality
     Greenergy_Ajax::get_instance();
 
-    // ACF Fields for Jobs
+    // ACF Fields for Jobs & Courses
     require_once GREENERGY_INC_DIR . '/class-acf-jobs.php';
+    require_once GREENERGY_INC_DIR . '/class-acf-courses.php';
 
     // Post Views System
     Greenergy_Post_Views::get_instance();

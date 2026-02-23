@@ -1,0 +1,10 @@
+{
+    "name": "greenergy/trainer",
+    "title": "Trainer",
+    "category": "greenergy-blocks",
+    "icon": "dashicons-admin-users",
+    "attributes": {},
+    "editorScript": "file:./index.js",
+    "editorStyle": "file:./index.css",
+    "render": "file:./render.php"
+}

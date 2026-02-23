@@ -1,0 +1,9 @@
+{
+    "name": "greenergy/course-overview",
+    "title": "Course Overview",
+    "category": "greenergy-blocks",
+    "icon": "dashicons-welcome-learn-more",
+    "apiVersion": 3,
+    "editorScript": "file:./index.js",
+    "render": "file:./render.php"
+}
