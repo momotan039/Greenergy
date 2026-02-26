@@ -14,17 +14,19 @@ import { initThemeToggle } from './modules/theme-toggle.js';
 import { initCounter } from './modules/counter.js';
 import { initCarousel } from './modules/carousel.js';
 import { initAjaxPagination } from './modules/ajax-pagination.js';
+import { initHubNav } from './modules/hub-nav.js';
 
-// Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize all modules
+function initAllModules() {
     initNavigation();
     initLazyLoad();
     initThemeToggle();
     initCounter();
     initCarousel();
     initAjaxPagination();
+    initHubNav();
 
-    // Initialize AOS
+    // Initialize/Refresh AOS
     if (typeof AOS !== 'undefined') {
         AOS.init({
             duration: 800,
@@ -32,8 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
             once: true,
             offset: 50,
         });
+        AOS.refresh();
     }
-});
+}
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', initAllModules);
+
+// Re-initialize on AJAX content updates
+document.addEventListener('greenergy:content-updated', initAllModules);
 
 // Export for debugging
 window.Greenergy = {

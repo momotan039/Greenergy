@@ -1,0 +1,8 @@
+{
+    "name": "greenergy/writer",
+    "title": "Writer",
+    "category": "greenergy-blocks",
+    "icon": "dashicons-admin-users",
+    "attributes": {},
+    "render": "file:./render.php"
+}

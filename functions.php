@@ -110,9 +110,10 @@ function greenergy_init()
     // AJAX functionality
     Greenergy_Ajax::get_instance();
 
-    // ACF Fields for Jobs & Courses
+    // ACF Fields for Jobs, Courses & Posts
     require_once GREENERGY_INC_DIR . '/class-acf-jobs.php';
     require_once GREENERGY_INC_DIR . '/class-acf-courses.php';
+    require_once GREENERGY_INC_DIR . '/class-acf-posts.php';
 
     // Post Views System
     Greenergy_Post_Views::get_instance();

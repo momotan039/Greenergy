@@ -1,28 +1,13 @@
 {
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
-    "name": "greenergy/all-courses",
-    "title": "All Courses",
+    "name": "greenergy/hub-navigation",
+    "title": "نظام التنقل (Hub)",
     "category": "greenergy-blocks",
-    "icon": "grid-view",
+    "icon": "randomize",
+    "description": "نوافذ التنقل بين التدريبات والمقالات التعليمية",
     "editorScript": "greenergy-blocks-editor",
     "attributes": {
-        "postsPerPage": {
-            "type": "number",
-            "default": 12
-        },
-        "featuredSelectedPosts": {
-            "type": "array",
-            "default": []
-        },
-        "featuredCount": {
-            "type": "number",
-            "default": 4
-        },
-        "selectedCategories": {
-            "type": "array",
-            "default": []
-        },
         "coursesLabel": {
             "type": "string",
             "default": "التدريبات"
@@ -38,6 +23,10 @@
         "articlesUrl": {
             "type": "string",
             "default": ""
+        },
+        "activeTab": {
+            "type": "string",
+            "default": "courses"
         }
     },
     "render": "file:./render.php"

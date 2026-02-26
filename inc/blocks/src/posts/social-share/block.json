@@ -1,0 +1,42 @@
+{
+    "name": "greenergy/social-share",
+    "title": "Social Share",
+    "category": "greenergy-blocks",
+    "icon": "share",
+    "apiVersion": 3,
+    "render": "file:./render.php",
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "شارك المقال"
+        },
+        "showWhatsapp": {
+            "type": "boolean",
+            "default": true
+        },
+        "showTelegram": {
+            "type": "boolean",
+            "default": true
+        },
+        "showFacebook": {
+            "type": "boolean",
+            "default": true
+        },
+        "showInstagram": {
+            "type": "boolean",
+            "default": false
+        },
+        "showYoutube": {
+            "type": "boolean",
+            "default": false
+        },
+        "showRss": {
+            "type": "boolean",
+            "default": false
+        },
+        "showCopy": {
+            "type": "boolean",
+            "default": true
+        }
+    }
+}

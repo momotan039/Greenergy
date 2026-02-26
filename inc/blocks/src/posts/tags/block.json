@@ -1,0 +1,8 @@
+{
+    "name": "greenergy/tags",
+    "title": "Tags",
+    "category": "greenergy-blocks",
+    "icon": "tag",
+    "apiVersion": 3,
+    "render": "file:./render.php"
+}

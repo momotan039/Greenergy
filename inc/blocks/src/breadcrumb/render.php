@@ -96,6 +96,30 @@
             </li>
 
         <?php
+        elseif (is_singular('post')) : ?>
+
+            <i class="fa fa-angle-left text-stone-500"></i>
+            <!-- صفحة المقالات (الأرشيف) -->
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a itemprop="item" href="<?php echo esc_url(home_url('/المقالات')); ?>"
+                    class="text-stone-500 text-base hover:text-green-700">
+                    <span itemprop="name"><?php esc_html_e('المقالات', 'greenergy'); ?></span>
+                </a>
+                <meta itemprop="position" content="<?php echo $position++; ?>" />
+            </li>
+
+
+            <i class="fa fa-angle-left text-stone-500"></i>
+
+            <!-- عنوان المقالة -->
+            <li class="line-clamp-1" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <span itemprop="name" class="text-neutral-950 text-base font-medium">
+                    <?php echo esc_html(get_the_title()); ?>
+                </span>
+                <meta itemprop="position" content="<?php echo $position++; ?>" />
+            </li>
+
+        <?php
         // Default (pages / others)
         elseif (is_singular()) : ?>
 

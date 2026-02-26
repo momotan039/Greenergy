@@ -1,0 +1,39 @@
+{
+    "name": "greenergy/featured-posts",
+    "title": "المقالات المميزة",
+    "category": "greenergy-blocks",
+    "icon": "dashicons-star-filled",
+    "apiVersion": 3,
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php",
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "المقالات المميزة"
+        },
+        "subtitle": {
+            "type": "string",
+            "default": "أبرز المقالات التعليمية في مجال الطاقة والاستدامة"
+        },
+        "selectionMode": {
+            "type": "string",
+            "default": "dynamic"
+        },
+        "orderBy": {
+            "type": "string",
+            "default": "latest"
+        },
+        "featuredCount": {
+            "type": "number",
+            "default": 8
+        },
+        "featuredSelectedPosts": {
+            "type": "array",
+            "default": []
+        },
+        "isEnabled": {
+            "type": "boolean",
+            "default": true
+        }
+    }
+}

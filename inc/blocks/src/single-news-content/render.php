@@ -21,7 +21,7 @@ $post_id = $post->ID;
     <div class="lg:flex lg:flex-row justify-start items-start gap-6">
 
         <!-- Main Content Area (Right side) -->
-        <article class="w-full flex-1 p-4 max-sm:p-0 bg-white rounded-2xl flex flex-col justify-start items-stretch gap-6 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300" data-aos="fade-up">
+        <article class="w-full sticky top-0 h-fit flex-1 p-4 max-sm:p-0 bg-white rounded-2xl flex flex-col justify-start items-stretch gap-6 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300" data-aos="fade-up">
             <div class="flex justify-between">
                 <!-- Categories -->
                 <div class="flex flex-wrap gap-2">
@@ -108,18 +108,9 @@ $post_id = $post->ID;
 
 
             <!-- tags -->
-            <div>
-                <?php
-                $tags = get_the_tags($post_id);
-                if ($tags) {
-                    echo '<div class="flex flex-wrap gap-[12px]">';
-                    foreach ($tags as $tag) {
-                        echo '<a href="' . esc_url(get_tag_link($tag->term_id)) . '" class="text-sm text-black px-4 bg-green-700/20 rounded-[100px] py-1 hover:bg-green-700 hover:text-white transition-colors duration-300">#' . esc_html($tag->name) . '</a>';
-                    }
-                    echo '</div>';
-                }
-                ?>
-            </div>
+            <?php get_template_part('templates/components/tags-list', null, [
+                'post_id' => $post_id
+            ]); ?>
 
             <!-- expert/author box -->
             <div class="max-sm:pr-3">
@@ -171,60 +162,10 @@ $post_id = $post->ID;
             </div>
 
             <!-- share buttons -->
-            <?php
-            $news_settings = get_option('greenergy_news_settings', []);
-            $share_providers = isset($news_settings['shareProviders']) ? $news_settings['shareProviders'] : [];
-            if (! empty($share_providers)) :
-                $link = get_permalink($post_id);
-                $title = get_the_title($post_id);
-            ?>
-                <div class="text-center justify-start text-neutral-950 text-base font-medium capitalize mt-6">شارك الخبر</div>
-                <div class="flex flex-wrap justify-center items-center gap-4 bg-gray-50 rounded-2xl shadow-sm p-4 pt-0">
-
-                    <?php if (in_array('whatsapp', $share_providers)) : ?>
-                        <a href="https://wa.me/?text=<?php echo urlencode($title . ' ' . $link); ?>" target="_blank" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#25D366] hover:shadow-lg hover:-translate-y-1">
-                            <i class="fab fa-whatsapp fa-xl"></i>
-                        </a>
-                    <?php endif; ?>
-
-                    <?php if (in_array('telegram', $share_providers)) : ?>
-                        <a href="https://t.me/share/url?url=<?php echo urlencode($link); ?>&text=<?php echo urlencode($title); ?>" target="_blank" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#0088cc] hover:shadow-lg hover:-translate-y-1">
-                            <i class="fab fa-telegram fa-xl"></i>
-                        </a>
-                    <?php endif; ?>
-
-                    <?php if (in_array('facebook', $share_providers)) : ?>
-                        <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($link); ?>" target="_blank" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#1877F2] hover:shadow-lg hover:-translate-y-1">
-                            <i class="fab fa-facebook-f fa-xl"></i>
-                        </a>
-                    <?php endif; ?>
-
-                    <?php if (in_array('instagram', $share_providers)) : ?>
-                        <a href="#" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] hover:shadow-lg hover:-translate-y-1">
-                            <i class="fab fa-instagram fa-xl"></i>
-                        </a>
-                    <?php endif; ?>
-
-                    <?php if (in_array('youtube', $share_providers)) : ?>
-                        <a href="#" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#FF0000] hover:shadow-lg hover:-translate-y-1">
-                            <i class="fab fa-youtube fa-xl"></i>
-                        </a>
-                    <?php endif; ?>
-
-                    <?php if (in_array('rss', $share_providers)) : ?>
-                        <a href="<?php bloginfo('rss2_url'); ?>" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-[#f26522] hover:shadow-lg hover:-translate-y-1">
-                            <i class="fas fa-rss fa-xl"></i>
-                        </a>
-                    <?php endif; ?>
-
-                    <?php if (in_array('copy', $share_providers)) : ?>
-                        <button onclick="navigator.clipboard.writeText('<?php echo $link; ?>'); alert('<?php echo __('Link Copied', 'greenergy'); ?>');" class="flex items-center justify-center w-12 h-12 max-sm:w-8 max-sm:h-8 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 transition-all duration-300 hover:text-white hover:bg-primary hover:shadow-lg hover:-translate-y-1">
-                            <i class="fa-regular fa-copy fa-xl"></i>
-                        </button>
-                    <?php endif; ?>
-
-                </div>
-            <?php endif; ?>
+            <?php get_template_part('templates/components/share-buttons', null, [
+                'post_id' => $post_id,
+                'label'   => __('شارك الخبر', 'greenergy')
+            ]); ?>
 
             <!-- Sidebar for mobile -->
             <div class="flex md:hidden flex-row flex-nowrap overflow-x-auto gap-4 px-4 -mx-4 pb-4 items-stretch scrollbar-hide">

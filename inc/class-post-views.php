@@ -83,6 +83,11 @@ class Greenergy_Post_Views
         add_action('manage_jobs_posts_custom_column', [$this, 'render_news_views_columns'], 10, 2);
         add_filter('manage_edit-jobs_sortable_columns', [$this, 'make_news_views_columns_sortable']);
 
+        // Admin columns for standard Posts
+        add_filter('manage_post_posts_columns', [$this, 'add_news_views_columns']);
+        add_action('manage_post_posts_custom_column', [$this, 'render_news_views_columns'], 10, 2);
+        add_filter('manage_edit-post_sortable_columns', [$this, 'make_news_views_columns_sortable']);
+
         add_action('pre_get_posts', [$this, 'sort_news_views_columns']);
     }
 
@@ -293,7 +298,7 @@ class Greenergy_Post_Views
      */
     public function sort_news_views_columns($query): void
     {
-        if (! is_admin() || ! $query->is_main_query() || ! in_array($query->get('post_type'), ['news', 'jobs'])) {
+        if (! is_admin() || ! $query->is_main_query() || ! in_array($query->get('post_type'), ['news', 'jobs', 'post'])) {
             return;
         }
 
