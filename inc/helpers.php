@@ -400,3 +400,195 @@ function greenergy_get_pagination_html($query, $current_page = 1)
 
     return $pagination_html;
 }
+
+/**
+ * Get company verification badge URL by company type (taxonomy) or company_verified meta.
+ * Returns full URL to vuesax/bold/verify-{type}.svg or empty string if no badge.
+ *
+ * @param int $post_id Company post ID.
+ * @return string URL to badge image or empty.
+ */
+function greenergy_company_verification_badge_url($post_id)
+{
+    $post_id = absint($post_id);
+    if (! $post_id) {
+        return '';
+    }
+    $assets_uri = defined('GREENERGY_ASSETS_URI') ? GREENERGY_ASSETS_URI : get_template_directory_uri() . '/assets';
+    $base = $assets_uri . '/images/vuesax/bold/';
+
+    // Taxonomy company_type: gold => verify-gold, trusted => verify-green, silver => verify-grey, diamond => verify-blue
+    $terms = get_the_terms($post_id, 'company_type');
+    if ($terms && ! is_wp_error($terms)) {
+        $slug = $terms[0]->slug ?? '';
+        $map = [
+            'gold'    => 'verify-gold.svg',
+            'trusted' => 'verify-green.svg',
+            'silver'  => 'verify-grey.svg',
+            'diamond' => 'verify-blue.svg',
+        ];
+        if (isset($map[ $slug ])) {
+            return $base . $map[ $slug ];
+        }
+    }
+
+    // Fallback: company_verified meta => gold
+    if ((bool) get_post_meta($post_id, 'company_verified', true)) {
+        return $base . 'verify-gold.svg';
+    }
+
+    return '';
+}
+
+/**
+ * Restrict search to post_title only when query var greenergy_search_in === 'title' (companies).
+ */
+function greenergy_companies_search_title_only($search, $wp_query)
+{
+    if ($wp_query->get('greenergy_search_in') !== 'title') {
+        return $search;
+    }
+    if ($wp_query->get('post_type') !== 'companies' || empty($wp_query->query_vars['s'])) {
+        return $search;
+    }
+    global $wpdb;
+    $terms = $wp_query->query_vars['search_terms'] ?? [];
+    if (empty($terms)) {
+        $s = $wp_query->query_vars['s'];
+        $terms = array_filter(explode(' ', $s));
+    }
+    if (empty($terms)) {
+        return $search;
+    }
+    $and = [];
+    foreach ($terms as $term) {
+        $like = '%' . $wpdb->esc_like($term) . '%';
+        $and[] = $wpdb->prepare("({$wpdb->posts}.post_title LIKE %s)", $like);
+    }
+    return ' AND (' . implode(' AND ', $and) . ') ';
+}
+
+add_filter('posts_search', 'greenergy_companies_search_title_only', 10, 2);
+
+/**
+ * Build WP_Query args for companies list from current request (GET: cat, country, sort, s_company).
+ *
+ * @param array $override Override or add args (e.g. post__not_in, paged, posts_per_page).
+ * @return array Query args for WP_Query.
+ */
+function greenergy_companies_query_args($override = [])
+{
+    $cat     = isset($_GET['cat'])     ? absint($_GET['cat'])     : 0;
+    $country = isset($_GET['country']) ? absint($_GET['country']) : 0;
+    $sort    = isset($_GET['sort'])    ? sanitize_text_field(wp_unslash($_GET['sort'])) : 'latest';
+    $search  = isset($_GET['s_company']) ? sanitize_text_field(wp_unslash($_GET['s_company'])) : '';
+
+    $args = [
+        'post_type'      => 'companies',
+        'post_status'    => 'publish',
+        'posts_per_page' => 9,
+        'paged'          => 1,
+    ];
+
+    if ($search !== '') {
+        $args['s'] = $search;
+    }
+
+    $tax_query = [];
+    if ($cat > 0) {
+        $tax_query[] = [
+            'taxonomy' => 'company_category',
+            'field'    => 'term_id',
+            'terms'    => $cat,
+        ];
+    }
+    if ($country > 0) {
+        $country_term = get_term($country, 'company_location');
+        if ($country_term && ! is_wp_error($country_term)) {
+            $term_ids = [ (int) $country_term->term_id ];
+            $children = get_terms([
+                'taxonomy'   => 'company_location',
+                'parent'     => $country_term->term_id,
+                'fields'     => 'ids',
+                'hide_empty' => false,
+            ]);
+            if (! empty($children)) {
+                $term_ids = array_merge($term_ids, array_map('intval', $children));
+            }
+            $tax_query[] = [
+                'taxonomy' => 'company_location',
+                'field'    => 'term_id',
+                'terms'    => $term_ids,
+            ];
+        }
+    }
+    if (! empty($tax_query)) {
+        $args['tax_query'] = $tax_query;
+    }
+
+    switch ($sort) {
+        case 'oldest':
+            $args['orderby'] = 'date';
+            $args['order']   = 'ASC';
+            break;
+        case 'popular':
+            if (class_exists('Greenergy_Post_Views')) {
+                $meta_key = Greenergy_Post_Views::TOTAL_VIEWS_KEY;
+            } else {
+                $meta_key = '_total_views_sort';
+            }
+            $args['meta_key']   = $meta_key;
+            $args['orderby']    = 'meta_value_num';
+            $args['order']      = 'DESC';
+            $args['meta_query'] = [
+                'relation' => 'OR',
+                ['key' => $meta_key, 'compare' => 'EXISTS'],
+                ['key' => $meta_key, 'compare' => 'NOT EXISTS', 'value' => ''],
+            ];
+            break;
+        case 'alpha':
+            $args['orderby'] = 'title';
+            $args['order']   = 'ASC';
+            break;
+        default:
+            $args['orderby'] = 'date';
+            $args['order']   = 'DESC';
+            break;
+    }
+
+    return array_merge($args, $override);
+}
+
+/**
+ * Run companies list query with search order: by name (title) first, then by description (content) if no results.
+ *
+ * @param array $override Override or add args (e.g. post__not_in, paged, posts_per_page).
+ * @return WP_Query
+ */
+function greenergy_companies_query($override = [])
+{
+    $args = function_exists('greenergy_companies_query_args') ? greenergy_companies_query_args($override) : array_merge([
+        'post_type'      => 'companies',
+        'post_status'    => 'publish',
+        'posts_per_page' => 9,
+        'paged'          => 1,
+    ], $override);
+
+    $search = isset($args['s']) ? trim($args['s']) : '';
+
+    if ($search === '') {
+        return new WP_Query($args);
+    }
+
+    // 1) Search by name (post_title) only
+    $args_title = array_merge($args, [ 'greenergy_search_in' => 'title' ]);
+    $query_title = new WP_Query($args_title);
+
+    if ($query_title->found_posts > 0) {
+        return $query_title;
+    }
+
+    // 2) No results by name — search by description (post_content); default WP search includes title + content
+    unset($args['greenergy_search_in']);
+    return new WP_Query($args);
+}

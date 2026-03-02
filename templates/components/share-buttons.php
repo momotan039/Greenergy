@@ -23,13 +23,13 @@ if (!$show) {
     }
 
     $show = [
-        'whatsapp'  => in_array('whatsapp', $share_providers),
-        'telegram'  => in_array('telegram', $share_providers),
-        'facebook'  => in_array('facebook', $share_providers),
-        'instagram' => in_array('instagram', $share_providers),
-        'youtube'   => in_array('youtube', $share_providers),
-        'rss'       => in_array('rss', $share_providers),
-        'copy'      => in_array('copy', $share_providers),
+        'whatsapp'  => true,
+        'telegram'  => true,
+        'facebook'  => true,
+        'instagram' => true,
+        'youtube'   => true,
+        'rss'       => true,
+        'copy'      => true,
     ];
 }
 
@@ -76,18 +76,6 @@ if (!array_filter($show)) {
         <?php if ($show['instagram']) : ?>
             <a href="#" class="group flex items-center justify-center w-12 h-12 max-sm:w-10 max-sm:h-10 rounded-xl bg-white text-[#E4405F] shadow-sm border border-gray-100 transition-all duration-300 hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] hover:text-white hover:shadow-lg hover:shadow-[#ee2a7b]/20 hover:-translate-y-1">
                 <i class="fab fa-instagram text-2xl group-hover:scale-110 transition-transform"></i>
-            </a>
-        <?php endif; ?>
-
-        <?php if ($show['youtube']) : ?>
-            <a href="#" class="group flex items-center justify-center w-12 h-12 max-sm:w-10 max-sm:h-10 rounded-xl bg-white text-[#FF0000] shadow-sm border border-gray-100 transition-all duration-300 hover:bg-[#FF0000] hover:text-white hover:shadow-lg hover:shadow-[#FF0000]/20 hover:-translate-y-1">
-                <i class="fab fa-youtube text-2xl group-hover:scale-110 transition-transform"></i>
-            </a>
-        <?php endif; ?>
-
-        <?php if ($show['rss']) : ?>
-            <a href="<?php bloginfo('rss2_url'); ?>" class="group flex items-center justify-center w-12 h-12 max-sm:w-10 max-sm:h-10 rounded-xl bg-white text-[#f26522] shadow-sm border border-gray-100 transition-all duration-300 hover:bg-[#f26522] hover:text-white hover:shadow-lg hover:shadow-[#f26522]/20 hover:-translate-y-1">
-                <i class="fas fa-rss text-2xl group-hover:scale-110 transition-transform"></i>
             </a>
         <?php endif; ?>
 

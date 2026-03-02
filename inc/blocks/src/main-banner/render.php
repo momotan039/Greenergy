@@ -88,6 +88,35 @@ if (!empty($attributes['backgroundImageId'])) {
     }
 }
 
+// Company banner: override from ACF when on single company
+if (is_singular('companies') && function_exists('get_field')) {
+    $company_id = get_queried_object_id();
+    $acf_title    = get_field('company_banner_title', $company_id);
+    $acf_subtitle = get_field('company_banner_subtitle', $company_id);
+    $acf_image    = get_field('company_banner_image', $company_id);
+    if ($acf_title !== '' && $acf_title !== null) {
+        $title = $acf_title;
+    } else {
+        $title = get_the_title($company_id);
+    }
+    if ($acf_subtitle !== '' && $acf_subtitle !== null) {
+        $subtitle = $acf_subtitle;
+    } else {
+        $subtitle = __('الشركة', 'greenergy');
+    }
+    if (! empty($acf_image)) {
+        $bg_image = is_array($acf_image) ? ($acf_image['url'] ?? '') : $acf_image;
+        if (empty($bg_image) && is_array($acf_image) && ! empty($acf_image['ID'])) {
+            $bg_image = wp_get_attachment_image_url($acf_image['ID'], 'full');
+        }
+    } else {
+        $fallback = get_the_post_thumbnail_url($company_id, 'full');
+        if ($fallback) {
+            $bg_image = $fallback;
+        }
+    }
+}
+
 // Global Theme Settings override
 $news_settings = get_option('greenergy_news_settings', []);
 if (!empty($news_settings) && (is_singular('news') || is_post_type_archive('news') || is_page('news'))) {

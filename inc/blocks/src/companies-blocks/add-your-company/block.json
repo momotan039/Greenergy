@@ -1,0 +1,44 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/add-your-company",
+    "title": "أضف شركتك",
+    "category": "greenergy-blocks",
+    "icon": "dashicons-building",
+    "editorScript": "greenergy-blocks-editor",
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "أضف شركتك أو منظمتك"
+        },
+        "description": {
+            "type": "string",
+            "default": "هل لديك شركة أو منظمة في مجال الطاقة المتجددة؟ انضم إلى دليلنا الشامل واعرض خدماتك لآلاف العملاء المحتملين."
+        },
+        "points": {
+            "type": "array",
+            "default": [
+                { "text": "إدراج مجاني مع إمكانية الترقية", "icon": "award.svg", "iconType": "platform" },
+                { "text": "عرض شامل لخدماتك ومشاريعك", "icon": "buildings-2.svg", "iconType": "platform" },
+                { "text": "وصول لآلاف العملاء المهتمين", "icon": "people-2.svg", "iconType": "platform" }
+            ]
+        },
+        "buttonText": {
+            "type": "string",
+            "default": "أضف شركتك الآن"
+        },
+        "buttonUrl": {
+            "type": "string",
+            "default": ""
+        },
+        "backgroundImage": {
+            "type": "string",
+            "default": "https://placehold.co/600x800"
+        },
+        "backgroundImageId": {
+            "type": "number",
+            "default": 0
+        }
+    },
+    "render": "file:./render.php"
+}

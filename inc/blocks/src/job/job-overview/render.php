@@ -25,7 +25,7 @@ $job_type_label = isset($job_types[$job_type_val]) ? $job_types[$job_type_val] :
 $categories = get_the_category($post_id);
 ?>
 
-<div class="relative w-full inline-flex items-start gap-2 max-sm:flex-col shadow-lg outline outline-1 outline-gray-200 p-6 rounded-lg">
+<div class="relative  w-full inline-flex items-start gap-2 max-sm:flex-col shadow-lg outline outline-1 outline-gray-200 p-6 rounded-lg">
     <a href="<?php echo get_post_type_archive_link('jobs'); ?>" class="bg-white hidden max-sm:flex text-stone-500 px-3 py-2  hover:bg-primary hover:text-white hover:scale-105 hover:shadow-xl transition-all duration-300 w-fit rounded-xl font-black inline-flex items-center gap-2 group">
         <i class="fas fa-arrow-right text-stone-500 group-hover:text-white transition-transform group-hover:-translate-x-1"></i>
         <span>العودة للوظائف</span>

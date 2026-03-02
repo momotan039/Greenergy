@@ -1,0 +1,37 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/related-companies",
+    "title": "الشركات ذات الصلة",
+    "category": "greenergy-blocks",
+    "icon": "building",
+    "editorScript": "greenergy-blocks-editor",
+    "description": "يعرض شركات ذات صلة (سلايدر بـ 3 عناصر في كل شريحة) مع إمكانية تحرير العنوان والنص الفرعي وعدد العناصر.",
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "شركات ذات صلة"
+        },
+        "subtitle": {
+            "type": "string",
+            "default": "اكتشف شركات أخرى في نفس المجال."
+        },
+        "selectionMode": {
+            "type": "string",
+            "default": "auto"
+        },
+        "relatedCount": {
+            "type": "number",
+            "default": 6
+        },
+        "relatedSelectedCompanies": {
+            "type": "array",
+            "default": []
+        },
+        "isEnabled": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "render": "file:./render.php"
+}

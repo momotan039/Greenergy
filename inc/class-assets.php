@@ -61,7 +61,7 @@ class Greenergy_Assets
         // --- Styles ---
 
         // FontAwesome
-        wp_register_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css', [], '6.4.0');
+        wp_register_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css', [], '7.0.1');
 
         // Custom Font (DIN Next LT Arabic)
         wp_register_style('din-next-lt-arabic', 'https://db.onlinewebfonts.com/c/aba1a083bf50980a05f0265179103a09?family=DIN+Next+LT+Arabic+Medium', [], null);

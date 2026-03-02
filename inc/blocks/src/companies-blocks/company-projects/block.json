@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "name": "greenergy/company-projects",
+    "title": "Company Projects",
+    "category": "greenergy-blocks",
+    "icon": "portfolio",
+    "apiVersion": 3,
+    "attributes": {
+        "title": { "type": "string", "default": "المشاريع التي شاركت بها الشركة" },
+        "projects": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "projectTitle": { "type": "string" },
+                    "year": { "type": "string" },
+                    "establishment": { "type": "string" },
+                    "capacity": { "type": "string" },
+                    "projectLink": { "type": "string" },
+                    "projectId": { "type": "number" },
+                    "selectedProject": { "type": "object" }
+                }
+            }
+        }
+    },
+    "usesContext": ["postId"],
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php"
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "greenergy/all-companies",
+  "title": "الشركات",
+  "description": "قائمة الشركات مع تصفية وشركات مميزة قابلة للاختيار من المحرر",
+  "category": "greenergy-blocks",
+  "icon": "admin-users",
+  "editorScript": "greenergy-blocks-editor",
+  "attributes": {
+    "title": { "type": "string", "default": "جميع الشركات" },
+    "description": { "type": "string", "default": "اكتشف أهم الشركات والمشاريع والخبراء في مجال الطاقة المتجددة" },
+    "perPage": { "type": "number", "default": 9 },
+    "featuredCompanies": { "type": "array", "default": [] },
+    "visibleCategoryIds": {
+      "type": "array",
+      "default": [],
+      "description": "تصنيفات التبويبات التي تظهر في فلتر الشركات. فارغ = عرض الكل."
+    }
+  },
+  "render": "file:./render.php"
+}

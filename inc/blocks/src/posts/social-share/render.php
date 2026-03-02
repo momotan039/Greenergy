@@ -10,9 +10,7 @@ get_template_part('templates/components/share-buttons', null, [
         'whatsapp'  => $attributes['showWhatsapp']  ?? true,
         'telegram'  => $attributes['showTelegram']  ?? true,
         'facebook'  => $attributes['showFacebook']  ?? true,
-        'instagram' => $attributes['showInstagram'] ?? false,
-        'youtube'   => $attributes['showYoutube']   ?? false,
-        'rss'       => $attributes['showRss']       ?? false,
+        'instagram' => $attributes['showInstagram'] ?? true,
         'copy'      => $attributes['showCopy']      ?? true,
     ]
 ]);

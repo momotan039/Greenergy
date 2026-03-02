@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "greenergy/filter-companies",
+  "title": "تصفية الشركات",
+  "description": "تصفية الشركات حسب التصنيف والدولة والترتيب",
+  "category": "greenergy",
+  "icon": "filter",
+  "attributes": {
+    "visibleCategoryIds": {
+      "type": "array",
+      "default": [],
+      "description": "Term IDs of categories to show in tabs. Empty = show all."
+    }
+  },
+  "render": "file:./render.php"
+}

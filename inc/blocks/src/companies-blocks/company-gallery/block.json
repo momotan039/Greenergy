@@ -1,0 +1,14 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "name": "greenergy/company-gallery",
+    "title": "Company Gallery",
+    "category": "greenergy-blocks",
+    "icon": "dashicons-images-alt",
+    "apiVersion": 3,
+    "attributes": {
+        "title": { "type": "string", "default": "معرض الصور" },
+        "images": { "type": "array", "default": [] }
+    },
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php"
+}

@@ -1,0 +1,14 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "name": "greenergy/company-about",
+    "title": "Company About",
+    "category": "greenergy-blocks",
+    "icon": "dashicons-building",
+    "apiVersion": 3,
+    "attributes": {
+        "title": { "type": "string", "default": "نبذة عن الشركة" },
+        "description": { "type": "string", "default": "" }
+    },
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php"
+}

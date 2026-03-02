@@ -15,8 +15,6 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-file_put_contents('C:/xampp/htdocs/greenergy/wp-content/themes/greenergy_theme/test-log.log', "PHP Execution Success: " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
-
 /**
  * Theme Constants
  */
@@ -92,6 +90,10 @@ function greenergy_init()
     // new Greenergy_CPT_Articles();
     new Greenergy_CPT_Jobs();
     new Greenergy_CPT_Courses();
+    new Greenergy_CPT_Companies();
+    new Greenergy_CPT_Experts();
+    new Greenergy_CPT_Project();
+    new Greenergy_CPT_Company_Product();
     // new Greenergy_CPT_Directory();
     // new Greenergy_CPT_Stories();
     // new Greenergy_CPT_Stats();
@@ -110,10 +112,11 @@ function greenergy_init()
     // AJAX functionality
     Greenergy_Ajax::get_instance();
 
-    // ACF Fields for Jobs, Courses & Posts
+    // ACF Fields for Jobs, Courses, Posts & Companies
     require_once GREENERGY_INC_DIR . '/class-acf-jobs.php';
     require_once GREENERGY_INC_DIR . '/class-acf-courses.php';
     require_once GREENERGY_INC_DIR . '/class-acf-posts.php';
+    require_once GREENERGY_INC_DIR . '/class-acf-companies.php';
 
     // Post Views System
     Greenergy_Post_Views::get_instance();

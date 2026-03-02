@@ -59,7 +59,7 @@ class Greenergy_Blocks_Loader
         wp_register_script(
             'greenergy-blocks-editor',
             GREENERGY_ASSETS_URI . '/js/dist/blocks.min.js',
-            ['wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-server-side-render', 'wp-i18n'],
+            ['wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-server-side-render', 'wp-i18n', 'wp-data'],
             $version,
             true
         );
@@ -94,5 +94,11 @@ class Greenergy_Blocks_Loader
     {
         // Enqueue Editor Script (handle was registered in register_blocks)
         wp_enqueue_script('greenergy-blocks-editor');
+        wp_localize_script('greenergy-blocks-editor', 'greenergyBlocks', [
+            'assetsUri'  => GREENERGY_ASSETS_URI,
+            'adminUrl'   => admin_url(),
+            'newProductUrl' => admin_url('post-new.php?post_type=company_product'),
+            'editProductsUrl' => admin_url('edit.php?post_type=company_product'),
+        ]);
     }
 }

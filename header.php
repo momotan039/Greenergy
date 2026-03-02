@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The header for our theme
  *
@@ -7,18 +8,18 @@
  */
 
 // Get header style from Redux options
-$header_style = greenergy_option( 'header_style', 'default' );
+$header_style = greenergy_option('header_style', 'default');
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?> dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>">
+
 <head>
-    <meta charset="<?php bloginfo( 'charset' ); ?>">
+    <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="profile" href="https://gmpg.org/xfn/11">
 
     <!-- Design Assets -->
     <link href="https://db.onlinewebfonts.com/c/aba1a083bf50980a05f0265179103a09?family=DIN+Next+LT+Arabic+Medium" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
             theme: {
@@ -48,10 +49,11 @@ $header_style = greenergy_option( 'header_style', 'default' );
             overflow-x: hidden;
             width: 100%;
         }
+
         * {
             font-family: 'DIN Next LT Arabic Medium', sans-serif;
         }
-        
+
         /* Sticky Nav Styles */
         .greenergy-fixed-nav {
             position: fixed !important;
@@ -64,10 +66,15 @@ $header_style = greenergy_option( 'header_style', 'default' );
             background-color: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(8px);
         }
-        
+
         @keyframes slideDown {
-            from { transform: translateY(-100%); }
-            to { transform: translateY(0); }
+            from {
+                transform: translateY(-100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
         }
     </style>
     <script>
@@ -90,15 +97,15 @@ $header_style = greenergy_option( 'header_style', 'default' );
 
             window.addEventListener('scroll', function() {
                 let st = window.scrollY; // Current scroll position
-                
+
                 // Desktop Always Sticky
-                if(desktopNav && window.innerWidth >= 1024) {
+                if (desktopNav && window.innerWidth >= 1024) {
                     if (st > desktopNavOffset) {
-                         // We are past the initial nav position -> Stick it
-                         desktopNav.classList.add('greenergy-fixed-nav');
-                         desktopNav.classList.remove('my-4', 'rounded-[1000px]');
-                         desktopNav.classList.add('py-2');
-                         desktopNav.style.transform = 'translateY(0)';
+                        // We are past the initial nav position -> Stick it
+                        desktopNav.classList.add('greenergy-fixed-nav');
+                        desktopNav.classList.remove('my-4', 'rounded-[1000px]');
+                        desktopNav.classList.add('py-2');
+                        desktopNav.style.transform = 'translateY(0)';
                     } else {
                         // At top -> Reset
                         desktopNav.classList.remove('greenergy-fixed-nav');
@@ -106,26 +113,26 @@ $header_style = greenergy_option( 'header_style', 'default' );
                         desktopNav.style.transform = 'translateY(0)';
                     }
                 }
-                
+
                 // Mobile Always Sticky with Spacer
-                if(mobileNav && window.innerWidth < 1024) {
-                     const mobileParent = document.getElementById('mobile-header-container');
-                     
-                     if (st > 0) {
-                         // Scroll > 0 -> Fixed + Add Spacer
-                         if (!mobileNav.classList.contains('fixed')) {
-                             mobileNav.classList.remove('relative');
-                             mobileNav.classList.add('fixed', 'top-0', 'left-0', 'right-0', 'shadow-md');
-                             if(mobileParent) mobileParent.style.paddingTop = mobileNav.offsetHeight + 'px';
-                         }
-                     } else {
-                         // Scroll at top -> Relative + Remove Spacer
-                         if (mobileNav.classList.contains('fixed')) {
-                             mobileNav.classList.remove('fixed', 'top-0', 'left-0', 'right-0', 'shadow-md');
-                             mobileNav.classList.add('relative');
-                             if(mobileParent) mobileParent.style.paddingTop = '0px';
-                         }
-                     }
+                if (mobileNav && window.innerWidth < 1024) {
+                    const mobileParent = document.getElementById('mobile-header-container');
+
+                    if (st > 0) {
+                        // Scroll > 0 -> Fixed + Add Spacer
+                        if (!mobileNav.classList.contains('fixed')) {
+                            mobileNav.classList.remove('relative');
+                            mobileNav.classList.add('fixed', 'top-0', 'left-0', 'right-0', 'shadow-md');
+                            if (mobileParent) mobileParent.style.paddingTop = mobileNav.offsetHeight + 'px';
+                        }
+                    } else {
+                        // Scroll at top -> Relative + Remove Spacer
+                        if (mobileNav.classList.contains('fixed')) {
+                            mobileNav.classList.remove('fixed', 'top-0', 'left-0', 'right-0', 'shadow-md');
+                            mobileNav.classList.add('relative');
+                            if (mobileParent) mobileParent.style.paddingTop = '0px';
+                        }
+                    }
                 }
             });
         });
@@ -134,15 +141,15 @@ $header_style = greenergy_option( 'header_style', 'default' );
     <?php wp_head(); ?>
 </head>
 
-<body <?php body_class( 'bg-white' ); ?>>
-<?php wp_body_open(); ?>
+<body <?php body_class('bg-white'); ?>>
+    <?php wp_body_open(); ?>
 
-<div id="page" class="site">
-    <a class="skip-link screen-reader-text" href="#primary">
-        <?php esc_html_e( 'Skip to content', 'greenergy' ); ?>
-    </a>
+    <div id="page" class="site">
+        <a class="skip-link screen-reader-text" href="#primary">
+            <?php esc_html_e('Skip to content', 'greenergy'); ?>
+        </a>
 
-    <?php
-    // Load header template variation
-    get_template_part( 'templates/header/header', $header_style );
-    ?>
+        <?php
+        // Load header template variation
+        get_template_part('templates/header/header', $header_style);
+        ?>

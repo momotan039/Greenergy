@@ -1,0 +1,13 @@
+{
+  "name": "greenergy/company-products",
+  "title": "منتجات الشركة",
+  "category": "greenergy-blocks",
+  "icon": "cart",
+  "apiVersion": 3,
+  "attributes": {
+    "title": { "type": "string", "default": "المنتجات" },
+    "selectedProducts": { "type": "array", "default": [] }
+  },
+  "editorScript": "greenergy-blocks-editor",
+  "render": "file:./render.php"
+}

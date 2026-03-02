@@ -15,6 +15,12 @@ import { initCounter } from './modules/counter.js';
 import { initCarousel } from './modules/carousel.js';
 import { initAjaxPagination } from './modules/ajax-pagination.js';
 import { initHubNav } from './modules/hub-nav.js';
+import { initCompanyOverview } from './modules/company-overview.js';
+import { initGalleryLightbox } from './modules/gallery-lightbox.js';
+import { initProductModal } from './modules/product-modal.js';
+import { initCompanyProductsPagination } from './modules/company-products-pagination.js';
+import { initAllCompaniesPagination } from './modules/all-companies-pagination.js';
+import { initCompanyFilterAutocomplete } from './modules/company-filter-autocomplete.js';
 
 // Initialize all modules
 function initAllModules() {
@@ -25,6 +31,12 @@ function initAllModules() {
     initCarousel();
     initAjaxPagination();
     initHubNav();
+    initCompanyOverview();
+    initGalleryLightbox();
+    initProductModal();
+    initCompanyProductsPagination();
+    initAllCompaniesPagination();
+    initCompanyFilterAutocomplete();
 
     // Initialize/Refresh AOS
     if (typeof AOS !== 'undefined') {
