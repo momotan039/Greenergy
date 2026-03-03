@@ -188,7 +188,7 @@ $post_id = $post->ID;
         </article>
 
         <!-- Sidebar Area (Left side) -->
-        <aside class="max-lg:hidden lg:w-1/4 w-full flex flex-col justify-start items-stretch gap-4 lg:sticky lg:top-4" data-aos="fade-right">
+        <aside class="max-lg:hidden sticky top-0 h-fit lg:w-1/4 w-full flex flex-col justify-start items-stretch gap-4 lg:sticky lg:top-4" data-aos="fade-right">
             <?php echo do_blocks('
                     <!-- wp:greenergy/directory-widget /-->
                     <!-- wp:greenergy/ad-block {"height":"136px","hasContainer":false} /-->
