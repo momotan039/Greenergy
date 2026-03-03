@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Add Your Company Block — CTA with title, description, points (icons), button, and image.
  *
@@ -36,9 +37,9 @@ $desc    = (string) $attrs['description'];
 $points  = is_array($attrs['points']) ? $attrs['points'] : [];
 if (empty($points)) {
     $points = [
-        [ 'text' => 'إدراج مجاني مع إمكانية الترقية', 'icon' => 'award.svg', 'iconType' => 'platform' ],
-        [ 'text' => 'عرض شامل لخدماتك ومشاريعك', 'icon' => 'buildings-2.svg', 'iconType' => 'platform' ],
-        [ 'text' => 'وصول لآلاف العملاء المهتمين', 'icon' => 'people-2.svg', 'iconType' => 'platform' ],
+        ['text' => 'إدراج مجاني مع إمكانية الترقية', 'icon' => 'award.svg', 'iconType' => 'platform'],
+        ['text' => 'عرض شامل لخدماتك ومشاريعك', 'icon' => 'buildings-2.svg', 'iconType' => 'platform'],
+        ['text' => 'وصول لآلاف العملاء المهتمين', 'icon' => 'people-2.svg', 'iconType' => 'platform'],
     ];
 }
 $btn_text = (string) $attrs['buttonText'];

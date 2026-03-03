@@ -18,7 +18,11 @@ $post_id = isset($block->context['postId']) ? (int) $block->context['postId'] : 
 if (! $post_id && is_singular('companies')) {
     $post_id = get_queried_object_id();
 }
-$type_terms = $post_id ? get_the_terms($post_id, 'company_type') : null;
+if (! $post_id && is_singular('organizations')) {
+    $post_id = get_queried_object_id();
+}
+$post_type = $post_id ? get_post_type($post_id) : '';
+$type_terms = ($post_id && $post_type !== 'organizations') ? get_the_terms($post_id, 'company_type') : null;
 $type_slug = ($type_terms && ! is_wp_error($type_terms) && ! empty($type_terms)) ? $type_terms[0]->slug : 'normal';
 $type_slug = in_array($type_slug, ['normal', 'gold', 'silver', 'diamond', 'trusted'], true) ? $type_slug : 'normal';
 
@@ -65,6 +69,14 @@ if (! empty($attributes['teamMembers']) && is_array($attributes['teamMembers']))
 }
 
 $title = isset($attributes['title']) ? (string) $attributes['title'] : 'يعمل هنا';
+$title_company = 'يعمل هنا';
+$title_org    = 'فريق المنظمة';
+$post_type = $post_id ? get_post_type($post_id) : '';
+if ($post_type === 'organizations' && ($title === '' || $title === $title_company)) {
+    $title = $title_org;
+} elseif ($title === '') {
+    $title = $title_company;
+}
 $experts      = is_array($attributes['selectedExperts']) ? $attributes['selectedExperts'] : [];
 $expert_ids   = array_values(array_filter(array_map(function ($item) {
     if (is_array($item) && isset($item['id'])) {

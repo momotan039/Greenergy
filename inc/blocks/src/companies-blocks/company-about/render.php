@@ -18,7 +18,15 @@ $attributes = wp_parse_args($attributes ?? [], [
     'description' => '',
 ]);
 
-$title       = $attributes['title'];
+$post_type     = get_post_type(get_the_ID());
+$title_company = 'نبذة عن الشركة';
+$title_org     = 'نبذة عن المنظمة';
+$title         = $attributes['title'];
+if ($post_type === 'organizations' && ($title === '' || $title === $title_company)) {
+    $title = $title_org;
+} elseif ($title === '') {
+    $title = $title_company;
+}
 $description = $attributes['description'];
 
 // Fallback to ACF if description empty (backward compatibility)
@@ -30,7 +38,8 @@ $description = $description ?: '';
 $company_id = get_the_ID();
 $tags = [];
 if ($company_id) {
-    $terms = get_the_terms($company_id, 'company_tag');
+    $tag_tax = ($post_type === 'organizations') ? 'organization_tag' : 'company_tag';
+    $terms = get_the_terms($company_id, $tag_tax);
     if (is_array($terms)) {
         $tags = $terms;
     }

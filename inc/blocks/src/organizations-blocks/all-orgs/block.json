@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "greenergy/all-orgs",
+  "title": "جميع المنظمات",
+  "description": "قائمة المنظمات مع تصفية ومنظمات مميزة قابلة للاختيار من المحرر",
+  "category": "greenergy-blocks",
+  "icon": "groups",
+  "editorScript": "greenergy-blocks-editor",
+  "attributes": {
+    "title": { "type": "string", "default": "جميع المنظمات" },
+    "description": { "type": "string", "default": "اكتشف أبرز المنظمات التي تساهم في تطوير المجتمع وتقدم خدمات متنوعة في مجالات مختلفة" },
+    "perPage": { "type": "number", "default": 9 },
+    "featuredOrganizations": { "type": "array", "default": [] },
+    "visibleCategoryIds": {
+      "type": "array",
+      "default": [],
+      "description": "تصنيفات التبويبات التي تظهر في فلتر المنظمات. فارغ = عرض الكل."
+    }
+  },
+  "render": "file:./render.php"
+}

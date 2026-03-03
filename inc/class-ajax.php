@@ -52,6 +52,9 @@ class Greenergy_Ajax
         add_action('wp_ajax_greenergy_companies_page', [$this, 'companies_page']);
         add_action('wp_ajax_nopriv_greenergy_companies_page', [$this, 'companies_page']);
 
+        add_action('wp_ajax_greenergy_organizations_page', [$this, 'organizations_page']);
+        add_action('wp_ajax_nopriv_greenergy_organizations_page', [$this, 'organizations_page']);
+
         add_action('wp_ajax_greenergy_companies_search_suggest', [$this, 'companies_search_suggest']);
         add_action('wp_ajax_nopriv_greenergy_companies_search_suggest', [$this, 'companies_search_suggest']);
     }
@@ -405,6 +408,84 @@ class Greenergy_Ajax
         wp_send_json_success([
             'content'    => $content,
             'pagination' => $pagination_html,
+        ]);
+    }
+
+    /**
+     * All-organizations block: return one page of organization cards HTML + pagination (filter-aware, no refresh).
+     */
+    public function organizations_page()
+    {
+        if (! isset($_POST['nonce']) || ! wp_verify_nonce($_POST['nonce'], 'greenergy_nonce')) {
+            wp_send_json_error(['message' => 'Invalid nonce']);
+        }
+        $page         = isset($_POST['page']) ? max(1, absint($_POST['page'])) : 1;
+        $per_page     = isset($_POST['per_page']) ? max(1, min(24, absint($_POST['per_page']))) : 9;
+        $featured_ids = isset($_POST['featured_ids']) ? array_filter(array_map('absint', wp_parse_id_list($_POST['featured_ids']))) : [];
+
+        $_GET['cat']     = isset($_POST['cat']) ? absint($_POST['cat']) : 0;
+        $_GET['country'] = isset($_POST['country']) ? absint($_POST['country']) : 0;
+        $_GET['sort']    = isset($_POST['sort']) ? sanitize_text_field($_POST['sort']) : 'latest';
+        $_GET['s_org']   = isset($_POST['s_org']) ? sanitize_text_field($_POST['s_org']) : '';
+
+        $query = function_exists('greenergy_organizations_query') ? greenergy_organizations_query([
+            'posts_per_page' => $per_page,
+            'paged'          => $page,
+            'post__not_in'   => $featured_ids,
+        ]) : new WP_Query([
+            'post_type'      => 'organizations',
+            'post_status'    => 'publish',
+            'posts_per_page' => $per_page,
+            'paged'          => $page,
+            'post__not_in'   => $featured_ids,
+        ]);
+        $total_pages  = $query->max_num_pages;
+        $current_page = max(1, $page);
+        $found_posts  = $query->found_posts;
+
+        $content = '';
+        if ($query->have_posts()) {
+            ob_start();
+            while ($query->have_posts()) {
+                $query->the_post();
+                get_template_part('templates/components/org-card', null, ['post_id' => get_the_ID(), 'is_featured' => false]);
+            }
+            $content = ob_get_clean();
+            wp_reset_postdata();
+        } else {
+            $content = '<p class="col-span-full text-neutral-500 text-center text-sm">' . esc_html__('لا توجد منظمات تطابق المعايير.', 'greenergy') . '</p>';
+        }
+
+        $from       = $found_posts > 0 ? (($current_page - 1) * $per_page) + 1 : 0;
+        $to         = $found_posts > 0 ? min($current_page * $per_page, $found_posts) : 0;
+        $count_text = $found_posts > 0
+            ? sprintf(/* translators: 1: from number, 2: to number, 3: total count */ __('عرض %1$s - %2$s من %3$s منظمة', 'greenergy'), number_format_i18n($from), number_format_i18n($to), number_format_i18n($found_posts))
+            : __('0 منظمة', 'greenergy');
+        $count_html = '<p class="js-all-orgs-count text-neutral-500 text-sm text-center mb-4" aria-live="polite">' . esc_html($count_text) . '</p>';
+
+        $pagination_html = '';
+        if ($total_pages > 1) {
+            $pagination_html .= '<nav class="greenergy-pagination greenergy-all-orgs-pagination mt-6 flex justify-center items-center gap-2 flex-wrap" aria-label="' . esc_attr__('تنقل المنظمات', 'greenergy') . '">';
+            if ($current_page > 1) {
+                $pagination_html .= '<button type="button" class="js-all-orgs-page w-10 h-10 flex justify-center items-center rounded-lg border border-gray-300 text-gray-700 hover:bg-green-50 hover:text-green-600 hover:border-green-500 transition-all" data-page="' . ($current_page - 1) . '" aria-label="' . esc_attr__('الصفحة السابقة', 'greenergy') . '"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>';
+            }
+            for ($i = 1; $i <= $total_pages; $i++) {
+                $active = $i === $current_page;
+                $pagination_html .= '<button type="button" class="js-all-orgs-page w-10 h-10 flex justify-center items-center rounded-lg transition-all text-sm ' . ($active ? 'bg-green-600 text-white font-semibold border border-transparent' : 'border border-gray-300 text-gray-700 hover:bg-green-50 hover:text-green-600 hover:border-green-500') . '" data-page="' . $i . '">' . $i . '</button>';
+            }
+            if ($current_page < $total_pages) {
+                $pagination_html .= '<button type="button" class="js-all-orgs-page w-10 h-10 flex justify-center items-center rounded-lg border border-gray-300 text-gray-700 hover:bg-green-50 hover:text-green-600 hover:border-green-500 transition-all" data-page="' . ($current_page + 1) . '" aria-label="' . esc_attr__('الصفحة التالية', 'greenergy') . '"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>';
+            }
+            $pagination_html .= '</nav>';
+        }
+
+        wp_send_json_success([
+            'content'        => $content,
+            'pagination'     => $pagination_html,
+            'count_html'     => $count_html,
+            'found_posts'    => $found_posts,
+            'total_pages'    => $total_pages,
+            'current_page'   => $current_page,
         ]);
     }
 }

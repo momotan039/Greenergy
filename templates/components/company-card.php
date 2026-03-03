@@ -54,12 +54,23 @@ if ($locations && ! is_wp_error($locations)) {
         $location_display = $city;
     }
 }
-$tag_terms = get_the_terms($post_id, 'company_tag');
-$tag_name = ($tag_terms && ! is_wp_error($tag_terms) && ! empty($tag_terms)) ? $tag_terms[0]->name : '';
+// Parent category for badge (company_category is hierarchical)
+$category_terms = get_the_terms($post_id, 'company_category');
+$category_label = '';
+if ($category_terms && ! is_wp_error($category_terms) && ! empty($category_terms)) {
+    $term = $category_terms[0];
+    if ((int) $term->parent !== 0) {
+        $parent_term = get_term((int) $term->parent, 'company_category');
+        $category_label = ($parent_term && ! is_wp_error($parent_term)) ? $parent_term->name : $term->name;
+    } else {
+        $category_label = $term->name;
+    }
+}
 
 $badge_url = function_exists('greenergy_company_verification_badge_url') ? greenergy_company_verification_badge_url($post_id) : '';
 ?>
-<article class="flex <?php echo $is_featured ? 'bg-gradient-to-br from-slate-50 via-cyan-200 to-slate-50 shadow outline outline-[0.5px] outline-sky-500' : 'bg-white shadow-lg outline outline-1 outline-offset-[-1px] outline-neutral-200'; ?> rounded-2xl overflow-hidden">
+<article class="flex card-hover relative <?php echo $is_featured ? 'featured-card bg-gradient-to-br from-slate-50 via-cyan-200 to-slate-50 shadow outline outline-[0.5px] outline-sky-500' : 'bg-white shadow-lg outline outline-1 outline-offset-[-1px] outline-neutral-200'; ?> rounded-2xl overflow-hidden">
+    <a href="<?php echo esc_url($link); ?>" class="absolute inset-0 z-10 w-full h-full"></a>
     <div class="w-40 min-h-[10rem] h-full max-md:w-[128px] max-md:min-h-[8rem] bg-cover bg-center shrink-0"
         style="background-image: url('<?php echo esc_url($thumb); ?>');"
         role="img"
@@ -85,13 +96,13 @@ $badge_url = function_exists('greenergy_company_verification_badge_url') ? green
                     <?php echo esc_html($location_display); ?>
                 </span>
             <?php endif; ?>
-            <?php if ($tag_name) : ?>
-                <span class="px-2 py-2 bg-green-100 rounded-full">#<?php echo esc_html($tag_name); ?></span>
+            <?php if ($category_label) : ?>
+                <span class="px-2 py-2 bg-green-100 !text-black rounded-full"><?php echo esc_html($category_label); ?></span>
             <?php endif; ?>
         </div>
 
         <p class="text-neutral-800 text-xs line-clamp-2"><?php echo esc_html($excerpt); ?></p>
-        <a href="<?php echo esc_url($link); ?>" class="h-9 <?php echo $is_featured ? 'bg-gradient-to-b from-sky-500 to-blue-700 text-white' : 'border border-neutral-200 text-neutral-800'; ?> rounded-lg text-sm flex items-center justify-center hover:opacity-90 transition-opacity">
+        <a href="<?php echo esc_url($link); ?>" class="h-9 btn-card <?php echo $is_featured ? 'bg-gradient-to-b from-sky-500 to-blue-700 text-white' : 'border border-neutral-200 text-neutral-800'; ?> rounded-lg text-sm flex items-center justify-center hover:opacity-90 transition-opacity">
             <?php esc_html_e('عرض التفاصيل', 'greenergy'); ?>
         </a>
     </div>

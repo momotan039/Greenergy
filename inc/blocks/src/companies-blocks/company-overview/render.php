@@ -18,9 +18,17 @@ $post_id = isset($block->context['postId']) ? (int) $block->context['postId'] : 
 if (! $post_id && is_singular('companies')) {
     $post_id = get_queried_object_id();
 }
+if (! $post_id && is_singular('organizations')) {
+    $post_id = get_queried_object_id();
+}
 if (! $post_id) {
     return;
 }
+
+$current_post_type = get_post_type($post_id);
+$is_organization  = ($current_post_type === 'organizations');
+$category_tax     = $is_organization ? 'organization_category' : 'company_category';
+$location_tax     = $is_organization ? 'organization_location' : 'company_location';
 
 $attrs = wp_parse_args($attributes ?? [], [
     'establishedDate' => '',
@@ -36,14 +44,19 @@ $attrs = wp_parse_args($attributes ?? [], [
 $views = (class_exists('Greenergy_Post_Views') && method_exists('Greenergy_Post_Views', 'get_views'))
     ? Greenergy_Post_Views::get_views($post_id)
     : '—';
-// Sub-category: from company_category taxonomy (prefer child terms as sub-category)
-$category_terms = get_the_terms($post_id, 'company_category');
+// Sub-category: from category taxonomy. For organizations there are no sub-categories, only main; for companies prefer child terms.
+$category_terms = get_the_terms($post_id, $category_tax);
 $sub_category_display = '—';
 if ($category_terms && ! is_wp_error($category_terms)) {
-    // Prefer child terms (sub-categories); else use first term
-    $children = array_filter($category_terms, fn($t) => (int) $t->parent !== 0);
-    $term_to_show = ! empty($children) ? reset($children) : reset($category_terms);
-    $sub_category_display = $term_to_show ? $term_to_show->name : '—';
+    if ($is_organization) {
+        // المنظمات: تصنيفات رئيسية فقط، نعرض أول تصنيف
+        $term_to_show = reset($category_terms);
+        $sub_category_display = $term_to_show ? $term_to_show->name : '—';
+    } else {
+        $children = array_filter($category_terms, fn($t) => (int) $t->parent !== 0);
+        $term_to_show = ! empty($children) ? reset($children) : reset($category_terms);
+        $sub_category_display = $term_to_show ? $term_to_show->name : '—';
+    }
 }
 
 // Display date: stored as Y-m-d from date picker; format to d/m/Y for display
@@ -58,7 +71,7 @@ if ($attrs['establishedDate'] !== '') {
 }
 
 // Location from taxonomy
-$locations = get_the_terms($post_id, 'company_location');
+$locations = get_the_terms($post_id, $location_tax);
 $location_display = 'غير محدد';
 if ($locations && ! is_wp_error($locations)) {
     $city = null;
@@ -66,7 +79,7 @@ if ($locations && ! is_wp_error($locations)) {
     foreach ($locations as $term) {
         if ($term->parent != 0) {
             $city = $term->name;
-            $parent_term = get_term($term->parent, 'company_location');
+            $parent_term = get_term($term->parent, $location_tax);
             if ($parent_term && ! is_wp_error($parent_term)) {
                 $country = $parent_term->name;
             }
@@ -122,7 +135,7 @@ $badges = [
     ],
 ];
 
-$type_terms = get_the_terms($post_id, 'company_type');
+$type_terms = $is_organization ? null : get_the_terms($post_id, 'company_type');
 $type_slug = ($type_terms && ! is_wp_error($type_terms) && ! empty($type_terms)) ? $type_terms[0]->slug : 'normal';
 $class = isset($classes[$type_slug]) ? $classes[$type_slug] : $classes['normal'];
 
@@ -137,14 +150,14 @@ $class = isset($classes[$type_slug]) ? $classes[$type_slug] : $classes['normal']
             <div class="flex flex-col gap-2">
                 <div class="flex gap-2 items-center">
                     <h2 class="text-sm md:text-2xl font-bold text-neutral-950 text-right"><?php echo esc_html($title); ?></h2>
-                    <?php if ((bool) get_post_meta($post_id, 'company_verified', true)) : ?>
+                    <?php if (! $is_organization && (bool) get_post_meta($post_id, 'company_verified', true)) : ?>
                         <span class="inline-flex w-fit justify-center items-center gap-1.5 px-3 py-1 mt-2 bg-sky-100 rounded-3xl outline outline-1 outline-offset-[-1px] outline-sky-500 text-sky-500 text-base font-medium">
                             <img src="<?php echo GREENERGY_ASSETS_URI; ?>/images/vuesax/bold/verify-gold.svg" alt="موثوقة" class="w-4 h-4 mt-1">
                             موثوقة
                         </span>
                     <?php endif; ?>
                 </div>
-                <?php if ($type_slug !== 'normal' && $type_slug !== 'trusted') : ?>
+                <?php if (! $is_organization && $type_slug !== 'normal' && $type_slug !== 'trusted') : ?>
                     <span
                         class="w-fit inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/60 outline outline-1 <?php echo $badges[$type_slug]['outline']; ?> <?php echo $badges[$type_slug]['text']; ?> text-base">
                         <img src="<?php echo $badges[$type_slug]['image']; ?>" alt="<?php echo $badges[$type_slug]['label']; ?>" class="w-6 h-6 mt-1">

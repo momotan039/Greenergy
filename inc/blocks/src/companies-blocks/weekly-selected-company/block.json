@@ -1,9 +1,37 @@
 {
+    "$schema": "https://schemas.wp.org/trunk/block.json",
     "name": "greenergy/weekly-selected-company",
     "title": "شركة الأسبوع",
     "category": "greenergy-blocks",
     "icon": "businessman",
     "apiVersion": 3,
+    "description": "عرض شركة واحدة: إما يدوياً أو اختيار شركة من القاعدة",
     "editorScript": "greenergy-blocks-editor",
+    "attributes": {
+        "source": {
+            "type": "string",
+            "default": "manual",
+            "enum": ["manual", "db"]
+        },
+        "selectedCompany": {
+            "type": "array",
+            "default": [],
+            "description": "عند المصدر من القاعدة: مصفوفة تحتوي شركة واحدة { id }"
+        },
+        "badgeText": { "type": "string", "default": "شركة الأسبوع" },
+        "heading": { "type": "string", "default": "شركة مميزة هذا الأسبوع" },
+        "subheading": { "type": "string", "default": "نسلط الضوء على إحدى أبرز الشركات في مجال الطاقة المتجددة" },
+        "title": { "type": "string", "default": "" },
+        "imageId": { "type": "number", "default": 0 },
+        "imageUrl": { "type": "string", "default": "" },
+        "location": { "type": "string", "default": "" },
+        "categoryLabel": { "type": "string", "default": "" },
+        "description": { "type": "string", "default": "" },
+        "statYears": { "type": "string", "default": "" },
+        "statRating": { "type": "string", "default": "" },
+        "statProjects": { "type": "string", "default": "" },
+        "linkKnowMore": { "type": "string", "default": "" },
+        "linkContact": { "type": "string", "default": "" }
+    },
     "render": "file:./render.php"
 }

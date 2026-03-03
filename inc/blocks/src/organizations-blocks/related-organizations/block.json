@@ -1,0 +1,37 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/related-organizations",
+    "title": "المنظمات ذات الصلة",
+    "category": "greenergy-blocks",
+    "icon": "groups",
+    "editorScript": "greenergy-blocks-editor",
+    "description": "يعرض منظمات ذات صلة (سلايدر بـ 3 عناصر في كل شريحة) مع إمكانية تحرير العنوان والنص الفرعي وعدد العناصر.",
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "منظمات ذات صلة"
+        },
+        "subtitle": {
+            "type": "string",
+            "default": "اكتشف منظمات أخرى في نفس المجال."
+        },
+        "selectionMode": {
+            "type": "string",
+            "default": "auto"
+        },
+        "relatedCount": {
+            "type": "number",
+            "default": 6
+        },
+        "relatedSelectedOrganizations": {
+            "type": "array",
+            "default": []
+        },
+        "isEnabled": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "render": "file:./render.php"
+}

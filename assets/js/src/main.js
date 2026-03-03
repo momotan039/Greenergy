@@ -20,6 +20,7 @@ import { initGalleryLightbox } from './modules/gallery-lightbox.js';
 import { initProductModal } from './modules/product-modal.js';
 import { initCompanyProductsPagination } from './modules/company-products-pagination.js';
 import { initAllCompaniesPagination } from './modules/all-companies-pagination.js';
+import { initAllOrgsPagination } from './modules/all-orgs-pagination.js';
 import { initCompanyFilterAutocomplete } from './modules/company-filter-autocomplete.js';
 
 // Initialize all modules
@@ -36,6 +37,7 @@ function initAllModules() {
     initProductModal();
     initCompanyProductsPagination();
     initAllCompaniesPagination();
+    initAllOrgsPagination();
     initCompanyFilterAutocomplete();
 
     // Initialize/Refresh AOS

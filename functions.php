@@ -91,6 +91,7 @@ function greenergy_init()
     new Greenergy_CPT_Jobs();
     new Greenergy_CPT_Courses();
     new Greenergy_CPT_Companies();
+    new Greenergy_CPT_Organizations();
     new Greenergy_CPT_Experts();
     new Greenergy_CPT_Project();
     new Greenergy_CPT_Company_Product();
@@ -117,6 +118,7 @@ function greenergy_init()
     require_once GREENERGY_INC_DIR . '/class-acf-courses.php';
     require_once GREENERGY_INC_DIR . '/class-acf-posts.php';
     require_once GREENERGY_INC_DIR . '/class-acf-companies.php';
+    require_once GREENERGY_INC_DIR . '/class-acf-organizations.php';
 
     // Post Views System
     Greenergy_Post_Views::get_instance();

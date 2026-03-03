@@ -12,9 +12,10 @@ const LABELS = {
     project: ['اختر المشروع', 'ابحث عن المشروع...'],
     company_product: ['اختر المنتجات', 'ابحث عن المنتج...'],
     companies: ['اختر الشركات المميزة', 'ابحث عن الشركة...'],
+    organizations: ['اختر المنظمات المميزة', 'ابحث عن المنظمة...'],
 };
 
-const getLabels = (postType) => LABELS[postType] || ['اختر الأخبار', 'ابحث عن الخبر...'];
+const getLabels = (postType) => LABELS[postType] || ['اختر العناصر', 'ابحث...'];
 
 export const PostSelection = ({ selectedPosts, onChange, postType = 'news', refreshKey = 0 }) => {
     const [suggestions, setSuggestions] = useState([]);

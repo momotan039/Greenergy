@@ -397,4 +397,16 @@
   .greenergy-variant-list-scroll::-webkit-scrollbar-thumb:hover {
     background: #15803d;
   }
+  /* card hover */
+  .card-hover:hover {
+    @apply !bg-green-600 !transition-all !duration-300;
+    @apply !scale-105 !transition-transform !duration-300;
+  }
+
+  .card-hover:hover:not(.featured-card) *:not(.tag) {
+    @apply text-white !transition-all !duration-300;
+  }
+  .title-badge {
+    @apply mx-auto px-8 py-2.5 bg-green-200/50 align-middle text-green-700 text-2xl font-medium rounded-full;
+  }
 }

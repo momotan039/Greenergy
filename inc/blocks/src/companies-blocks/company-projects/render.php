@@ -18,7 +18,11 @@ $post_id = isset($block->context['postId']) ? (int) $block->context['postId'] : 
 if (! $post_id && is_singular('companies')) {
     $post_id = get_queried_object_id();
 }
-$type_terms = $post_id ? get_the_terms($post_id, 'company_type') : null;
+if (! $post_id && is_singular('organizations')) {
+    $post_id = get_queried_object_id();
+}
+$post_type = $post_id ? get_post_type($post_id) : '';
+$type_terms = ($post_id && $post_type !== 'organizations') ? get_the_terms($post_id, 'company_type') : null;
 $type_slug = ($type_terms && ! is_wp_error($type_terms) && ! empty($type_terms)) ? $type_terms[0]->slug : 'normal';
 $type_slug = in_array($type_slug, ['normal', 'gold', 'silver', 'diamond', 'trusted'], true) ? $type_slug : 'normal';
 
@@ -74,7 +78,15 @@ $attributes = wp_parse_args($raw_attrs, [
     'projects' => [],
 ]);
 
-$title    = (string) ($attributes['title'] ?? 'المشاريع التي شاركت بها الشركة');
+$title_company = 'المشاريع التي شاركت بها الشركة';
+$title_org     = 'المشاريع التي شاركت بها المنظمة';
+$post_type     = $post_id ? get_post_type($post_id) : '';
+$title = (string) ($attributes['title'] ?? $title_company);
+if ($post_type === 'organizations' && ($title === '' || $title === $title_company)) {
+    $title = $title_org;
+} elseif ($title === '') {
+    $title = $title_company;
+}
 $projects = isset($attributes['projects']) && is_array($attributes['projects']) ? $attributes['projects'] : [];
 ?>
 

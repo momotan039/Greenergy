@@ -116,7 +116,7 @@ $filter_block_attrs = ! empty($visible_category_ids) ? wp_json_encode(['visibleC
     data-total-pages="<?php echo esc_attr((string) $total_pages); ?>">
 
     <header class="text-center flex flex-col gap-2">
-        <div class="mx-auto px-8 py-2.5 bg-teal-50 rounded-3xl text-green-700 text-2xl font-medium"><?php echo esc_html($title); ?></div>
+        <div class="title-badge"><?php echo esc_html($title); ?></div>
         <p class="text-stone-500 text-base"><?php echo esc_html($desc); ?></p>
     </header>
 

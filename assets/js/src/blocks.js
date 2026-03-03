@@ -73,6 +73,14 @@ const GreenergyBlockEdit = (props) => {
             null;
     }, []);
 
+    // Current post type (companies | organizations) for block title defaults and preview.
+    const currentPostType = useSelect((select) => {
+        const editor = select('core/editor');
+        const currentPost = editor && typeof editor.getCurrentPost === 'function' ? editor.getCurrentPost() : null;
+        return currentPost && currentPost.type ? currentPost.type : null;
+    }, []);
+    const isOrganization = currentPostType === 'organizations';
+
     // When editing company-overview: get current post title, thumbnail, location from entity so preview shows them (ServerSideRender does not pass context).
     const companyOverviewPost = useSelect((select) => {
         if (name !== 'greenergy/company-overview' || !currentPostId) return null;
@@ -82,7 +90,7 @@ const GreenergyBlockEdit = (props) => {
             editor.getCurrentPost() :
             null;
         const postType = currentPost ? currentPost.type : null;
-        if (postType !== 'companies') return null;
+        if (postType !== 'companies' && postType !== 'organizations') return null;
 
         const entity = select('core') && typeof select('core').getEditedEntityRecord === 'function' ?
             select('core').getEditedEntityRecord('postType', postType, currentPostId) :
@@ -94,19 +102,21 @@ const GreenergyBlockEdit = (props) => {
             const media = select('core').getEntityRecord('media', featuredMediaId);
             if (media && media.source_url) mediaUrl = media.source_url;
         }
+        const locationTax = postType === 'organizations' ? 'organization_location' : 'company_location';
+        const categoryTax = postType === 'organizations' ? 'organization_category' : 'company_category';
         let locationDisplay = 'غير محدد';
-        const locationIds = entity.company_location || [];
+        const locationIds = entity[locationTax] || entity.company_location || [];
         if (Array.isArray(locationIds) && locationIds.length > 0) {
-            const terms = select('core').getEntityRecords('taxonomy', 'company_location', {
+            const terms = select('core').getEntityRecords('taxonomy', locationTax, {
                 include: locationIds,
                 per_page: 100
             }) || [];
             locationDisplay = terms.map((t) => t.name).join(' ، ') || locationDisplay;
         }
         let subCategoryDisplay = '—';
-        const catIds = entity.company_category || [];
+        const catIds = entity[categoryTax] || entity.company_category || [];
         if (Array.isArray(catIds) && catIds.length > 0) {
-            const catTerms = select('core').getEntityRecords('taxonomy', 'company_category', {
+            const catTerms = select('core').getEntityRecords('taxonomy', categoryTax, {
                 include: catIds,
                 per_page: 100
             }) || [];
@@ -119,9 +129,51 @@ const GreenergyBlockEdit = (props) => {
             mediaUrl: mediaUrl || 'https://placehold.co/122x122',
             locationDisplay,
             subCategoryDisplay,
-            companyVerified: !!(entity.meta && entity.meta.company_verified)
+            companyVerified: postType === 'companies' && !!(entity.meta && entity.meta.company_verified),
+            isOrganization: postType === 'organizations'
         };
     }, [name, currentPostId]);
+
+    // Sync block title attributes to organization defaults when editing an organization and attribute is still company default.
+    const DEFAULT_TITLES = {
+        companyAbout: {
+            company: 'نبذة عن الشركة',
+            org: 'نبذة عن المنظمة'
+        },
+        companyTeam: {
+            company: 'يعمل هنا',
+            org: 'فريق المنظمة'
+        },
+        companyProjects: {
+            company: 'المشاريع التي شاركت بها الشركة',
+            org: 'المشاريع التي شاركت بها المنظمة'
+        }
+    };
+    useEffect(() => {
+        if (!isOrganization || !setAttributes) return;
+        if (name === 'greenergy/company-about') {
+            const t = attributes.title || '';
+            if (t === '' || t === DEFAULT_TITLES.companyAbout.company) {
+                setAttributes({
+                    title: DEFAULT_TITLES.companyAbout.org
+                });
+            }
+        } else if (name === 'greenergy/company-team') {
+            const t = attributes.title || '';
+            if (t === '' || t === DEFAULT_TITLES.companyTeam.company) {
+                setAttributes({
+                    title: DEFAULT_TITLES.companyTeam.org
+                });
+            }
+        } else if (name === 'greenergy/company-projects') {
+            const t = attributes.title || '';
+            if (t === '' || t === DEFAULT_TITLES.companyProjects.company) {
+                setAttributes({
+                    title: DEFAULT_TITLES.companyProjects.org
+                });
+            }
+        }
+    }, [isOrganization, name]); // Intentionally run when post type / block name is known; avoid deps on attributes to prevent overwriting user edits after first sync.
 
     const {
         editEntityRecord
@@ -156,7 +208,7 @@ const GreenergyBlockEdit = (props) => {
             editor.getCurrentPost() :
             null;
         const postType = currentPost ? currentPost.type : null;
-        if (postType !== 'companies') {
+        if (postType !== 'companies' && postType !== 'organizations') {
             return {
                 ids: [],
                 terms: []
@@ -168,20 +220,20 @@ const GreenergyBlockEdit = (props) => {
             core.getEditedEntityRecord('postType', postType, postId) :
             null;
 
-        let ids = entity && Array.isArray(entity.company_tag) ? entity.company_tag : null;
+        const tagTax = postType === 'organizations' ? 'organization_tag' : 'company_tag';
+        const tagKey = postType === 'organizations' ? 'organization_tag' : 'company_tag';
+        let ids = entity && Array.isArray(entity[tagKey]) ? entity[tagKey] : null;
         if (!Array.isArray(ids)) {
             ids = editor && typeof editor.getEditedPostAttribute === 'function' ?
-                editor.getEditedPostAttribute('company_tag') :
-                [];
+                editor.getEditedPostAttribute(tagKey) : [];
         }
         ids = Array.isArray(ids) ? ids : [];
 
         const terms = (ids.length && core && typeof core.getEntityRecords === 'function' ?
-            core.getEntityRecords('taxonomy', 'company_tag', {
+            core.getEntityRecords('taxonomy', tagTax, {
                 include: ids,
                 per_page: 100
-            }) :
-            []) || [];
+            }) : []) || [];
 
         return {
             ids,
@@ -2802,6 +2854,7 @@ const GreenergyBlockEdit = (props) => {
                     createElement(TextControl, {
                         label: __('العنوان', 'greenergy'),
                         value: attributes.title,
+                        placeholder: isOrganization ? __('نبذة عن المنظمة', 'greenergy') : __('نبذة عن الشركة', 'greenergy'),
                         onChange: (val) => updateAttribute('title', val)
                     }),
                     createElement(TextareaControl, {
@@ -2820,6 +2873,7 @@ const GreenergyBlockEdit = (props) => {
                         createElement(TextControl, {
                             label: __('العنوان', 'greenergy'),
                             value: attributes.title,
+                            placeholder: isOrganization ? __('فريق المنظمة', 'greenergy') : __('يعمل هنا', 'greenergy'),
                             onChange: (val) => updateAttribute('title', val)
                         }),
                         createElement('p', {
@@ -3019,6 +3073,7 @@ const GreenergyBlockEdit = (props) => {
                     createElement(TextControl, {
                         label: __('عنوان القسم', 'greenergy'),
                         value: attributes.title,
+                        placeholder: isOrganization ? __('المشاريع التي شاركت بها المنظمة', 'greenergy') : __('المشاريع التي شاركت بها الشركة', 'greenergy'),
                         onChange: (val) => updateAttribute('title', val)
                     }),
                     createElement('p', {
@@ -3267,6 +3322,153 @@ const GreenergyBlockEdit = (props) => {
                         })
                     )
                 );
+            case 'greenergy/all-orgs':
+                return createElement(Fragment, null,
+                    createElement(PanelBody, {
+                            title: __('إعدادات قائمة المنظمات', 'greenergy'),
+                            initialOpen: true
+                        },
+                        createElement(TextControl, {
+                            label: __('العنوان', 'greenergy'),
+                            value: attributes.title || 'جميع المنظمات',
+                            onChange: (val) => updateAttribute('title', val)
+                        }),
+                        createElement(TextareaControl, {
+                            label: __('الوصف', 'greenergy'),
+                            value: attributes.description || '',
+                            onChange: (val) => updateAttribute('description', val),
+                            rows: 3
+                        }),
+                        createElement(RangeControl, {
+                            label: __('عدد المنظمات في كل صفحة', 'greenergy'),
+                            value: typeof attributes.perPage === 'number' ? attributes.perPage : 9,
+                            onChange: (val) => updateAttribute('perPage', val),
+                            min: 3,
+                            max: 24
+                        }),
+                        createElement(GreenergyTermSelect, {
+                            taxonomy: 'organization_category',
+                            parent: 0,
+                            selectedTermIds: attributes.visibleCategoryIds || [],
+                            onChange: (val) => updateAttribute('visibleCategoryIds', Array.isArray(val) ? val : []),
+                            label: __('التصنيفات الظاهرة في القائمة (فارغ = الكل)', 'greenergy')
+                        }),
+                        createElement(GreenergyPostSelection, {
+                            postType: 'organizations',
+                            selectedPosts: attributes.featuredOrganizations || [],
+                            onChange: (val) => updateAttribute('featuredOrganizations', val),
+                            label: __('المنظمات المميزة (تظهر في الأعلى)', 'greenergy')
+                        })
+                    )
+                );
+            case 'greenergy/featured-organizations':
+                const manualEntries = attributes.manualEntries || [];
+                const setManualEntry = (idx, key, val) => {
+                    const next = [...manualEntries];
+                    next[idx] = { ...(next[idx] || {}), [key]: val };
+                    updateAttribute('manualEntries', next);
+                };
+                const removeManualEntry = (idx) => {
+                    updateAttribute('manualEntries', manualEntries.filter((_, i) => i !== idx));
+                };
+                const addManualEntry = () => {
+                    updateAttribute('manualEntries', [...manualEntries, {
+                        title: '',
+                        imageId: 0,
+                        imageUrl: '',
+                        location: '',
+                        tag: '',
+                        excerpt: '',
+                        link: ''
+                    }]);
+                };
+                return createElement(Fragment, null,
+                    createElement(PanelBody, {
+                            title: __('إعدادات المنظمات المميزة', 'greenergy'),
+                            initialOpen: true
+                        },
+                        createElement(TextControl, {
+                            label: __('العنوان', 'greenergy'),
+                            value: attributes.title || 'أبرز المنظمات',
+                            onChange: (val) => updateAttribute('title', val)
+                        }),
+                        createElement(TextareaControl, {
+                            label: __('الوصف', 'greenergy'),
+                            value: attributes.description || '',
+                            onChange: (val) => updateAttribute('description', val),
+                            rows: 2
+                        }),
+                        createElement('p', { className: 'components-base-control__help', style: { marginBottom: '8px' } },
+                            __('يمكنك إضافة عناصر يدوياً و/أو اختيار منظمات من القاعدة. العناصر اليدوية تظهر أولاً ثم المختارة من القاعدة.', 'greenergy')),
+                        createElement('strong', { style: { display: 'block', marginBottom: '6px' } }, __('عناصر يدوية', 'greenergy')),
+                        manualEntries.map((entry, idx) => createElement(PanelBody, {
+                            key: 'manual-' + idx,
+                            title: (entry && entry.title) ? entry.title : __('عنصر يدوي', 'greenergy') + ' ' + (idx + 1),
+                            initialOpen: false
+                        },
+                            createElement(TextControl, {
+                                label: __('العنوان', 'greenergy'),
+                                value: (entry && entry.title) || '',
+                                onChange: (val) => setManualEntry(idx, 'title', val)
+                            }),
+                            createElement(MediaUploadCheck, null,
+                                createElement(MediaUpload, {
+                                    allowedTypes: ['image'],
+                                    value: (entry && entry.imageId) || 0,
+                                    onSelect: (media) => {
+                                        setManualEntry(idx, 'imageId', media.id);
+                                        setManualEntry(idx, 'imageUrl', media.url || (media.sizes && media.sizes.medium && media.sizes.medium.url) || '');
+                                    },
+                                    render: ({ open }) => createElement(Fragment, null,
+                                        (entry && entry.imageUrl) ? createElement('div', { style: { marginBottom: 8 } },
+                                            createElement('img', { src: entry.imageUrl, alt: '', style: { maxWidth: 120, height: 80, objectFit: 'cover', borderRadius: 4 } }),
+                                            createElement(Button, { isSecondary: true, isSmall: true, onClick: open, style: { marginTop: 4 } }, __('تغيير الصورة', 'greenergy'))
+                                        ) : createElement(Button, { isSecondary: true, onClick: open }, __('اختر صورة', 'greenergy'))
+                                    )
+                                })
+                            ),
+                            createElement(TextControl, {
+                                label: __('الموقع', 'greenergy'),
+                                value: (entry && entry.location) || '',
+                                onChange: (val) => setManualEntry(idx, 'location', val)
+                            }),
+                            createElement(TextControl, {
+                                label: __('وسم (#)', 'greenergy'),
+                                value: (entry && entry.tag) || '',
+                                onChange: (val) => setManualEntry(idx, 'tag', val)
+                            }),
+                            createElement(TextareaControl, {
+                                label: __('مقتطف', 'greenergy'),
+                                value: (entry && entry.excerpt) || '',
+                                onChange: (val) => setManualEntry(idx, 'excerpt', val),
+                                rows: 2
+                            }),
+                            createElement(TextControl, {
+                                label: __('رابط', 'greenergy'),
+                                value: (entry && entry.link) || '',
+                                onChange: (val) => setManualEntry(idx, 'link', val),
+                                help: __('رابط زر عرض التفاصيل', 'greenergy')
+                            }),
+                            createElement(Button, {
+                                isDestructive: true,
+                                isLink: true,
+                                onClick: () => removeManualEntry(idx)
+                            }, __('حذف هذا العنصر', 'greenergy'))
+                        )),
+                        createElement(Button, {
+                            isSecondary: true,
+                            onClick: addManualEntry,
+                            style: { marginTop: 8, marginBottom: 16 }
+                        }, __('+ إضافة عنصر يدوي', 'greenergy')),
+                        createElement('strong', { style: { display: 'block', marginBottom: '6px' } }, __('منظمات من القاعدة', 'greenergy')),
+                        createElement(GreenergyPostSelection, {
+                            postType: 'organizations',
+                            selectedPosts: attributes.selectedOrganizations || [],
+                            onChange: (val) => updateAttribute('selectedOrganizations', Array.isArray(val) ? val : []),
+                            label: __('اختر المنظمات من القاعدة', 'greenergy')
+                        })
+                    )
+                );
             case 'greenergy/filter-companies':
                 return createElement(PanelBody, {
                         title: __('إعدادات التصفية', 'greenergy'),
@@ -3285,6 +3487,111 @@ const GreenergyBlockEdit = (props) => {
                         onChange: (val) => updateAttribute('visibleCategoryIds', Array.isArray(val) ? val : []),
                         label: __('إظهار التصنيفات فقط', 'greenergy')
                     })
+                );
+            case 'greenergy/weekly-selected-company':
+                const weeklySource = attributes.source || 'manual';
+                return createElement(Fragment, null,
+                    createElement(PanelBody, {
+                            title: __('شركة الأسبوع', 'greenergy'),
+                            initialOpen: true
+                        },
+                        createElement(SelectControl, {
+                            label: __('المصدر', 'greenergy'),
+                            value: weeklySource,
+                            options: [
+                                { label: __('يدوي', 'greenergy'), value: 'manual' },
+                                { label: __('من القاعدة', 'greenergy'), value: 'db' }
+                            ],
+                            onChange: (val) => updateAttribute('source', val)
+                        }),
+                        createElement(TextControl, {
+                            label: __('نص الشارة', 'greenergy'),
+                            value: attributes.badgeText || 'شركة الأسبوع',
+                            onChange: (val) => updateAttribute('badgeText', val)
+                        }),
+                        createElement(TextControl, {
+                            label: __('العنوان الرئيسي', 'greenergy'),
+                            value: attributes.heading || '',
+                            onChange: (val) => updateAttribute('heading', val)
+                        }),
+                        createElement(TextareaControl, {
+                            label: __('العنوان الفرعي', 'greenergy'),
+                            value: attributes.subheading || '',
+                            onChange: (val) => updateAttribute('subheading', val),
+                            rows: 2
+                        }),
+                        weeklySource === 'db'
+                            ? createElement(GreenergyPostSelection, {
+                                postType: 'companies',
+                                selectedPosts: attributes.selectedCompany || [],
+                                onChange: (val) => updateAttribute('selectedCompany', Array.isArray(val) ? (val.length > 1 ? val.slice(0, 1) : val) : []),
+                                label: __('اختر شركة واحدة', 'greenergy')
+                            })
+                            : createElement(Fragment, null,
+                                createElement(TextControl, {
+                                    label: __('اسم الشركة', 'greenergy'),
+                                    value: attributes.title || '',
+                                    onChange: (val) => updateAttribute('title', val)
+                                }),
+                                createElement(MediaUploadCheck, null,
+                                    createElement(MediaUpload, {
+                                        allowedTypes: ['image'],
+                                        value: attributes.imageId || 0,
+                                        onSelect: (media) => {
+                                            updateAttribute('imageId', media.id);
+                                            updateAttribute('imageUrl', media.url || (media.sizes && media.sizes.medium && media.sizes.medium.url) || '');
+                                        },
+                                        render: ({ open }) => createElement(Fragment, null,
+                                            (attributes.imageUrl) ? createElement('div', { style: { marginBottom: 8 } },
+                                                createElement('img', { src: attributes.imageUrl, alt: '', style: { maxWidth: 120, height: 80, objectFit: 'cover', borderRadius: 4 } }),
+                                                createElement(Button, { isSecondary: true, isSmall: true, onClick: open, style: { marginTop: 4 } }, __('تغيير الصورة', 'greenergy'))
+                                            ) : createElement(Button, { isSecondary: true, onClick: open }, __('اختر صورة', 'greenergy'))
+                                        )
+                                    })
+                                ),
+                                createElement(TextControl, {
+                                    label: __('الموقع', 'greenergy'),
+                                    value: attributes.location || '',
+                                    onChange: (val) => updateAttribute('location', val)
+                                }),
+                                createElement(TextControl, {
+                                    label: __('التصنيف', 'greenergy'),
+                                    value: attributes.categoryLabel || '',
+                                    onChange: (val) => updateAttribute('categoryLabel', val)
+                                }),
+                                createElement(TextareaControl, {
+                                    label: __('الوصف', 'greenergy'),
+                                    value: attributes.description || '',
+                                    onChange: (val) => updateAttribute('description', val),
+                                    rows: 3
+                                }),
+                                createElement(TextControl, {
+                                    label: __('سنة خبرة (رقم)', 'greenergy'),
+                                    value: attributes.statYears || '',
+                                    onChange: (val) => updateAttribute('statYears', val)
+                                }),
+                                createElement(TextControl, {
+                                    label: __('تقييم العملاء (رقم)', 'greenergy'),
+                                    value: attributes.statRating || '',
+                                    onChange: (val) => updateAttribute('statRating', val)
+                                }),
+                                createElement(TextControl, {
+                                    label: __('مشاريع مكتملة (رقم)', 'greenergy'),
+                                    value: attributes.statProjects || '',
+                                    onChange: (val) => updateAttribute('statProjects', val)
+                                }),
+                                createElement(TextControl, {
+                                    label: __('رابط اعرف المزيد', 'greenergy'),
+                                    value: attributes.linkKnowMore || '',
+                                    onChange: (val) => updateAttribute('linkKnowMore', val)
+                                }),
+                                createElement(TextControl, {
+                                    label: __('رابط تواصل معنا', 'greenergy'),
+                                    value: attributes.linkContact || '',
+                                    onChange: (val) => updateAttribute('linkContact', val)
+                                })
+                            )
+                    )
                 );
             case 'greenergy/add-your-company':
                 const points = attributes.points || [];
@@ -3561,7 +3868,7 @@ const GreenergyBlockEdit = (props) => {
                                 },
                                 createElement('h2', {
                                     className: 'text-2xl font-bold text-neutral-950 text-right'
-                                }, post.title || __('عنوان الشركة', 'greenergy')),
+                                }, post.title || (post.isOrganization ? __('عنوان المنظمة', 'greenergy') : __('عنوان الشركة', 'greenergy'))),
                                 post.companyVerified && createElement('span', {
                                         className: 'inline-flex w-fit justify-center items-center gap-1.5 px-3 py-1 mt-2 bg-sky-100 rounded-3xl outline outline-1 outline-offset-[-1px] outline-sky-500 text-sky-500 text-base font-medium'
                                     },
@@ -3600,7 +3907,8 @@ const GreenergyBlockEdit = (props) => {
         }
         // company-about: render preview in editor with tags from entity so add/remove tag updates at once (SSR would show only saved data)
         if (name === 'greenergy/company-about') {
-            const title = attributes.title || __('نبذة عن الشركة', 'greenergy');
+            const defaultTitle = isOrganization ? __('نبذة عن المنظمة', 'greenergy') : __('نبذة عن الشركة', 'greenergy');
+            const title = attributes.title && attributes.title.trim() !== '' ? attributes.title : defaultTitle;
             const desc = attributes.description || '';
             const tags = companyAboutTags.terms || [];
             return createElement('div', {
@@ -4415,7 +4723,7 @@ const blocks = [
     // Company blocks
     {
         name: 'company-gallery',
-        title: __('معرض الشركة', 'greenergy'),
+        title: __('معرض الشركة/المنظمة', 'greenergy'),
         icon: 'format-gallery',
         attributes: {
             title: {
@@ -4430,7 +4738,7 @@ const blocks = [
     },
     {
         name: 'company-overview',
-        title: __('نظرة عامة على الشركة', 'greenergy'),
+        title: __('نظرة عامة على الشركة/المنظمة', 'greenergy'),
         icon: 'building',
         attributes: {
             establishedDate: {
@@ -4488,7 +4796,7 @@ const blocks = [
     },
     {
         name: 'company-team',
-        title: __('فريق الشركة - الخبراء', 'greenergy'),
+        title: __('فريق الشركة/المنظمة - الخبراء', 'greenergy'),
         icon: 'groups',
         attributes: {
             title: {
@@ -4507,7 +4815,7 @@ const blocks = [
     },
     {
         name: 'company-projects',
-        title: __('مشاريع الشركة', 'greenergy'),
+        title: __('مشاريع الشركة/المنظمة', 'greenergy'),
         icon: 'portfolio',
         attributes: {
             title: {
@@ -4548,6 +4856,11 @@ const blocks = [
         }
     },
     {
+        name: 'weekly-selected-company',
+        title: __('شركة الأسبوع', 'greenergy'),
+        icon: 'businessman'
+    },
+    {
         name: 'all-companies',
         title: __('الشركات', 'greenergy'),
         icon: 'admin-users',
@@ -4569,6 +4882,56 @@ const blocks = [
                 default: []
             },
             visibleCategoryIds: {
+                type: 'array',
+                default: []
+            },
+        }
+    },
+    {
+        name: 'all-orgs',
+        title: __('جميع المنظمات', 'greenergy'),
+        icon: 'groups',
+        attributes: {
+            title: {
+                type: 'string',
+                default: 'جميع المنظمات'
+            },
+            description: {
+                type: 'string',
+                default: 'اكتشف أبرز المنظمات التي تساهم في تطوير المجتمع وتقدم خدمات متنوعة في مجالات مختلفة'
+            },
+            perPage: {
+                type: 'number',
+                default: 9
+            },
+            featuredOrganizations: {
+                type: 'array',
+                default: []
+            },
+            visibleCategoryIds: {
+                type: 'array',
+                default: []
+            },
+        }
+    },
+    {
+        name: 'featured-organizations',
+        title: __('المنظمات المميزة', 'greenergy'),
+        icon: 'building',
+        attributes: {
+            title: {
+                type: 'string',
+                default: 'أبرز المنظمات'
+            },
+            description: {
+                type: 'string',
+                default: 'اكتشف أبرز المنظمات التي تقود التغيير في مجال الطاقة المستدامة'
+            },
+            manualEntries: {
+                type: 'array',
+                default: []
+            },
+            selectedOrganizations: {
                 type: 'array',
                 default: []
             },

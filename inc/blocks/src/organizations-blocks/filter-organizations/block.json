@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "greenergy/filter-organizations",
+  "title": "تصفية المنظمات",
+  "description": "تصفية المنظمات حسب التصنيف والدولة والترتيب",
+  "category": "greenergy-blocks",
+  "icon": "groups",
+  "attributes": {
+    "visibleCategoryIds": {
+      "type": "array",
+      "default": [],
+      "description": "Term IDs of organization categories to show in tabs. Empty = show all."
+    }
+  },
+  "render": "file:./render.php"
+}

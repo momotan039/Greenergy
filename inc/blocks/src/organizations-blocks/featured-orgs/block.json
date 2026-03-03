@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "greenergy/featured-organizations",
+  "title": "المنظمات المميزة",
+  "category": "greenergy-blocks",
+  "icon": "building",
+  "description": "سلايدر المنظمات المميزة (يدوي + من القاعدة)، 3 عناصر للشاشات الكبيرة و 1.5 للصغيرة",
+  "editorScript": "greenergy-blocks-editor",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "أبرز المنظمات"
+    },
+    "description": {
+      "type": "string",
+      "default": "اكتشف أبرز المنظمات التي تقود التغيير في مجال الطاقة المستدامة"
+    },
+    "manualEntries": {
+      "type": "array",
+      "default": [],
+      "description": "عناصر يدوية: كل عنصر { title, imageId, imageUrl, location, tag, excerpt, link }"
+    },
+    "selectedOrganizations": {
+      "type": "array",
+      "default": [],
+      "description": "منظمات من القاعدة: مصفوفة { id } أو معرفات"
+    }
+  },
+  "render": "file:./render.php"
+}

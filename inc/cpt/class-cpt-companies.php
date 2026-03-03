@@ -23,6 +23,7 @@ class Greenergy_CPT_Companies
         add_action('add_meta_boxes', [$this, 'add_meta_boxes']);
         add_action('save_post_' . self::POST_TYPE, [$this, 'save_verified_meta'], 10, 2);
         add_action('save_post_' . self::POST_TYPE, [$this, 'save_views_and_card_meta'], 10, 2);
+        add_action('enqueue_block_editor_assets', [$this, 'enqueue_company_weekly_panel_script']);
     }
 
     public function register()
@@ -157,13 +158,81 @@ class Greenergy_CPT_Companies
             },
         ]);
 
+        $auth_callback = function ($allowed, $meta_key, $post_id) {
+            return current_user_can('edit_post', $post_id);
+        };
+
         register_post_meta(self::POST_TYPE, 'company_card_description', [
             'show_in_rest'      => true,
             'single'            => true,
             'type'              => 'string',
             'default'           => '',
+            'auth_callback'     => $auth_callback,
             'sanitize_callback' => 'sanitize_textarea_field',
         ]);
+
+        // وصف شركة الأسبوع (للعرض في كتلة شركة الأسبوع عند السحب من القاعدة؛ إن فارغ يُستخدم وصف البطاقة)
+        register_post_meta(self::POST_TYPE, 'company_weekly_description', [
+            'show_in_rest'      => true,
+            'single'            => true,
+            'type'              => 'string',
+            'default'           => '',
+            'auth_callback'     => $auth_callback,
+            'sanitize_callback' => 'sanitize_textarea_field',
+        ]);
+
+        // حقول عرض "شركة الأسبوع" (الوضع الديناميكي) — يملأها الأدمن وتظهر عند السحب من القاعدة
+        register_post_meta(self::POST_TYPE, 'company_years_experience', [
+            'show_in_rest'      => true,
+            'single'            => true,
+            'type'              => 'string',
+            'default'           => '',
+            'auth_callback'     => $auth_callback,
+            'sanitize_callback' => 'sanitize_text_field',
+        ]);
+        register_post_meta(self::POST_TYPE, 'company_customer_rating', [
+            'show_in_rest'      => true,
+            'single'            => true,
+            'type'              => 'string',
+            'default'           => '',
+            'auth_callback'     => $auth_callback,
+            'sanitize_callback' => 'sanitize_text_field',
+        ]);
+        register_post_meta(self::POST_TYPE, 'company_projects_completed', [
+            'show_in_rest'      => true,
+            'single'            => true,
+            'type'              => 'string',
+            'default'           => '',
+            'auth_callback'     => $auth_callback,
+            'sanitize_callback' => 'sanitize_text_field',
+        ]);
+        register_post_meta(self::POST_TYPE, 'company_contact_url', [
+            'show_in_rest'      => true,
+            'single'            => true,
+            'type'              => 'string',
+            'default'           => '',
+            'auth_callback'     => $auth_callback,
+            'sanitize_callback' => 'esc_url_raw',
+        ]);
+    }
+
+    /**
+     * Enqueue script that adds "شركة الأسبوع" meta panel in block editor (so fields save via REST).
+     */
+    public function enqueue_company_weekly_panel_script()
+    {
+        $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+        if (! $screen || $screen->post_type !== self::POST_TYPE) {
+            return;
+        }
+        $script_path = GREENERGY_ASSETS_URI . '/js/src/company-weekly-meta-panel.js';
+        wp_enqueue_script(
+            'greenergy-company-weekly-meta-panel',
+            $script_path,
+            ['wp-edit-post', 'wp-plugins', 'wp-data', 'wp-element', 'wp-components', 'wp-i18n'],
+            defined('GREENERGY_VERSION') ? GREENERGY_VERSION : '1.0.0',
+            true
+        );
     }
 
     /**
@@ -189,6 +258,13 @@ class Greenergy_CPT_Companies
             'company_card_description',
             __('وصف البطاقة (قائمة الشركات)', 'greenergy'),
             [$this, 'render_card_description_meta_box'],
+            self::POST_TYPE,
+            'normal'
+        );
+        add_meta_box(
+            'company_weekly_display',
+            __('بيانات عرض شركة الأسبوع', 'greenergy'),
+            [$this, 'render_weekly_display_meta_box'],
             self::POST_TYPE,
             'normal'
         );
@@ -261,6 +337,42 @@ class Greenergy_CPT_Companies
         <?php
     }
 
+    /**
+     * Meta box: بيانات عرض شركة الأسبوع (سنة خبرة، تقييم، مشاريع، رابط تواصل).
+     */
+    public function render_weekly_display_meta_box($post)
+    {
+        wp_nonce_field('company_weekly_display_nonce', 'company_weekly_display_nonce');
+        $weekly_desc = get_post_meta($post->ID, 'company_weekly_description', true);
+        $years   = get_post_meta($post->ID, 'company_years_experience', true);
+        $rating  = get_post_meta($post->ID, 'company_customer_rating', true);
+        $projects = get_post_meta($post->ID, 'company_projects_completed', true);
+        $contact = get_post_meta($post->ID, 'company_contact_url', true);
+        ?>
+        <p class="description" style="margin-bottom: 12px;"><?php esc_html_e('تظهر هذه الحقول عند اختيار هذه الشركة في كتلة "شركة الأسبوع" بالمصدر "من القاعدة". في محرر الكتل تظهر أيضاً لوحة "بيانات شركة الأسبوع" في الشريط الجانبي.', 'greenergy'); ?></p>
+        <p>
+            <label for="company_weekly_description"><?php esc_html_e('وصف شركة الأسبوع (للعرض عند السحب من القاعدة)', 'greenergy'); ?></label>
+            <textarea id="company_weekly_description" name="company_weekly_description" rows="3" class="widefat"><?php echo esc_textarea($weekly_desc); ?></textarea>
+        </p>
+        <p>
+            <label for="company_years_experience"><?php esc_html_e('سنة خبرة (رقم أو نص)', 'greenergy'); ?></label>
+            <input type="text" id="company_years_experience" name="company_years_experience" value="<?php echo esc_attr($years); ?>" class="widefat" />
+        </p>
+        <p>
+            <label for="company_customer_rating"><?php esc_html_e('تقييم العملاء (رقم أو نص)', 'greenergy'); ?></label>
+            <input type="text" id="company_customer_rating" name="company_customer_rating" value="<?php echo esc_attr($rating); ?>" class="widefat" />
+        </p>
+        <p>
+            <label for="company_projects_completed"><?php esc_html_e('مشاريع مكتملة (رقم أو نص)', 'greenergy'); ?></label>
+            <input type="text" id="company_projects_completed" name="company_projects_completed" value="<?php echo esc_attr($projects); ?>" class="widefat" />
+        </p>
+        <p>
+            <label for="company_contact_url"><?php esc_html_e('رابط تواصل معنا (URL)', 'greenergy'); ?></label>
+            <input type="url" id="company_contact_url" name="company_contact_url" value="<?php echo esc_attr($contact); ?>" class="widefat" placeholder="https://" />
+        </p>
+        <?php
+    }
+
     public function save_views_and_card_meta($post_id, $post)
     {
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
@@ -277,6 +389,13 @@ class Greenergy_CPT_Companies
         if (isset($_POST['company_card_desc_nonce']) && wp_verify_nonce($_POST['company_card_desc_nonce'], 'company_card_desc_nonce')) {
             $desc = isset($_POST['company_card_description']) ? sanitize_textarea_field($_POST['company_card_description']) : '';
             update_post_meta($post_id, 'company_card_description', $desc);
+        }
+        if (isset($_POST['company_weekly_display_nonce']) && wp_verify_nonce($_POST['company_weekly_display_nonce'], 'company_weekly_display_nonce')) {
+            update_post_meta($post_id, 'company_weekly_description', isset($_POST['company_weekly_description']) ? sanitize_textarea_field($_POST['company_weekly_description']) : '');
+            update_post_meta($post_id, 'company_years_experience', isset($_POST['company_years_experience']) ? sanitize_text_field($_POST['company_years_experience']) : '');
+            update_post_meta($post_id, 'company_customer_rating', isset($_POST['company_customer_rating']) ? sanitize_text_field($_POST['company_customer_rating']) : '');
+            update_post_meta($post_id, 'company_projects_completed', isset($_POST['company_projects_completed']) ? sanitize_text_field($_POST['company_projects_completed']) : '');
+            update_post_meta($post_id, 'company_contact_url', isset($_POST['company_contact_url']) ? esc_url_raw($_POST['company_contact_url']) : '');
         }
     }
 
