@@ -90,6 +90,109 @@ function greenergy_reading_time($post_id = null)
 }
 
 /**
+ * Get all companies/organizations linked to an expert (from company-team blocks).
+ * Populated automatically when expert is added in company-team on company/org page.
+ *
+ * @param int $post_id Expert post ID.
+ * @return array List of items with 'id' and 'type' (organizations|companies).
+ */
+function greenergy_expert_get_linked_entities($post_id)
+{
+    $post_id = absint($post_id);
+    if (! $post_id || get_post_type($post_id) !== 'experts') {
+        return [];
+    }
+    $ids = get_post_meta($post_id, 'expert_linked_entity_ids', true);
+    if (! is_array($ids)) {
+        $ids = [];
+    }
+    $out = [];
+    foreach (array_map('absint', $ids) as $id) {
+        if ($id <= 0) {
+            continue;
+        }
+        $post = get_post($id);
+        if (! $post || ! in_array($post->post_type, ['organizations', 'companies'], true)) {
+            continue;
+        }
+        $out[] = [
+            'id'   => (int) $post->ID,
+            'type' => $post->post_type,
+        ];
+    }
+    return $out;
+}
+
+/**
+ * Get the entity (company or organization) to display as "work for" in card and overview.
+ * Uses expert_primary_entity (ACF) if set, otherwise first of linked entities (from company-team sync).
+ *
+ * @param int $post_id Expert post ID.
+ * @return WP_Post|null
+ */
+function greenergy_expert_get_display_entity($post_id)
+{
+    $post_id = absint($post_id);
+    if (! $post_id || get_post_type($post_id) !== 'experts') {
+        return null;
+    }
+    if (function_exists('get_field')) {
+        $primary = get_field('expert_primary_entity', $post_id);
+        if ($primary && is_object($primary) && isset($primary->ID)) {
+            $p = get_post($primary->ID);
+            if ($p && in_array($p->post_type, ['organizations', 'companies'], true)) {
+                return $p;
+            }
+        }
+        if (is_numeric($primary) && $primary > 0) {
+            $p = get_post((int) $primary);
+            if ($p && in_array($p->post_type, ['organizations', 'companies'], true)) {
+                return $p;
+            }
+        }
+    }
+    $linked = greenergy_expert_get_linked_entities($post_id);
+    if (! empty($linked)) {
+        $first = $linked[0];
+        $id = isset($first['id']) ? (int) $first['id'] : 0;
+        if ($id > 0) {
+            $p = get_post($id);
+            if ($p && in_array($p->post_type, ['organizations', 'companies'], true)) {
+                return $p;
+            }
+        }
+    }
+    return null;
+}
+
+/**
+ * Get "يعمل لدى" label and optional URL for an expert.
+ * Manual text (expert_work_for) is used when not empty; otherwise linked entity title + permalink.
+ *
+ * @param int $post_id Expert post ID.
+ * @return array{label: string, url: string}
+ */
+function greenergy_expert_work_for_display($post_id)
+{
+    $post_id = absint($post_id);
+    $result  = ['label' => '', 'url' => ''];
+    if (! $post_id || get_post_type($post_id) !== 'experts') {
+        return $result;
+    }
+    $manual = function_exists('get_field') ? trim((string) get_field('expert_work_for', $post_id)) : '';
+    if ($manual !== '') {
+        $result['label'] = $manual;
+        return $result;
+    }
+    $entity = greenergy_expert_get_display_entity($post_id);
+    if ($entity && isset($entity->post_title)) {
+        $result['label'] = $entity->post_title;
+        $result['url']   = get_permalink($entity->ID) ?: '';
+    }
+    return $result;
+}
+
+/**
  * Get formatted date
  *
  * @param int    $post_id Post ID.

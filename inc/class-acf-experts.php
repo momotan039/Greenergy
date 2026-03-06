@@ -39,29 +39,18 @@ if (function_exists('acf_add_local_field_group')) :
                 'label'         => __('يعمل لدى (نص يدوي)', 'greenergy'),
                 'name'          => 'expert_work_for',
                 'type'          => 'text',
-                'instructions'  => __('إذا تركته فارغاً وربطت منظمة أو شركة أدناه، سيُستخدم اسمها تلقائياً.', 'greenergy'),
+                'instructions'  => __('إن وُجد نص هنا يُعرض دائماً في البطاقة والملخص. إذا تركته فارغاً يُستخدم اسم الجهة التي أضفت الخبير فيها من صفحة الشركة/المنظمة (قسم فريق العمل).', 'greenergy'),
             ],
             [
-                'key'           => 'field_expert_linked_organization',
-                'label'         => __('المنظمة المرتبطة', 'greenergy'),
-                'name'          => 'expert_linked_organization',
+                'key'           => 'field_expert_primary_entity',
+                'label'         => __('الجهة الظاهرة في البطاقة والملخص', 'greenergy'),
+                'name'          => 'expert_primary_entity',
                 'type'          => 'post_object',
-                'post_type'     => ['organizations'],
+                'post_type'     => ['organizations', 'companies'],
                 'return_format' => 'object',
                 'allow_null'    => 1,
                 'multiple'      => 0,
-                'instructions'  => __('اختياري. يُستخدم لـ "يعمل لدى" إذا لم يُملأ النص اليدوي.', 'greenergy'),
-            ],
-            [
-                'key'           => 'field_expert_linked_company',
-                'label'         => __('الشركة المرتبطة', 'greenergy'),
-                'name'          => 'expert_linked_company',
-                'type'          => 'post_object',
-                'post_type'     => ['companies'],
-                'return_format' => 'object',
-                'allow_null'    => 1,
-                'multiple'      => 0,
-                'instructions'  => __('اختياري. يُستخدم لـ "يعمل لدى" إذا لم يُملأ النص اليدوي أو المنظمة.', 'greenergy'),
+                'instructions'  => __('يُملأ تلقائياً من صفحات الشركات/المنظمات التي أضفت فيها الخبير في قسم "فريق العمل". عند ظهور الخبير في أكثر من جهة، اختر هنا أي جهة تظهر في البطاقة وملخص صفحته.', 'greenergy'),
             ],
             [
                 'key'           => 'field_expert_profile_url',
@@ -88,4 +77,36 @@ if (function_exists('acf_add_local_field_group')) :
         'active'                => true,
     ]);
 
+    /**
+     * عرض جهات الخبير المرتبطة فقط في حقل "الجهة الظاهرة" (تسهيل الاختيار).
+     */
+    add_filter('acf/fields/post_object/query/name=expert_primary_entity', 'greenergy_expert_primary_entity_query_only_linked', 10, 3);
+
 endif;
+
+/**
+ * Limit expert_primary_entity choices to entities linked to this expert (from company-team).
+ *
+ * @param array $args   WP_Query args.
+ * @param array $field  ACF field array.
+ * @param int   $post_id Current post ID (expert).
+ * @return array
+ */
+function greenergy_expert_primary_entity_query_only_linked($args, $field, $post_id)
+{
+    if (! $post_id || get_post_type($post_id) !== 'experts') {
+        return $args;
+    }
+    $ids = get_post_meta($post_id, 'expert_linked_entity_ids', true);
+    if (! is_array($ids)) {
+        $ids = [];
+    }
+    $ids = array_filter(array_map('absint', $ids));
+    if (empty($ids)) {
+        $args['post__in'] = [0];
+        return $args;
+    }
+    $args['post__in'] = $ids;
+    $args['orderby'] = 'post__in';
+    return $args;
+}

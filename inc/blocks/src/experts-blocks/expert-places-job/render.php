@@ -2,7 +2,7 @@
 
 /**
  * Expert Places Job Block — render
- * Shows orgs/companies linked to the current expert (ACF expert_linked_organization, expert_linked_company).
+ * Shows all orgs/companies linked to the current expert (ACF expert_linked_entities).
  * Centered layout when only one place.
  *
  * @var array    $attributes Block attributes.
@@ -19,23 +19,7 @@ if (! $post_id || get_post_type($post_id) !== 'experts') {
     return;
 }
 
-$places = [];
-if (function_exists('get_field')) {
-    $linked_org = get_field('expert_linked_organization', $post_id);
-    if ($linked_org && is_object($linked_org) && isset($linked_org->ID)) {
-        $places[] = [
-            'id'   => $linked_org->ID,
-            'type' => 'organizations',
-        ];
-    }
-    $linked_company = get_field('expert_linked_company', $post_id);
-    if ($linked_company && is_object($linked_company) && isset($linked_company->ID)) {
-        $places[] = [
-            'id'   => $linked_company->ID,
-            'type' => 'companies',
-        ];
-    }
-}
+$places = function_exists('greenergy_expert_get_linked_entities') ? greenergy_expert_get_linked_entities($post_id) : [];
 
 if (empty($places)) {
     return;

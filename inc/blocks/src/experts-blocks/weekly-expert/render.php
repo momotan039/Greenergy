@@ -53,8 +53,9 @@ $name        = '';
 $image_url   = 'https://placehold.co/126x126';
 $role        = '';
 $quote       = '';
-$work_for    = '';
-$profile_url = '#';
+$work_for      = '';
+$work_for_url  = '';
+$profile_url   = '#';
 $phone       = '';
 $website     = '';
 $twitter     = '';
@@ -73,21 +74,9 @@ if ($source === 'db' && $expert_id) {
             $role = get_the_excerpt($expert_id);
         }
         $quote       = function_exists('get_field') ? (string) get_field('expert_quote', $expert_id) : '';
-        $work_for    = trim((string) (function_exists('get_field') ? get_field('expert_work_for', $expert_id) : ''));
-        if ($work_for === '' && function_exists('get_field')) {
-            $linked_org = get_field('expert_linked_organization', $expert_id);
-            if ($linked_org && is_object($linked_org) && isset($linked_org->post_title)) {
-                $work_for = $linked_org->post_title;
-                $work_for_url = get_permalink($linked_org->ID);
-            }
-        }
-        if ($work_for === '' && function_exists('get_field')) {
-            $linked_company = get_field('expert_linked_company', $expert_id);
-            if ($linked_company && is_object($linked_company) && isset($linked_company->post_title)) {
-                $work_for = $linked_company->post_title;
-                $work_for_url = get_permalink($linked_company->ID);
-            }
-        }
+        $wf          = function_exists('greenergy_expert_work_for_display') ? greenergy_expert_work_for_display($expert_id) : ['label' => '', 'url' => ''];
+        $work_for    = isset($wf['label']) ? trim((string) $wf['label']) : '';
+        $work_for_url = isset($wf['url']) ? trim((string) $wf['url']) : '';
         $profile_url = function_exists('get_field') ? trim((string) get_field('expert_profile_url', $expert_id)) : '';
         if ($profile_url === '') {
             $profile_url = get_permalink($expert_id) ?: '#';

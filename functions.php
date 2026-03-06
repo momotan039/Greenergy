@@ -85,6 +85,9 @@ function greenergy_init()
     // SEO helpers
     new Greenergy_SEO();
 
+    // Sync expert ↔ company/org from company-team block (no manual link on expert page)
+    new Greenergy_Company_Team_Expert_Sync();
+
     // Custom Post Types
     new Greenergy_CPT_News();
     // new Greenergy_CPT_Articles();

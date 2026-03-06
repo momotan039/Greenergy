@@ -29,19 +29,9 @@ $role = is_string($role) ? trim($role) : '';
 $quote = get_field('expert_quote', $post_id);
 $quote = is_string($quote) ? trim($quote) : '';
 
-$work_for = trim((string) get_field('expert_work_for', $post_id));
-if ($work_for === '') {
-    $linked_org = get_field('expert_linked_organization', $post_id);
-    if ($linked_org && is_object($linked_org) && isset($linked_org->post_title)) {
-        $work_for = $linked_org->post_title;
-    }
-}
-if ($work_for === '') {
-    $linked_company = get_field('expert_linked_company', $post_id);
-    if ($linked_company && is_object($linked_company) && isset($linked_company->post_title)) {
-        $work_for = $linked_company->post_title;
-    }
-}
+$work_for_data = function_exists('greenergy_expert_work_for_display') ? greenergy_expert_work_for_display($post_id) : ['label' => trim((string) get_field('expert_work_for', $post_id)), 'url' => ''];
+$work_for     = isset($work_for_data['label']) ? trim((string) $work_for_data['label']) : '';
+$work_for_url = isset($work_for_data['url']) ? trim((string) $work_for_data['url']) : '';
 
 $profile_url = trim((string) get_field('expert_profile_url', $post_id));
 if ($profile_url === '') {
@@ -98,11 +88,15 @@ $any_social = $website || $twitter || $instagram || $facebook || $linkedin;
         <?php endif; ?>
     </div>
 
-    <!-- Work-for — always rendered -->
+    <!-- Work-for — always rendered; link when from linked entity -->
     <div class="shrink-0 flex gap-2 text-sm h-6 items-center w-full justify-center">
         <?php if ($work_for !== '') : ?>
             <span class="text-stone-500"><?php esc_html_e('يعمل لدى :', 'greenergy'); ?></span>
-            <span class="text-green-700 font-medium line-clamp-1"><?php echo esc_html($work_for); ?></span>
+            <?php if ($work_for_url !== '') : ?>
+                <a href="<?php echo esc_url($work_for_url); ?>" class="text-green-700 font-medium line-clamp-1 hover:underline" onclick="event.stopPropagation();"><?php echo esc_html($work_for); ?></a>
+            <?php else : ?>
+                <span class="text-green-700 font-medium line-clamp-1"><?php echo esc_html($work_for); ?></span>
+            <?php endif; ?>
         <?php else : ?>
             <span class="flex items-center gap-1.5 text-stone-400 text-xs select-none">
                 <i class="fa-solid fa-lock text-[9px]"></i>

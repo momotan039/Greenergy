@@ -180,26 +180,10 @@ $class = isset($classes[$type_slug]) ? $classes[$type_slug] : $classes['normal']
                         $expert_role = get_the_excerpt($post_id) ?: '';
                     }
                     $expert_role = is_string($expert_role) ? trim($expert_role) : '';
-                    // الشركة الحالية + الرابط: من ACF expert_work_for أو expert_linked_organization أو expert_linked_company
-                    $expert_company     = '';
-                    $expert_company_url = '';
-                    if (function_exists('get_field')) {
-                        $expert_company = trim((string) get_field('expert_work_for', $post_id));
-                        if ($expert_company === '') {
-                            $linked_org = get_field('expert_linked_organization', $post_id);
-                            if ($linked_org && is_object($linked_org) && isset($linked_org->post_title)) {
-                                $expert_company     = $linked_org->post_title;
-                                $expert_company_url = get_permalink($linked_org->ID) ?: '';
-                            }
-                        }
-                        if ($expert_company === '') {
-                            $linked_company = get_field('expert_linked_company', $post_id);
-                            if ($linked_company && is_object($linked_company) && isset($linked_company->post_title)) {
-                                $expert_company     = $linked_company->post_title;
-                                $expert_company_url = get_permalink($linked_company->ID) ?: '';
-                            }
-                        }
-                    }
+                    // الشركة الحالية + الرابط: نص يدوي أو جهة مرتبطة (مع اختيار الجهة الظاهرة عند تعدد الربط)
+                    $expert_work_for = function_exists('greenergy_expert_work_for_display') ? greenergy_expert_work_for_display($post_id) : ['label' => '', 'url' => ''];
+                    $expert_company     = isset($expert_work_for['label']) ? trim((string) $expert_work_for['label']) : '';
+                    $expert_company_url = isset($expert_work_for['url']) ? trim((string) $expert_work_for['url']) : '';
                     ?>
                     <?php if ($expert_role !== '') : ?>
                         <p class="text-stone-500 text-base">
