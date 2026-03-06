@@ -27,20 +27,23 @@ if (! $post_id) {
 
 $current_post_type = get_post_type($post_id);
 $is_organization  = ($current_post_type === 'organizations');
+$is_expert  = ($current_post_type === 'experts');
 $category_tax     = $is_organization ? 'organization_category' : 'company_category';
 $location_tax     = $is_organization ? 'organization_location' : 'company_location';
 
 $attrs = wp_parse_args($attributes ?? [], [
-    'establishedDate' => '',
-    'phone'           => '',
-    'website'         => '',
-    'email'           => '',
-    'contactLabel'    => 'معلومات التواصل',
-    'xLink'           => '',
-    'instagramLink'  => '',
-    'facebookLink'   => '',
-    'linkedinLink'   => '',
+    'establishedDate'      => '',
+    'phone'                => '',
+    'website'              => '',
+    'email'                => '',
+    'contactLabel'         => 'معلومات التواصل',
+    'xLink'                => '',
+    'instagramLink'        => '',
+    'facebookLink'         => '',
+    'linkedinLink'         => '',
+    'expertExperience'     => '',
 ]);
+
 $views = (class_exists('Greenergy_Post_Views') && method_exists('Greenergy_Post_Views', 'get_views'))
     ? Greenergy_Post_Views::get_views($post_id)
     : '—';
@@ -164,12 +167,76 @@ $class = isset($classes[$type_slug]) ? $classes[$type_slug] : $classes['normal']
                         <?php echo $badges[$type_slug]['label']; ?>
                     </span>
                 <?php endif; ?>
-                <div class="flex flex-wrap items-center gap-4 text-stone-500 text-sm max-md:gap-2 ">
-                    <span><i class="fa-solid fa-location-dot ml-1"></i><?php echo esc_html($location_display); ?></span>
-                    <span><i class="fa-solid fa-briefcase ml-1"></i><?php echo esc_html($sub_category_display); ?></span>
-                    <span><i class="fa-solid fa-calendar-days ml-1"></i><?php echo esc_html($established_date); ?></span>
-                    <span><i class="fa-solid fa-eye ml-1"></i><?php echo esc_html($views); ?> مشاهدات</span>
-                </div>
+                <?php if ($is_expert) : ?>
+                    <?php
+                    // الخبرة: من صفات البلوك ثم من post meta (مُخزَّن عند الحفظ)
+                    $expert_exp = trim((string) ($attrs['expertExperience'] ?? ''));
+                    if ($expert_exp === '') {
+                        $expert_exp = trim((string) get_post_meta($post_id, 'expert_experience', true));
+                    }
+                    // التخصص / الدور: من حقل ACF expert_role
+                    $expert_role = function_exists('get_field') ? get_field('expert_role', $post_id) : '';
+                    if ($expert_role === null || $expert_role === false) {
+                        $expert_role = get_the_excerpt($post_id) ?: '';
+                    }
+                    $expert_role = is_string($expert_role) ? trim($expert_role) : '';
+                    // الشركة الحالية + الرابط: من ACF expert_work_for أو expert_linked_organization أو expert_linked_company
+                    $expert_company     = '';
+                    $expert_company_url = '';
+                    if (function_exists('get_field')) {
+                        $expert_company = trim((string) get_field('expert_work_for', $post_id));
+                        if ($expert_company === '') {
+                            $linked_org = get_field('expert_linked_organization', $post_id);
+                            if ($linked_org && is_object($linked_org) && isset($linked_org->post_title)) {
+                                $expert_company     = $linked_org->post_title;
+                                $expert_company_url = get_permalink($linked_org->ID) ?: '';
+                            }
+                        }
+                        if ($expert_company === '') {
+                            $linked_company = get_field('expert_linked_company', $post_id);
+                            if ($linked_company && is_object($linked_company) && isset($linked_company->post_title)) {
+                                $expert_company     = $linked_company->post_title;
+                                $expert_company_url = get_permalink($linked_company->ID) ?: '';
+                            }
+                        }
+                    }
+                    ?>
+                    <?php if ($expert_role !== '') : ?>
+                        <p class="text-stone-500 text-base">
+                            <?php echo esc_html($expert_role); ?>
+                        </p>
+                    <?php endif; ?>
+                    <?php if ($expert_exp !== '' || $expert_company !== '') : ?>
+                        <ul class="flex gap-8 text-base">
+                            <?php if ($expert_exp !== '') : ?>
+                                <li>
+                                    <span class="text-stone-500"><?php esc_html_e('الخبرة:', 'greenergy'); ?></span>
+                                    <strong class="text-neutral-800 font-medium"><?php echo esc_html($expert_exp); ?></strong>
+                                </li>
+                            <?php endif; ?>
+                            <?php if ($expert_company !== '') : ?>
+                                <li>
+                                    <span class="text-stone-500"><?php esc_html_e('المؤسسة الحالية:', 'greenergy'); ?></span>
+                                    <strong class="text-neutral-800 font-medium">
+                                        <?php if ($expert_company_url !== '') : ?>
+                                            <a href="<?php echo esc_url($expert_company_url); ?>" class="text-neutral-800 font-medium hover:text-green-600 transition-colors"><?php echo esc_html($expert_company); ?></a>
+                                        <?php else : ?>
+                                            <?php echo esc_html($expert_company); ?>
+                                        <?php endif; ?>
+                                    </strong>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <?php if (! $is_expert) : ?>
+                    <div class="flex flex-wrap items-center gap-4 text-stone-500 text-sm max-md:gap-2 ">
+                        <span><i class="fa-solid fa-location-dot ml-1"></i><?php echo esc_html($location_display); ?></span>
+                        <span><i class="fa-solid fa-briefcase ml-1"></i><?php echo esc_html($sub_category_display); ?></span>
+                        <span><i class="fa-solid fa-calendar-days ml-1"></i><?php echo esc_html($established_date); ?></span>
+                        <span><i class="fa-solid fa-eye ml-1"></i><?php echo esc_html($views); ?> مشاهدات</span>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 

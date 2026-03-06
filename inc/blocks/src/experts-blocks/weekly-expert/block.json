@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "greenergy/weekly-expert",
+    "title": "خبير الشهر",
+    "category": "greenergy-blocks",
+    "icon": "businessman",
+    "editorScript": "greenergy-blocks-editor",
+    "description": "عرض خبير واحد: إما اختياره من القاعدة أو إدخال البيانات يدوياً.",
+    "attributes": {
+        "source": {
+            "type": "string",
+            "default": "manual",
+            "enum": ["manual", "db"]
+        },
+        "selectedExpert": {
+            "type": "array",
+            "default": []
+        },
+        "badgeText": { "type": "string", "default": "خبير الشهر" },
+        "name": { "type": "string", "default": "" },
+        "imageId": { "type": "number", "default": 0 },
+        "imageUrl": { "type": "string", "default": "" },
+        "role": { "type": "string", "default": "" },
+        "quote": { "type": "string", "default": "" },
+        "workFor": { "type": "string", "default": "" },
+        "profileUrl": { "type": "string", "default": "" },
+        "phone": { "type": "string", "default": "" },
+        "website": { "type": "string", "default": "" },
+        "twitter": { "type": "string", "default": "" },
+        "instagram": { "type": "string", "default": "" },
+        "facebook": { "type": "string", "default": "" },
+        "linkedin": { "type": "string", "default": "" }
+    },
+    "render": "file:./render.php"
+}

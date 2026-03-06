@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "name": "greenergy/related-experts",
+    "title": "الخبراء ذوو الصلة",
+    "category": "greenergy-blocks",
+    "icon": "businessman",
+    "apiVersion": 3,
+    "description": "يعرض خبراء من نفس التصنيف (سلايدر: 2 في الموبايل، 4 في الشاشات الكبيرة) مع إمكانية تغيير عدد العناصر.",
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "خبراء من نفس المجال"
+        },
+        "relatedCount": {
+            "type": "number",
+            "default": 8
+        }
+    },
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php"
+}

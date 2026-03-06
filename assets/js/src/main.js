@@ -21,6 +21,8 @@ import { initProductModal } from './modules/product-modal.js';
 import { initCompanyProductsPagination } from './modules/company-products-pagination.js';
 import { initAllCompaniesPagination } from './modules/all-companies-pagination.js';
 import { initAllOrgsPagination } from './modules/all-orgs-pagination.js';
+import { initAllExpertsPagination } from './modules/all-experts-pagination.js';
+import { initExpertFilterAutocomplete } from './modules/expert-filter-autocomplete.js';
 import { initCompanyFilterAutocomplete } from './modules/company-filter-autocomplete.js';
 
 // Initialize all modules
@@ -38,6 +40,8 @@ function initAllModules() {
     initCompanyProductsPagination();
     initAllCompaniesPagination();
     initAllOrgsPagination();
+    initAllExpertsPagination();
+    initExpertFilterAutocomplete();
     initCompanyFilterAutocomplete();
 
     // Initialize/Refresh AOS

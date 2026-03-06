@@ -711,6 +711,177 @@ function greenergy_organizations_query($override = [])
 }
 
 /**
+ * Restrict search to post_title only when query var greenergy_search_in_expert === 'title' (experts).
+ */
+function greenergy_experts_search_title_only($search, $wp_query)
+{
+    if ($wp_query->get('greenergy_search_in_expert') !== 'title') {
+        return $search;
+    }
+    if ($wp_query->get('post_type') !== 'experts' || empty($wp_query->query_vars['s'])) {
+        return $search;
+    }
+    global $wpdb;
+    $terms = $wp_query->query_vars['search_terms'] ?? [];
+    if (empty($terms)) {
+        $s = $wp_query->query_vars['s'];
+        $terms = array_filter(explode(' ', $s));
+    }
+    if (empty($terms)) {
+        return $search;
+    }
+    $and = [];
+    foreach ($terms as $term) {
+        $like = '%' . $wpdb->esc_like($term) . '%';
+        $and[] = $wpdb->prepare("({$wpdb->posts}.post_title LIKE %s)", $like);
+    }
+    return ' AND (' . implode(' AND ', $and) . ') ';
+}
+
+add_filter('posts_search', 'greenergy_experts_search_title_only', 10, 2);
+
+/**
+ * Join postmeta for expert_role and expert_work_for when doing experts keyword search.
+ */
+function greenergy_experts_keyword_search_join($join, $wp_query)
+{
+    if ($wp_query->get('greenergy_experts_keyword_search') != 1 || $wp_query->get('post_type') !== 'experts' || empty($wp_query->get('s'))) {
+        return $join;
+    }
+    global $wpdb;
+    $join .= " LEFT JOIN {$wpdb->postmeta} AS pm_role ON pm_role.post_id = {$wpdb->posts}.ID AND pm_role.meta_key = 'expert_role' ";
+    $join .= " LEFT JOIN {$wpdb->postmeta} AS pm_work ON pm_work.post_id = {$wpdb->posts}.ID AND pm_work.meta_key = 'expert_work_for' ";
+    return $join;
+}
+
+add_filter('posts_join', 'greenergy_experts_keyword_search_join', 10, 2);
+
+/**
+ * Extend experts search to include expert_role and expert_work_for (تخصص، جهة عمل).
+ */
+function greenergy_experts_keyword_search_where($search, $wp_query)
+{
+    if ($wp_query->get('greenergy_experts_keyword_search') != 1 || $wp_query->get('post_type') !== 'experts' || empty($wp_query->get('s'))) {
+        return $search;
+    }
+    global $wpdb;
+    $terms = $wp_query->query_vars['search_terms'] ?? [];
+    if (empty($terms)) {
+        $s = $wp_query->get('s');
+        $terms = array_filter(explode(' ', $s));
+    }
+    if (empty($terms)) {
+        return $search;
+    }
+    $and_parts = [];
+    foreach ($terms as $term) {
+        $like = '%' . $wpdb->esc_like($term) . '%';
+        $and_parts[] = $wpdb->prepare('(pm_role.meta_value LIKE %s OR pm_work.meta_value LIKE %s)', $like, $like);
+    }
+    $search .= ' OR (' . implode(' AND ', $and_parts) . ')';
+    return $search;
+}
+
+add_filter('posts_search', 'greenergy_experts_keyword_search_where', 11, 2);
+
+/**
+ * Avoid duplicate rows when expert matches via multiple meta rows.
+ */
+function greenergy_experts_keyword_search_distinct($distinct, $wp_query)
+{
+    if ($wp_query->get('greenergy_experts_keyword_search') != 1 || $wp_query->get('post_type') !== 'experts' || empty($wp_query->get('s'))) {
+        return $distinct;
+    }
+    return 'DISTINCT';
+}
+
+add_filter('posts_distinct', 'greenergy_experts_keyword_search_distinct', 10, 2);
+
+/**
+ * Build WP_Query args for experts list from current request (GET: location, sort, s_exp).
+ *
+ * @param array $override Override or add args (e.g. paged, posts_per_page).
+ * @return array Query args for WP_Query.
+ */
+function greenergy_experts_query_args($override = [])
+{
+    $location = isset($_GET['location']) ? absint($_GET['location']) : 0;
+    $cat      = isset($_GET['cat']) ? absint($_GET['cat']) : 0;
+    $search   = isset($_GET['s_exp']) ? sanitize_text_field(wp_unslash($_GET['s_exp'])) : '';
+
+    $args = [
+        'post_type'      => 'experts',
+        'post_status'    => 'publish',
+        'posts_per_page' => 9,
+        'paged'          => 1,
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ];
+
+    if ($search !== '') {
+        $args['s'] = $search;
+    }
+
+    $tax_query = [];
+    if ($location > 0) {
+        $location_term = get_term($location, 'expert_location');
+        if ($location_term && ! is_wp_error($location_term)) {
+            $term_ids = [ (int) $location_term->term_id ];
+            $children = get_terms([
+                'taxonomy'   => 'expert_location',
+                'parent'     => $location_term->term_id,
+                'fields'     => 'ids',
+                'hide_empty' => false,
+            ]);
+            if (! empty($children)) {
+                $term_ids = array_merge($term_ids, array_map('intval', $children));
+            }
+            $tax_query[] = [
+                'taxonomy' => 'expert_location',
+                'field'    => 'term_id',
+                'terms'    => $term_ids,
+            ];
+        }
+    }
+    if ($cat > 0) {
+        $tax_query[] = [
+            'taxonomy' => 'expert_category',
+            'field'    => 'term_id',
+            'terms'    => $cat,
+        ];
+    }
+    if (! empty($tax_query)) {
+        $args['tax_query'] = $tax_query;
+    }
+
+    return array_merge($args, $override);
+}
+
+/**
+ * Run experts list query. Search is free keyword: name (title), excerpt, content, expert_role (تخصص), expert_work_for (جهة عمل).
+ *
+ * @param array $override Override or add args (e.g. paged, posts_per_page).
+ * @return WP_Query
+ */
+function greenergy_experts_query($override = [])
+{
+    $args = function_exists('greenergy_experts_query_args') ? greenergy_experts_query_args($override) : array_merge([
+        'post_type'      => 'experts',
+        'post_status'    => 'publish',
+        'posts_per_page' => 9,
+        'paged'          => 1,
+    ], $override);
+
+    $search = isset($args['s']) ? trim($args['s']) : '';
+
+    if ($search !== '') {
+        $args['greenergy_experts_keyword_search'] = 1;
+    }
+
+    return new WP_Query($args);
+}
+
+/**
  * Run companies list query with search order: by name (title) first, then by description (content) if no results.
  *
  * @param array $override Override or add args (e.g. post__not_in, paged, posts_per_page).

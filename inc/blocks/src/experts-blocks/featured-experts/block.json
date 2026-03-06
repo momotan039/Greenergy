@@ -1,0 +1,29 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "name": "greenergy/featured-experts",
+    "title": "أبرز الخبراء",
+    "category": "greenergy-blocks",
+    "icon": "users",
+    "apiVersion": 3,
+    "description": "عرض سلايدر للخبراء المميزين: إضافة يدوية و/أو اختيار من القاعدة. 4 عناصر للشاشات الكبيرة و2 للموبايل.",
+    "editorScript": "greenergy-blocks-editor",
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "أبرز الخبراء"
+        },
+        "description": {
+            "type": "string",
+            "default": "خبراء يقدمون عروضًا في مؤتمرات للطاقة المتجددة."
+        },
+        "manualEntries": {
+            "type": "array",
+            "default": []
+        },
+        "selectedExperts": {
+            "type": "array",
+            "default": []
+        }
+    },
+    "render": "file:./render.php"
+}

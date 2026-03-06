@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "name": "greenergy/are-you-an-expert",
+    "title": "هل أنت خبير؟",
+    "category": "greenergy-blocks",
+    "icon": "users",
+    "apiVersion": 3,
+    "description": "قسم دعوة الخبراء للتسجيل: صورة خلفية، عنوان، نص، وزر (رابط الربط لاحقاً).",
+    "editorScript": "greenergy-blocks-editor",
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "هل أنت خبير؟ انضم إلى مجتمعنا."
+        },
+        "description": {
+            "type": "string",
+            "default": "سجّل ملفك لزيادة فرص التعاون والظهور أمام شركات ومشاريع الطاقة المتجددة."
+        },
+        "buttonText": {
+            "type": "string",
+            "default": "انشئ ملف خبير"
+        },
+        "imageId": {
+            "type": "number",
+            "default": 0
+        },
+        "imageUrl": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "render": "file:./render.php"
+}

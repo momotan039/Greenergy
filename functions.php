@@ -119,6 +119,7 @@ function greenergy_init()
     require_once GREENERGY_INC_DIR . '/class-acf-posts.php';
     require_once GREENERGY_INC_DIR . '/class-acf-companies.php';
     require_once GREENERGY_INC_DIR . '/class-acf-organizations.php';
+    require_once GREENERGY_INC_DIR . '/class-acf-experts.php';
 
     // Post Views System
     Greenergy_Post_Views::get_instance();

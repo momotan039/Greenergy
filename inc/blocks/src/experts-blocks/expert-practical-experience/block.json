@@ -1,0 +1,16 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "name": "greenergy/expert-practical-experience",
+    "title": "Expert Practical Experience",
+    "category": "greenergy-blocks",
+    "icon": "portfolio",
+    "apiVersion": 3,
+    "attributes": {
+        "experiences": {
+            "type": "array",
+            "default": []
+        }
+    },
+    "editorScript": "greenergy-blocks-editor",
+    "render": "file:./render.php"
+}

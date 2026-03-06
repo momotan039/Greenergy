@@ -116,7 +116,7 @@ if (! empty($team_members)) {
             'img_url'  => $img_url,
             'link'     => $link,
             'twitter'  => isset($member['twitter']) ? (string) $member['twitter'] : '',
-            'instagram'=> isset($member['instagram']) ? (string) $member['instagram'] : '',
+            'instagram' => isset($member['instagram']) ? (string) $member['instagram'] : '',
             'facebook' => isset($member['facebook']) ? (string) $member['facebook'] : '',
             'linkedin' => isset($member['linkedin']) ? (string) $member['linkedin'] : '',
         ];

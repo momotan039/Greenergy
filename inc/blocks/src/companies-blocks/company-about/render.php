@@ -21,9 +21,12 @@ $attributes = wp_parse_args($attributes ?? [], [
 $post_type     = get_post_type(get_the_ID());
 $title_company = 'نبذة عن الشركة';
 $title_org     = 'نبذة عن المنظمة';
+$title_expert  = 'نبذة عن الخبير';
 $title         = $attributes['title'];
 if ($post_type === 'organizations' && ($title === '' || $title === $title_company)) {
     $title = $title_org;
+} elseif ($post_type === 'experts' && ($title === '' || $title === $title_company)) {
+    $title = $title_expert;
 } elseif ($title === '') {
     $title = $title_company;
 }
@@ -35,13 +38,26 @@ if ($description === '' && function_exists('get_field')) {
 }
 $description = $description ?: '';
 
-$company_id = get_the_ID();
+$post_id_for_tags = get_the_ID();
 $tags = [];
-if ($company_id) {
-    $tag_tax = ($post_type === 'organizations') ? 'organization_tag' : 'company_tag';
-    $terms = get_the_terms($company_id, $tag_tax);
-    if (is_array($terms)) {
-        $tags = $terms;
+if ($post_id_for_tags) {
+    if ($post_type === 'experts') {
+        // هاشتاغات الخبير: وسوم الخبراء (expert_tag) + تصنيفات الخبراء (expert_category)
+        $tag_terms   = get_the_terms($post_id_for_tags, 'expert_tag');
+        $category_terms = get_the_terms($post_id_for_tags, 'expert_category');
+        $tags = [];
+        if (is_array($tag_terms) && ! is_wp_error($tag_terms)) {
+            $tags = array_merge($tags, $tag_terms);
+        }
+        if (is_array($category_terms) && ! is_wp_error($category_terms)) {
+            $tags = array_merge($tags, $category_terms);
+        }
+    } else {
+        $tag_tax = ($post_type === 'organizations') ? 'organization_tag' : 'company_tag';
+        $terms = get_the_terms($post_id_for_tags, $tag_tax);
+        if (is_array($terms) && ! is_wp_error($terms)) {
+            $tags = $terms;
+        }
     }
 }
 ?>
@@ -52,10 +68,12 @@ if ($company_id) {
         <?php if ($description !== '') : ?>
             <div class="text-neutral-800 leading-6 prose prose-neutral max-w-none"><?php echo wp_kses_post(wpautop($description)); ?></div>
         <?php endif; ?>
-        <?php if (!empty($tags)) : ?>
+        <?php if (! empty($tags)) : ?>
             <div class="flex flex-wrap gap-2">
                 <?php foreach ($tags as $tag) : ?>
-                    <a href="<?php echo esc_url(get_term_link($tag)); ?>" class="px-3 py-1 bg-green-100 rounded-full text-sm text-neutral-950"><?php echo esc_html($tag->name); ?></a>
+                    <a href="<?php echo esc_url(get_term_link($tag)); ?>" class="px-3 py-1 bg-green-100 rounded-full text-sm text-neutral-950 hover:bg-green-200 transition-colors">
+                        <?php echo $post_type === 'experts' ? '#' : ''; ?><?php echo esc_html($tag->name); ?>
+                    </a>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>

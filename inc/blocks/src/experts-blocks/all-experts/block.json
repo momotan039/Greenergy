@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "name": "greenergy/all-experts",
+    "title": "جميع الخبراء",
+    "category": "greenergy-blocks",
+    "icon": "users",
+    "apiVersion": 3,
+    "description": "قائمة الخبراء مع بحث وتصفية حسب الموقع والتصنيف وترقيم الصفحات",
+    "editorScript": "greenergy-blocks-editor",
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "جميع الخبراء"
+        },
+        "description": {
+            "type": "string",
+            "default": "اكتشف الخبراء والمتخصصين في مجالات الطاقة والمجتمع"
+        },
+        "perPage": {
+            "type": "number",
+            "default": 9
+        },
+        "visibleLocationIds": {
+            "type": "array",
+            "default": []
+        },
+        "visibleCategoryIds": {
+            "type": "array",
+            "default": []
+        }
+    },
+    "render": "file:./render.php"
+}
