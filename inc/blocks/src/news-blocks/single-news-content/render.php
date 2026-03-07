@@ -161,11 +161,8 @@ $post_id = $post->ID;
                 <?php endif; ?>
             </div>
 
-            <!-- share buttons -->
-            <?php get_template_part('templates/components/share-buttons', null, [
-                'post_id' => $post_id,
-                'label'   => __('شارك الخبر', 'greenergy')
-            ]); ?>
+
+            <?php echo do_blocks('<!-- wp:template-part {"slug":"social-media-share-btns","tagName":"div"} /-->'); ?>
 
             <!-- Sidebar for mobile -->
             <div class="flex md:hidden flex-row flex-nowrap overflow-x-auto gap-4 px-4 -mx-4 pb-4 items-stretch scrollbar-hide">

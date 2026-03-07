@@ -8,7 +8,7 @@
     "attributes": {
         "title": {
             "type": "string",
-            "default": "شارك المقال"
+            "default": "شارك على"
         },
         "showWhatsapp": {
             "type": "boolean",
@@ -23,14 +23,6 @@
             "default": true
         },
         "showInstagram": {
-            "type": "boolean",
-            "default": false
-        },
-        "showYoutube": {
-            "type": "boolean",
-            "default": false
-        },
-        "showRss": {
             "type": "boolean",
             "default": false
         },

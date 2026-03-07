@@ -118,6 +118,11 @@
             "name": "footer",
             "title": "Footer",
             "area": "footer"
+        },
+        {
+            "name": "social-media-share-btns",
+            "title": "ازرار المشاركة في الشبكات الاجتماعية",
+            "area": "front-page"
         }
     ],
     "styles": {

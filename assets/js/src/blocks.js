@@ -2697,16 +2697,6 @@ const GreenergyBlockEdit = (props) => {
                         onChange: (val) => updateAttribute('showInstagram', val)
                     }),
                     createElement(ToggleControl, {
-                        label: __('يوتيوب', 'greenergy'),
-                        checked: !!attributes.showYoutube,
-                        onChange: (val) => updateAttribute('showYoutube', val)
-                    }),
-                    createElement(ToggleControl, {
-                        label: __('RSS', 'greenergy'),
-                        checked: !!attributes.showRss,
-                        onChange: (val) => updateAttribute('showRss', val)
-                    }),
-                    createElement(ToggleControl, {
                         label: __('نسخ الرابط', 'greenergy'),
                         checked: !!attributes.showCopy,
                         onChange: (val) => updateAttribute('showCopy', val)
@@ -5103,7 +5093,7 @@ const blocks = [
         attributes: {
             title: {
                 type: 'string',
-                default: 'شارك المقال'
+                default: 'شارك على'
             },
             showWhatsapp: {
                 type: 'boolean',
@@ -5118,14 +5108,6 @@ const blocks = [
                 default: true
             },
             showInstagram: {
-                type: 'boolean',
-                default: false
-            },
-            showYoutube: {
-                type: 'boolean',
-                default: false
-            },
-            showRss: {
                 type: 'boolean',
                 default: false
             },

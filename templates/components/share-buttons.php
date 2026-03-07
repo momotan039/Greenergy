@@ -10,21 +10,10 @@
  * }
  */
 $post_id = $args['post_id'] ?? get_the_ID();
-$label   = $args['label'] ?? __('شارك المقال', 'greenergy');
+$label   = $args['label'] ?? __('شارك على', 'greenergy');
 $class   = $args['class'] ?? '';
 $show    = $args['show'] ?? null;
 
-if (!$show) {
-    $show = [
-        'whatsapp'  => true,
-        'telegram'  => true,
-        'facebook'  => true,
-        'instagram' => true,
-        'youtube'   => true,
-        'rss'       => true,
-        'copy'      => true,
-    ];
-}
 
 $link = get_permalink($post_id);
 $title = get_the_title($post_id);
@@ -46,34 +35,36 @@ if (!array_filter($show)) {
 
     <div class="flex flex-wrap justify-center items-center gap-4">
         <?php if ($show['whatsapp']) : ?>
-            <a href="https://wa.me/?text=<?php echo urlencode($title . ' ' . $link); ?>" target="_blank"
+            <a href="https://wa.me/?text=<?php echo rawurlencode($title . ' ' . $link); ?>" target="_blank" rel="noopener noreferrer"
                 class="group flex items-center justify-center w-12 h-12 max-sm:w-10 max-sm:h-10 rounded-xl bg-white text-[#25D366] shadow-sm border border-gray-100 transition-all duration-300 hover:bg-[#25D366] hover:text-white hover:shadow-lg hover:shadow-[#25D366]/20 hover:-translate-y-1">
                 <i class="fab fa-whatsapp text-2xl group-hover:scale-110 transition-transform"></i>
             </a>
         <?php endif; ?>
 
         <?php if ($show['telegram']) : ?>
-            <a href="https://t.me/share/url?url=<?php echo urlencode($link); ?>&text=<?php echo urlencode($title); ?>" target="_blank"
+            <a href="https://t.me/share/url?url=<?php echo rawurlencode($link); ?>&text=<?php echo rawurlencode($title); ?>" target="_blank" rel="noopener noreferrer"
                 class="group flex items-center justify-center w-12 h-12 max-sm:w-10 max-sm:h-10 rounded-xl bg-white text-[#0088cc] shadow-sm border border-gray-100 transition-all duration-300 hover:bg-[#0088cc] hover:text-white hover:shadow-lg hover:shadow-[#0088cc]/20 hover:-translate-y-1">
                 <i class="fab fa-telegram-plane text-2xl group-hover:scale-110 transition-transform"></i>
             </a>
         <?php endif; ?>
 
         <?php if ($show['facebook']) : ?>
-            <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($link); ?>" target="_blank"
+            <?php $facebook_share_url = 'https://www.facebook.com/sharer/sharer.php?u=' . rawurlencode($link); ?>
+            <a href="<?php echo esc_url($facebook_share_url); ?>" target="_blank" rel="noopener noreferrer"
                 class="group flex items-center justify-center w-12 h-12 max-sm:w-10 max-sm:h-10 rounded-xl bg-white text-[#1877F2] shadow-sm border border-gray-100 transition-all duration-300 hover:bg-[#1877F2] hover:text-white hover:shadow-lg hover:shadow-[#1877F2]/20 hover:-translate-y-1">
                 <i class="fab fa-facebook-f text-xl group-hover:scale-110 transition-transform"></i>
             </a>
         <?php endif; ?>
 
         <?php if ($show['instagram']) : ?>
-            <a href="#" class="group flex items-center justify-center w-12 h-12 max-sm:w-10 max-sm:h-10 rounded-xl bg-white text-[#E4405F] shadow-sm border border-gray-100 transition-all duration-300 hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] hover:text-white hover:shadow-lg hover:shadow-[#ee2a7b]/20 hover:-translate-y-1">
+            <button type="button" onclick="sharePageNative('<?php echo esc_js(esc_url($link)); ?>', '<?php echo esc_js($title); ?>')"
+                class="group flex items-center justify-center w-12 h-12 max-sm:w-10 max-sm:h-10 rounded-xl bg-white text-[#E4405F] shadow-sm border border-gray-100 transition-all duration-300 hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] hover:text-white hover:shadow-lg hover:shadow-[#ee2a7b]/20 hover:-translate-y-1">
                 <i class="fab fa-instagram text-2xl group-hover:scale-110 transition-transform"></i>
-            </a>
+            </button>
         <?php endif; ?>
 
         <?php if ($show['copy']) : ?>
-            <button onclick="copyPostLink(this, '<?php echo esc_js($link); ?>')"
+            <button type="button" onclick="copyPostLink(this, '<?php echo esc_js($link); ?>')"
                 class="group flex items-center justify-center w-12 h-12 max-sm:w-10 max-sm:h-10 rounded-xl bg-white text-primary-600 shadow-sm border border-gray-100 transition-all duration-300 hover:bg-primary-600 hover:text-white hover:shadow-lg hover:shadow-primary-500/20 hover:-translate-y-1">
                 <i class="far fa-copy text-2xl group-hover:scale-110 transition-transform"></i>
             </button>
@@ -88,23 +79,38 @@ if (!array_filter($show)) {
             </div>
             <div>
                 <div class="text-secondary-900 font-bold text-base leading-none mb-1">تمت العملية بنجاح</div>
-                <div class="text-stone-500 text-sm">تم نسخ رابط المقالة للحافظة</div>
+                <div id="copy-toast-desc" class="text-stone-500 text-sm">تم نسخ رابط المقالة للحافظة</div>
             </div>
         </div>
     </div>
 
     <script>
-        function copyPostLink(btn, text) {
-            navigator.clipboard.writeText(text).then(() => {
-                const toast = document.getElementById('copy-toast');
+        function copyPostLink(btn, text, descMessage) {
+            navigator.clipboard.writeText(text).then(function() {
+                showCopyToast(descMessage || '<?php echo esc_js(__('تم نسخ رابط المقالة للحافظة', 'greenergy')); ?>');
+            });
+        }
+        function showCopyToast(descMessage) {
+            var toast = document.getElementById('copy-toast');
+            var desc = document.getElementById('copy-toast-desc');
+            if (desc) desc.textContent = descMessage;
+            if (toast) {
                 toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
                 toast.classList.add('opacity-100', 'translate-y-0');
-
-                setTimeout(() => {
+                setTimeout(function() {
                     toast.classList.remove('opacity-100', 'translate-y-0');
                     toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
                 }, 3000);
-            });
+            }
+        }
+        function sharePageNative(url, title) {
+            if (typeof navigator !== 'undefined' && navigator.share) {
+                navigator.share({ url: url, title: title || '' }).then(function() {}).catch(function() {
+                    copyPostLink(null, url, '<?php echo esc_js(__('تم نسخ الرابط — الصق في انستغرام لمشاركته', 'greenergy')); ?>');
+                });
+            } else {
+                copyPostLink(null, url, '<?php echo esc_js(__('تم نسخ الرابط — الصق في انستغرام لمشاركته', 'greenergy')); ?>');
+            }
         }
     </script>
 </div>
