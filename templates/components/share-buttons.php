@@ -15,13 +15,6 @@ $class   = $args['class'] ?? '';
 $show    = $args['show'] ?? null;
 
 if (!$show) {
-    $news_settings = get_option('greenergy_news_settings', []);
-    $share_providers = isset($news_settings['shareProviders']) ? $news_settings['shareProviders'] : [];
-
-    if (empty($share_providers)) {
-        return;
-    }
-
     $show = [
         'whatsapp'  => true,
         'telegram'  => true,

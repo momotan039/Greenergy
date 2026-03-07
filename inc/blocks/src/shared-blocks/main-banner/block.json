@@ -62,37 +62,12 @@
         },
         "stats": {
             "type": "array",
-            "default": [{
-                    "value": "250",
-                    "label": "وظيفة متاحة",
-                    "icon": "clipboard-text.svg",
-                    "iconType": "platform",
-                    "faIcon": "fas fa-briefcase",
-                    "faIconSize": 12,
-                    "mode": "dynamic",
-                    "dataSource": "jobs_count"
-                },
-                {
-                    "value": "300",
-                    "label": "فرصة ذهبية",
-                    "icon": "profile-2user.svg",
-                    "iconType": "platform",
-                    "faIcon": "fas fa-star",
-                    "faIconSize": 12,
-                    "mode": "dynamic",
-                    "dataSource": "gold_jobs_count"
-                },
-                {
-                    "value": "+150",
-                    "label": "شريك موثوق",
-                    "icon": "medal.svg",
-                    "iconType": "platform",
-                    "faIcon": "fas fa-handshake",
-                    "faIconSize": 12,
-                    "mode": "manual",
-                    "dataSource": "news_count"
-                }
-            ]
+            "default": [
+                { "value": "250", "label": "وظيفة متاحة", "icon": "clipboard-text.svg", "iconType": "platform", "mode": "dynamic", "dataSource": "jobs_count" },
+                { "value": "300", "label": "فرص ذهبية", "icon": "profile-2user.svg", "iconType": "platform", "mode": "dynamic", "dataSource": "gold_jobs_count" },
+                { "value": "+150", "label": "شريك موثوق", "icon": "medal.svg", "iconType": "platform", "mode": "manual", "dataSource": "news_count" }
+            ],
+            "description": "قائمة الإحصائيات. القيم الافتراضية (وظائف) مخزّنة هنا؛ يمكن تعديلها أو استبدالها. للبانر في أرشيف المشاريع يُفضّل تعيين عناصر مشاريع في القالب."
         }
     },
     "supports": {

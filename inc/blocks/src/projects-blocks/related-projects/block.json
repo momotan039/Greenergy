@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "greenergy/related-projects",
+  "title": "المشاريع ذات الصلة",
+  "category": "greenergy-blocks",
+  "icon": "portfolio",
+  "description": "سلايدر مشاريع ذات صلة (ديناميكي حسب التصنيف والوسوم). 3 بطاقات للشاشات الكبيرة و 2 للصغيرة.",
+  "editorScript": "greenergy-blocks-editor",
+  "usesContext": ["postId"],
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "مشاريع ذات صلة"
+    },
+    "description": {
+      "type": "string",
+      "default": "اكتشف مشاريع أخرى من نفس التصنيف أو الوسوم."
+    },
+    "maxCount": {
+      "type": "number",
+      "default": 6,
+      "description": "العدد الأقصى للمشاريع المعروضة"
+    }
+  },
+  "render": "file:./render.php"
+}

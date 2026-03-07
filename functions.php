@@ -96,7 +96,7 @@ function greenergy_init()
     new Greenergy_CPT_Companies();
     new Greenergy_CPT_Organizations();
     new Greenergy_CPT_Experts();
-    new Greenergy_CPT_Project();
+    new Greenergy_CPT_Projects();
     new Greenergy_CPT_Company_Product();
     // new Greenergy_CPT_Directory();
     // new Greenergy_CPT_Stories();

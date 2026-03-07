@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "greenergy/featured-projects",
+  "title": "المشاريع المميزة",
+  "category": "greenergy-blocks",
+  "icon": "format-aside",
+  "description": "سلايدر المشاريع المميزة (اختيار من القاعدة). 3 بطاقات للشاشات الكبيرة و 2 للصغيرة.",
+  "editorScript": "greenergy-blocks-editor",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "المشاريع المميزة"
+    },
+    "description": {
+      "type": "string",
+      "default": "أبرز المشاريع الرائدة في مجال الطاقة المتجددة"
+    },
+    "selectedProjects": {
+      "type": "array",
+      "default": [],
+      "description": "مشاريع من القاعدة: مصفوفة { id } أو معرفات"
+    }
+  },
+  "render": "file:./render.php"
+}

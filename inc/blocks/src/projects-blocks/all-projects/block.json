@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "greenergy/all-projects",
+  "title": "جميع المشاريع",
+  "description": "قائمة المشاريع مع فلتر (بحث، تصنيف، دولة، وسم، ترتيب) وترقيم 15 عنصر لكل صفحة",
+  "category": "greenergy-blocks",
+  "icon": "portfolio",
+  "editorScript": "greenergy-blocks-editor",
+  "attributes": {
+    "title": { "type": "string", "default": "جميع المشاريع" },
+    "description": { "type": "string", "default": "اكتشف أبرز المشاريع في مجال الطاقة المتجددة والاستدامة" },
+    "perPage": { "type": "number", "default": 15 },
+    "visibleTypeIds": { "type": "array", "default": [], "description": "أنواع المشاريع الظاهرة في الفلتر. فارغ = الكل." },
+    "visibleCountryIds": { "type": "array", "default": [], "description": "الدول الظاهرة في الفلتر. فارغ = الكل." }
+  },
+  "render": "file:./render.php"
+}

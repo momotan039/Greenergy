@@ -80,32 +80,7 @@ class Greenergy_Admin_Panel
             'show_in_rest' => [
                 'schema' => [
                     'type'       => 'object',
-                    'properties' => [
-                        'news_settings' => [
-                            'type' => 'object'
-                        ]
-                    ],
-                ],
-            ],
-            'default'      => [],
-        ]);
-
-        // Register News Settings
-        register_setting('greenergy_settings_group', 'greenergy_news_settings', [
-            'type'         => 'object',
-            'show_in_rest' => [
-                'schema' => [
-                    'type'       => 'object',
-                    'properties' => [
-                        'bannerType'     => ['type' => 'string'],
-                        'bannerImage'    => ['type' => 'string'],
-                        'bannerVideo'    => ['type' => 'string'],
-                        'bannerTitle'    => ['type' => 'string'],
-                        'showBannerTitle' => ['type' => 'boolean'],
-                        'bannerSubtitle' => ['type' => 'string'],
-                        'showBannerSubtitle' => ['type' => 'boolean'],
-                        'shareProviders' => ['type' => 'array', 'items' => ['type' => 'string']],
-                    ],
+                    'properties' => [],
                 ],
             ],
             'default'      => [],
@@ -153,7 +128,6 @@ class Greenergy_Admin_Panel
             'nonce'         => wp_create_nonce('wp_rest'),
             'root'          => esc_url_raw(rest_url()),
             'settings'      => get_option('greenergy_settings', []),
-            'news_settings' => get_option('greenergy_news_settings', []),
             'blocks'        => get_option('greenergy_admin_blocks', ''),
         ]);
     }

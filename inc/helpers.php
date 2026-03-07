@@ -814,6 +814,105 @@ function greenergy_organizations_query($override = [])
 }
 
 /**
+ * Build WP_Query args for projects list from current request (GET: s_proj, type, country, sort).
+ *
+ * @param array $override Override or add args (e.g. post__not_in, paged, posts_per_page).
+ * @return array Query args for WP_Query.
+ */
+function greenergy_projects_query_args($override = [])
+{
+    $type_id  = isset($_GET['type']) ? absint($_GET['type']) : 0;
+    $country  = isset($_GET['country']) ? absint($_GET['country']) : 0;
+    $sort     = isset($_GET['sort']) ? sanitize_text_field(wp_unslash($_GET['sort'])) : 'latest';
+    $search   = isset($_GET['s_proj']) ? sanitize_text_field(wp_unslash($_GET['s_proj'])) : '';
+
+    $args = [
+        'post_type'      => 'projects',
+        'post_status'    => 'publish',
+        'posts_per_page' => 15,
+        'paged'          => 1,
+    ];
+
+    if ($search !== '') {
+        $args['s'] = $search;
+    }
+
+    $tax_query = [];
+    if ($type_id > 0) {
+        $tax_query[] = [
+            'taxonomy' => 'project_type',
+            'field'    => 'term_id',
+            'terms'    => $type_id,
+        ];
+    }
+    if ($country > 0) {
+        $country_term = get_term($country, 'project_location');
+        if ($country_term && ! is_wp_error($country_term)) {
+            $term_ids = [ (int) $country_term->term_id ];
+            $children = get_terms([
+                'taxonomy'   => 'project_location',
+                'parent'     => $country_term->term_id,
+                'fields'     => 'ids',
+                'hide_empty' => false,
+            ]);
+            if (! empty($children)) {
+                $term_ids = array_merge($term_ids, array_map('intval', $children));
+            }
+            $tax_query[] = [
+                'taxonomy' => 'project_location',
+                'field'    => 'term_id',
+                'terms'    => $term_ids,
+            ];
+        }
+    }
+    if (! empty($tax_query)) {
+        $args['tax_query'] = $tax_query;
+    }
+
+    switch ($sort) {
+        case 'oldest':
+            $args['orderby'] = 'date';
+            $args['order']   = 'ASC';
+            break;
+        case 'popular':
+            $views_key = class_exists('Greenergy_Post_Views') ? Greenergy_Post_Views::TOTAL_VIEWS_KEY : '_news_view_count';
+            $args['meta_key']   = $views_key;
+            $args['orderby']    = 'meta_value_num';
+            $args['order']      = 'DESC';
+            $args['meta_query'] = [
+                'relation' => 'OR',
+                [ 'key' => $views_key, 'compare' => 'EXISTS' ],
+                [ 'key' => $views_key, 'compare' => 'NOT EXISTS', 'value' => '' ],
+            ];
+            break;
+        case 'latest':
+        default:
+            $args['orderby'] = 'date';
+            $args['order']   = 'DESC';
+            break;
+    }
+
+    return array_merge($args, $override);
+}
+
+/**
+ * Run projects list query.
+ *
+ * @param array $override Override or add args (e.g. post__not_in, paged, posts_per_page).
+ * @return WP_Query
+ */
+function greenergy_projects_query($override = [])
+{
+    $args = function_exists('greenergy_projects_query_args') ? greenergy_projects_query_args($override) : array_merge([
+        'post_type'      => 'projects',
+        'post_status'    => 'publish',
+        'posts_per_page' => 15,
+        'paged'          => 1,
+    ], $override);
+    return new WP_Query($args);
+}
+
+/**
  * Restrict search to post_title only when query var greenergy_search_in_expert === 'title' (experts).
  */
 function greenergy_experts_search_title_only($search, $wp_query)

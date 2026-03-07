@@ -22,11 +22,14 @@ $post_type     = get_post_type(get_the_ID());
 $title_company = 'نبذة عن الشركة';
 $title_org     = 'نبذة عن المنظمة';
 $title_expert  = 'نبذة عن الخبير';
+$title_project = 'نبذة عن المشروع';
 $title         = $attributes['title'];
 if ($post_type === 'organizations' && ($title === '' || $title === $title_company)) {
     $title = $title_org;
 } elseif ($post_type === 'experts' && ($title === '' || $title === $title_company)) {
     $title = $title_expert;
+} elseif ($post_type === 'projects' && ($title === '' || $title === $title_company)) {
+    $title = $title_project;
 } elseif ($title === '') {
     $title = $title_company;
 }
@@ -51,6 +54,11 @@ if ($post_id_for_tags) {
         }
         if (is_array($category_terms) && ! is_wp_error($category_terms)) {
             $tags = array_merge($tags, $category_terms);
+        }
+    } elseif ($post_type === 'projects') {
+        $terms = get_the_terms($post_id_for_tags, 'project_tag');
+        if (is_array($terms) && ! is_wp_error($terms)) {
+            $tags = $terms;
         }
     } else {
         $tag_tax = ($post_type === 'organizations') ? 'organization_tag' : 'company_tag';

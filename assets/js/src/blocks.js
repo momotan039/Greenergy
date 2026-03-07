@@ -1673,13 +1673,16 @@ const GreenergyBlockEdit = (props) => {
                         onChange: (val) => updateAttribute('desc', val)
                     }),
                     createElement(ToggleControl, {
-                        label: __('إظهار الإحصائيات (مثل صفحة الوظائف)', 'greenergy'),
+                        label: __('إظهار الإحصائيات', 'greenergy'),
                         checked: attributes.showStats || attributes.isJobsPage,
                         onChange: (val) => {
                             updateAttribute('showStats', val);
-                            updateAttribute('isJobsPage', val); // Keep in sync for compatibility
+                            updateAttribute('isJobsPage', val);
                         }
                     }),
+                    (attributes.showStats || attributes.isJobsPage) && createElement('p', { className: 'components-base-control__help', style: { marginTop: 4 } },
+                        __('إن تركت قائمة الإحصائيات فارغة، تظهر إحصائيات الوظائف في أرشيف الوظائف وإحصائيات المشاريع في أرشيف المشاريع تلقائياً.', 'greenergy')
+                    ),
                     (attributes.showStats || attributes.isJobsPage) && createElement(Fragment, null,
                         createElement('hr', null),
                         createElement('div', {
@@ -1754,6 +1757,18 @@ const GreenergyBlockEdit = (props) => {
                                         {
                                             label: __('عدد الصفحات', 'greenergy'),
                                             value: 'pages_count'
+                                        },
+                                        {
+                                            label: __('عدد المشاريع الكلية', 'greenergy'),
+                                            value: 'projects_count'
+                                        },
+                                        {
+                                            label: __('عدد الدول في المشاريع (دول فقط)', 'greenergy'),
+                                            value: 'projects_countries_count'
+                                        },
+                                        {
+                                            label: __('عدد الدول في المنصة (دول فقط)', 'greenergy'),
+                                            value: 'platform_countries_count'
                                         },
                                     ],
                                     onChange: (v) => {
@@ -3530,6 +3545,46 @@ const GreenergyBlockEdit = (props) => {
                         })
                     )
                 );
+            case 'greenergy/all-projects':
+                return createElement(Fragment, null,
+                    createElement(PanelBody, {
+                            title: __('إعدادات قائمة المشاريع', 'greenergy'),
+                            initialOpen: true
+                        },
+                        createElement(TextControl, {
+                            label: __('العنوان', 'greenergy'),
+                            value: attributes.title || 'جميع المشاريع',
+                            onChange: (val) => updateAttribute('title', val)
+                        }),
+                        createElement(TextareaControl, {
+                            label: __('الوصف', 'greenergy'),
+                            value: attributes.description || '',
+                            onChange: (val) => updateAttribute('description', val),
+                            rows: 3
+                        }),
+                        createElement(RangeControl, {
+                            label: __('عدد المشاريع في كل صفحة', 'greenergy'),
+                            value: typeof attributes.perPage === 'number' ? attributes.perPage : 15,
+                            onChange: (val) => updateAttribute('perPage', val),
+                            min: 3,
+                            max: 24
+                        }),
+                        createElement(GreenergyTermSelect, {
+                            taxonomy: 'project_type',
+                            parent: 0,
+                            selectedTermIds: attributes.visibleTypeIds || [],
+                            onChange: (val) => updateAttribute('visibleTypeIds', Array.isArray(val) ? val : []),
+                            label: __('أنواع المشاريع الظاهرة في الفلتر (فارغ = الكل)', 'greenergy')
+                        }),
+                        createElement(GreenergyTermSelect, {
+                            taxonomy: 'project_location',
+                            parent: 0,
+                            selectedTermIds: attributes.visibleCountryIds || [],
+                            onChange: (val) => updateAttribute('visibleCountryIds', Array.isArray(val) ? val : []),
+                            label: __('الدول الظاهرة في الفلتر (فارغ = الكل)', 'greenergy')
+                        })
+                    )
+                );
             case 'greenergy/all-experts':
                 return createElement(Fragment, null,
                     createElement(PanelBody, {
@@ -3586,6 +3641,30 @@ const GreenergyBlockEdit = (props) => {
                         onChange: (val) => updateAttribute('relatedCount', val),
                         min: 1,
                         max: 20
+                    })
+                );
+            case 'greenergy/related-projects':
+                return createElement(PanelBody, {
+                        title: __('إعدادات المشاريع ذات الصلة', 'greenergy'),
+                        initialOpen: true
+                    },
+                    createElement(TextControl, {
+                        label: __('العنوان', 'greenergy'),
+                        value: attributes.title || 'مشاريع ذات صلة',
+                        onChange: (val) => updateAttribute('title', val)
+                    }),
+                    createElement(TextareaControl, {
+                        label: __('الوصف', 'greenergy'),
+                        value: attributes.description || '',
+                        onChange: (val) => updateAttribute('description', val),
+                        rows: 2
+                    }),
+                    createElement(RangeControl, {
+                        label: __('العدد الأقصى للمشاريع المعروضة', 'greenergy'),
+                        value: typeof attributes.maxCount === 'number' ? attributes.maxCount : 6,
+                        onChange: (val) => updateAttribute('maxCount', val),
+                        min: 1,
+                        max: 24
                     })
                 );
             case 'greenergy/are-you-an-expert':
@@ -3781,6 +3860,31 @@ const GreenergyBlockEdit = (props) => {
                             selectedPosts: attributes.selectedOrganizations || [],
                             onChange: (val) => updateAttribute('selectedOrganizations', Array.isArray(val) ? val : []),
                             label: __('اختر المنظمات من القاعدة', 'greenergy')
+                        })
+                    )
+                );
+            case 'greenergy/featured-projects':
+                return createElement(Fragment, null,
+                    createElement(PanelBody, {
+                            title: __('إعدادات المشاريع المميزة', 'greenergy'),
+                            initialOpen: true
+                        },
+                        createElement(TextControl, {
+                            label: __('العنوان', 'greenergy'),
+                            value: attributes.title || 'المشاريع المميزة',
+                            onChange: (val) => updateAttribute('title', val)
+                        }),
+                        createElement(TextareaControl, {
+                            label: __('الوصف', 'greenergy'),
+                            value: attributes.description || '',
+                            onChange: (val) => updateAttribute('description', val),
+                            rows: 2
+                        }),
+                        createElement(GreenergyPostSelection, {
+                            postType: 'projects',
+                            selectedPosts: attributes.selectedProjects || [],
+                            onChange: (val) => updateAttribute('selectedProjects', Array.isArray(val) ? val : []),
+                            label: __('اختر المشاريع من القاعدة', 'greenergy')
                         })
                     )
                 );
@@ -5518,6 +5622,33 @@ const blocks = [
         }
     },
     {
+        name: 'all-projects',
+        title: __('جميع المشاريع', 'greenergy'),
+        icon: 'portfolio',
+        attributes: {
+            title: {
+                type: 'string',
+                default: 'جميع المشاريع'
+            },
+            description: {
+                type: 'string',
+                default: 'اكتشف أبرز المشاريع في مجال الطاقة المتجددة والاستدامة'
+            },
+            perPage: {
+                type: 'number',
+                default: 15
+            },
+            visibleTypeIds: {
+                type: 'array',
+                default: []
+            },
+            visibleCountryIds: {
+                type: 'array',
+                default: []
+            },
+        }
+    },
+    {
         name: 'all-experts',
         title: __('جميع الخبراء', 'greenergy'),
         icon: 'users',
@@ -5556,6 +5687,25 @@ const blocks = [
             relatedCount: {
                 type: 'number',
                 default: 8
+            }
+        }
+    },
+    {
+        name: 'related-projects',
+        title: __('المشاريع ذات الصلة', 'greenergy'),
+        icon: 'portfolio',
+        attributes: {
+            title: {
+                type: 'string',
+                default: 'مشاريع ذات صلة'
+            },
+            description: {
+                type: 'string',
+                default: 'اكتشف مشاريع أخرى من نفس التصنيف أو الوسوم.'
+            },
+            maxCount: {
+                type: 'number',
+                default: 6
             }
         }
     },
@@ -5615,6 +5765,25 @@ const blocks = [
                 default: []
             },
             selectedOrganizations: {
+                type: 'array',
+                default: []
+            },
+        }
+    },
+    {
+        name: 'featured-projects',
+        title: __('المشاريع المميزة', 'greenergy'),
+        icon: 'portfolio',
+        attributes: {
+            title: {
+                type: 'string',
+                default: 'المشاريع المميزة'
+            },
+            description: {
+                type: 'string',
+                default: 'أبرز المشاريع الرائدة في مجال الطاقة المتجددة'
+            },
+            selectedProjects: {
                 type: 'array',
                 default: []
             },

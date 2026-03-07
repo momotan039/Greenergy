@@ -4,9 +4,6 @@ const { SlotFillProvider, Popover, Button, SnackbarList } = wp.components;
 const { registerBlockType } = wp.blocks;
 const apiFetch = wp.apiFetch;
 
-// Import our custom blocks code
-import '../../../inc/blocks/src/news-settings';
-
 const GreenergyAdmin = () => {
     // Initial blocks state from DB
     const [blocks, updateBlocks] = useState([]);
@@ -36,32 +33,13 @@ const GreenergyAdmin = () => {
             try {
                 const parsedBlocks = wp.blocks.parse(savedBlocks);
                 console.log('Greenergy Admin: Parsed blocks successfully. Count:', parsedBlocks.length);
-
-                // Check if News Settings block is missing and append it
-                const newsBlockName = 'greenergy/news-settings';
-                const hasNewsBlock = parsedBlocks.some(block => block.name === newsBlockName);
-                
-                if (!hasNewsBlock && wp.blocks.getBlockType(newsBlockName)) {
-                     console.log('Greenergy Admin: News block missing from saved data. Appending default.');
-                     const newsBlock = wp.blocks.createBlock(newsBlockName);
-                     parsedBlocks.push(newsBlock);
-                }
-
                 updateBlocks(parsedBlocks);
             } catch (e) {
                 console.error('Greenergy Admin: Error parsing saved blocks:', e);
+                updateBlocks([]);
             }
-            const initialBlocks = [];
-            
-            if (wp.blocks.getBlockType(newsBlockName)) {
-                initialBlocks.push(wp.blocks.createBlock(newsBlockName));
-            }
-
-            if (initialBlocks.length > 0) {
-                updateBlocks(initialBlocks);
-            } else {
-                console.error(`Greenergy Admin: Default blocks NOT registered.`);
-            }
+        } else {
+            updateBlocks([]);
         }
     }, []);
 
@@ -81,26 +59,13 @@ const GreenergyAdmin = () => {
         // Serialize blocks for editor state restoration
         const serializedBlocks = wp.blocks.serialize(blocks);
 
-        // Extraction Logic
-        let newsSettingsData = {};
-
-        blocks.forEach(block => {
-            if (block.name === 'greenergy/news-settings') {
-                newsSettingsData = block.attributes;
-            }
-        });
-
-        const settingsData = {
-            news_settings: newsSettingsData
-        };
-
         try {
             await apiFetch({
                 path: '/greenergy/v1/save-settings',
                 method: 'POST',
                 data: {
                     blocks: serializedBlocks,
-                    settings: settingsData
+                    settings: {}
                 },
             });
 

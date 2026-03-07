@@ -95,10 +95,6 @@ class Greenergy_Admin_REST
             // We can merge with existing or overwrite. For now, overwrite is safer for consistency with editor state.
             update_option('greenergy_settings', $settings);
 
-            // Handle News Settings extraction from the payload
-            if (isset($settings['news_settings'])) {
-                update_option('greenergy_news_settings', $settings['news_settings']);
-            }
         }
 
         return new WP_REST_Response([
